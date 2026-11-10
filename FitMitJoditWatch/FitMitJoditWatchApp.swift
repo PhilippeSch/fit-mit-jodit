@@ -39,8 +39,22 @@ struct WatchRunPage: View {
                     let st = snap.state(at: ctx.date)
                     let kind = st.step?.kind ?? .prep
                     VStack(spacing: 2) {
-                        Text(kind.label.uppercased())
-                            .font(.caption2.bold())
+                        HStack {
+                            Button { confirmStop = true } label: { Image(systemName: "xmark").font(.caption.bold()) }
+                                .buttonStyle(.plain)
+                                .frame(width: 28, height: 28)
+                                .background(.black.opacity(0.25), in: Circle())
+                                .accessibilityLabel(Text("Stopp"))
+                                .accessibilityIdentifier("watchStop")
+                            Spacer()
+                            Text(snap.hostName).font(.caption2)
+                                .padding(.trailing, 14)
+                                .accessibilityLabel(Text("Steuert \(snap.hostName)"))
+                        }
+                        if st.step?.displayName != kind.label {
+                            Text(kind.label.uppercased())
+                                .font(.caption2.bold())
+                        }
                         Text(st.step?.displayName ?? "")
                             .font(.headline)
                             .lineLimit(1).minimumScaleFactor(0.6)
@@ -67,16 +81,6 @@ struct WatchRunPage: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Theme.color(for: kind).gradient)
-                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button { confirmStop = true } label: { Image(systemName: "xmark") }
-                            .accessibilityLabel(Text("Stopp"))
-                    }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Text(snap.hostName).font(.caption2)
-                            .accessibilityLabel(Text("Steuert \(snap.hostName)"))
-                    }
                 }
                 .confirmationDialog(Text("Training beenden?"), isPresented: $confirmStop) {
                     Button(String(localized: "Beenden"), role: .destructive) { link.send(.stop) }
