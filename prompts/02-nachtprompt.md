@@ -25,9 +25,10 @@ dass die ganze Kette funktioniert:
    iPhone Duo (mehrere Displays). Screenshots dort über
    XCUIScreen im UI-Test erzeugen. Unter macOS gibt es kein
    `timeout`.
-   Apple Watch: Das Simulator-Werkzeug hat keine Freigabe,
-   Watch nur über xcodebuild und `xcrun simctl` bedienen
-   (Screenshots per simctl funktionieren dort).
+   Apple Watch: Series 12 (46mm) watchOS 27.2 (UDID 5379D419-…),
+   gepaart mit iPhone 18 Pro Max iOS 27.2: dieses Paar für
+   Watch-Tests verwenden. Für fastlane vorher
+   `export LANG=en_US.UTF-8` setzen.
 3. fastlane mit dem API-Schlüssel einrichten. Bundle-ID mit
    iCloud registrieren, falls sie fehlt.
 4. Version 1.0, Build 1: signieren, archivieren, hochladen,
