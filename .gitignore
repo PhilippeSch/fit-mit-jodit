@@ -31,3 +31,6 @@ vendor/bundle/
 
 # macOS
 .DS_Store
+
+# Pruefkontakt mit Telefonnummer: lokal, nie ins oeffentliche Repository
+fastlane/metadata/review_information/

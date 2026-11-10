@@ -1,0 +1,1 @@
+interval,timer,circuit,tabata,HIIT,group,class,workout,coach,trainer,fitness,rounds

@@ -55,6 +55,8 @@ TARGETS = [
              "ENABLE_PREVIEWS": "YES",
              "SWIFT_EMIT_LOC_STRINGS": "YES",
          },
+         release=dict(CODE_SIGN_STYLE="Manual", CODE_SIGN_IDENTITY="Apple Distribution",
+                      PROVISIONING_PROFILE_SPECIFIER="$(APP_BUNDLE_ID) AppStore"),
          embed_watch="FitMitJoditWatch", embed_appex=[]),
     dict(name="FitMitJoditWatch", kind="watchapp", product="Fit mit Jodit Watch", folders=["FitMitJoditWatch", "Shared"],
          settings={
@@ -73,10 +75,13 @@ TARGETS = [
              "TARGETED_DEVICE_FAMILY": "4",
              "WATCHOS_DEPLOYMENT_TARGET": WATCH_MIN,
              "SKIP_INSTALL": "YES",
+             "CODE_SIGN_ENTITLEMENTS": "FitMitJoditWatch/FitMitJoditWatch.entitlements",
              "LD_RUNPATH_SEARCH_PATHS": "\"@executable_path/Frameworks\"",
              "ENABLE_PREVIEWS": "YES",
              "SWIFT_EMIT_LOC_STRINGS": "YES",
-         }),
+         },
+         release=dict(CODE_SIGN_STYLE="Manual", CODE_SIGN_IDENTITY="Apple Distribution",
+                      PROVISIONING_PROFILE_SPECIFIER="$(APP_BUNDLE_ID).watchkitapp AppStore")),
     dict(name="FitMitJoditTests", kind="unit", product="FitMitJoditTests", folders=["FitMitJoditTests"], host="FitMitJodit",
          settings={
              "PRODUCT_BUNDLE_IDENTIFIER": "$(APP_BUNDLE_ID).tests",
@@ -353,7 +358,9 @@ def main():
         s.append(f"\t\t{oid('cfg', 'project', cfg)} /* {cfg} */ = {{\n\t\t\tisa = XCBuildConfiguration;\n\t\t\tbaseConfigurationReference = {base_xcconfig};\n\t\t\tbuildSettings = {{\n{fmt_settings(d)}\n\t\t\t}};\n\t\t\tname = {cfg};\n\t\t}};")
     for t in TARGETS:
         for cfg in ("Debug", "Release"):
-            s.append(f"\t\t{oid('cfg', t['name'], cfg)} /* {cfg} */ = {{\n\t\t\tisa = XCBuildConfiguration;\n\t\t\tbuildSettings = {{\n{fmt_settings(t['settings'])}\n\t\t\t}};\n\t\t\tname = {cfg};\n\t\t}};")
+            d = dict(t["settings"])
+            d.update(t.get(cfg.lower(), {}))
+            s.append(f"\t\t{oid('cfg', t['name'], cfg)} /* {cfg} */ = {{\n\t\t\tisa = XCBuildConfiguration;\n\t\t\tbuildSettings = {{\n{fmt_settings(d)}\n\t\t\t}};\n\t\t\tname = {cfg};\n\t\t}};")
     s.append("/* End XCBuildConfiguration section */\n")
 
     s.append("/* Begin XCConfigurationList section */")

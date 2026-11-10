@@ -41,6 +41,16 @@ platform :ios do
     n
   end
 
+  desc "Verteilungszertifikat und App-Store-Profile per API-Schluessel (ohne Xcode-Konto)"
+  lane :signing do
+    asc_key
+    get_certificates(development: false, output_path: "build/signing", keychain_path: File.expand_path("~/Library/Keychains/login.keychain-db"))
+    [APP_ID, "#{APP_ID}.watchkitapp"].each do |bid|
+      get_provisioning_profile(app_identifier: bid, output_path: "build/signing",
+                               filename: "#{bid}.mobileprovision", readonly: false, skip_install: false)
+    end
+  end
+
   desc "Archiv und .ipa unter build/"
   lane :archive do
     build_app(

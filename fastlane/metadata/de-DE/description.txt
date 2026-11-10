@@ -1,0 +1,16 @@
+Fit mit Jodit ist ein Intervall-Timer für Gruppentrainings. Die Trainerin stellt das Training vorher zusammen, im Kurs läuft es gross auf dem iPad und ist auch aus mehreren Metern gut lesbar.
+
+TRAININGS ZUSAMMENKLICKEN
+Unten liegen Bausteine wie 45 s Arbeit, 15 s Pause oder 1 min Pause. Antippen hängt sie an die Zeitleiste. Mehrere Blöcke markieren und «mal 4» macht daraus eine Runde. Übungsnamen sind freiwillig und stammen aus einer Liste mit rund 60 Übungen oder werden selbst eingetippt.
+
+IM KURS
+Arbeit ist grün, Pause orange, Vorbereitung blau, jeweils mit Text. Ein grosser Countdown, darunter der nächste Block und die Runde. Die Knöpfe blenden sich aus, ein Tipp holt sie zurück. Töne in den letzten Sekunden und zur Halbzeit, Sprachansagen auf Wunsch.
+
+APPLE WATCH
+Die Watch-App zeigt den laufenden Block mit Countdown und vibriert beim Wechsel. Pause, weiter und zurück lassen sich vom Handgelenk aus steuern, auch für ein Training auf dem iPad, solange das iPhone im selben WLAN ist. Die Musik auf dem iPhone lässt sich ebenfalls auf der Uhr steuern.
+
+MUSIK
+Jedes Training kann einen Spotify-Link speichern, der die Playlist in Spotify öffnet. Auf dem iPad passt Spotify im geteilten Bildschirm daneben, der Timer bleibt lesbar.
+
+WEITERES
+Vier Vorlagen zum Start (Zirkel 45/15, Tabata, Kraft, Warm-up), Favoriten und Suche, Sync über die eigene iCloud, Export einzelner Trainings als Datei. Für iPad, iPhone und iPhone Duo. Kein Konto, keine Werbung, keine Datenerhebung.

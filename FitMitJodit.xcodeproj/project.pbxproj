@@ -557,6 +557,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = FitMitJodit/FitMitJodit.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FitMitJodit/Info.plist;
@@ -573,6 +575,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = FitMitJodit;
 				PRODUCT_NAME = FitMitJodit;
+				PROVISIONING_PROFILE_SPECIFIER = "$(APP_BUNDLE_ID) AppStore";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -588,6 +591,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FitMitJoditWatch/FitMitJoditWatch.entitlements;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
@@ -612,6 +616,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FitMitJoditWatch/FitMitJoditWatch.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
@@ -622,6 +629,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).watchkitapp";
 				PRODUCT_MODULE_NAME = FitMitJoditWatch;
 				PRODUCT_NAME = FitMitJoditWatch;
+				PROVISIONING_PROFILE_SPECIFIER = "$(APP_BUNDLE_ID).watchkitapp AppStore";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchos watchsimulator";
