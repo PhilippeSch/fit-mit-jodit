@@ -80,13 +80,14 @@ iCloud-Sync zwischen Geräten derselben Apple-ID (Trainings, Palette, eigene Üb
 Deutsch und Englisch, folgt der Gerätesprache.
 
 ### 10. Apple Watch (Begleit-App)
-Eine watchOS-App, die zusammen mit der iOS-App ausgeliefert wird (Companion, braucht das iPhone). Die Trainerin trägt die Uhr im Kurs und muss nicht zum iPad oder iPhone laufen. Lies vor der Umsetzung Apples aktuelle Doku zu WatchConnectivity, watchOS-App-Struktur und `NowPlayingView`.
+**Pflichtteil.** Eine watchOS-App, die zusammen mit der iOS-App ausgeliefert wird (Companion, braucht das iPhone). Die Trainerin trägt die Uhr im Kurs und muss nicht zum iPad oder iPhone laufen. Typischer Kurs: Timer gross auf dem iPad, Spotify auf dem iPhone (Box per Bluetooth am iPhone), Uhr am Handgelenk. Lies vor der Umsetzung Apples aktuelle Doku zu WatchConnectivity, watchOS-App-Struktur und `NowPlayingView`.
 1. **Fernbedienung:** Läuft auf dem iPhone ein Training, zeigt die Uhr Blockname, Typ (Farbe und Text wie auf dem iPhone), Countdown, nächsten Block und Runde x von y. Knöpfe: Pause/Weiter, Block vor, Block zurück, Stopp mit Bestätigung. Die Digital Crown ist nicht nötig.
 2. **Automatisch weiterschalten:** Der Ablauf schaltet wie in der Laufansicht automatisch von Block zu Block. Die Uhr läuft synchron mit, ohne pro Sekunde Daten zu brauchen: das iPhone schickt Endzeitpunkt und Blockfolge, die Uhr rechnet selbst. Bei jedem Blockwechsel eine deutliche Haptik (unterschiedlich für Arbeit, Pause, letzte 3 Sekunden).
 3. **Training starten:** Liste der Trainings (Favoriten oben) auf der Uhr, Antippen startet das Training auf dem verbundenen iPhone. Ist kein iPhone erreichbar, klare Meldung.
-4. **Musik:** Keine Spotify-Anbindung per SDK oder Web API (siehe SPOTIFY). Stattdessen die System-Ansicht `NowPlayingView` aus WatchKit als eigene Seite: Sie steuert die gerade laufende Musik auf dem iPhone, also auch Spotify (Play/Pause, Titel vor, Lautstärke), so wie es andere Trainings-Apps machen. Ist sie auf der Zielversion nicht verfügbar, nur einen Hinweis zeigen. Begründung und Restrisiko im Bericht nennen.
-5. **Technik:** SwiftUI, watchOS 10.0 als Mindestversion, WatchConnectivity für Steuerung und Trainingsliste, gemeinsamer Code (Blocktypen, Auflösung von Runden, Timer-Rechnung) in einem geteilten Modul statt kopiert. Texte Deutsch und Englisch im String Catalog. Keine eigene Datenhaltung auf der Uhr ausser einem Cache der Trainingsliste.
-6. **Komplikation:** optional und erst ganz am Ende: eine Komplikation (WidgetKit), die die App startet.
+4. **Musik:** Keine Spotify-Anbindung per SDK oder Web API (siehe SPOTIFY). Stattdessen die System-Ansicht `NowPlayingView` aus WatchKit als eigene Seite: Sie steuert die gerade laufende Musik auf dem iPhone, also auch Spotify (Play/Pause, Titel vor, Lautstärke), so wie es andere Trainings-Apps machen. Musik läuft im Kurs auf dem iPhone, das reicht. Auf dem iPad gibt es keine Musiksteuerung in der App (keine öffentliche Schnittstelle), dort bleibt Spotify daneben oder das Kontrollzentrum. Ist sie auf der Zielversion nicht verfügbar, nur einen Hinweis zeigen. Begründung und Restrisiko im Bericht nennen.
+5. **Weiterleitung zum iPad:** Eine Watch ist nur mit dem iPhone gekoppelt. Läuft das Training auf dem iPad, leitet die iPhone-App die Befehle der Uhr im lokalen Netz ans iPad weiter und den Zustand des iPad zurück an die Uhr: Uhr ↔ iPhone (WatchConnectivity) ↔ iPad (MultipeerConnectivity oder Network-Framework mit Bonjour, nur Apple-Frameworks). Kopplung iPhone–iPad einmalig bestätigen, danach automatisch, nur Geräte derselben Apple-ID oder ausdrücklich bestätigte. Auf dem iPhone ein Modus «Fernbedienung fürs iPad», der den Zustand des iPad zeigt und die Verbindung hält, solange er offen ist; Bildschirm bleibt dabei wach. Die Uhr zeigt klar, welches Gerät sie gerade steuert und ob die Verbindung steht. Läuft das Training auf dem iPhone selbst, entfällt die Weiterleitung. Im Simulator mit Unit-Tests der Nachrichten und einem Test iPhone-Simulator ↔ iPad-Simulator prüfen, soweit möglich; der Rest ist Gerätetest. Rechtfertigung für den lokalen Netzzugriff (`NSLocalNetworkUsageDescription`, `NSBonjourServices`) in beiden Sprachen, Datenschutz-Seite entsprechend ergänzen (nur lokales Netz, nichts verlässt die Geräte).
+6. **Technik:** SwiftUI, watchOS 10.0 als Mindestversion, WatchConnectivity für Steuerung und Trainingsliste, gemeinsamer Code (Blocktypen, Auflösung von Runden, Timer-Rechnung) in einem geteilten Modul statt kopiert. Texte Deutsch und Englisch im String Catalog. Keine eigene Datenhaltung auf der Uhr ausser einem Cache der Trainingsliste.
+7. **Komplikation:** optional und erst ganz am Ende: eine Komplikation (WidgetKit), die die App startet.
 
 ## GERÄTE
 1. iPad: Hauptgerät, Querformat bevorzugt, alle Ausrichtungen und Fenstergrössen.
@@ -116,7 +117,7 @@ App-Name «Fit mit Jodit». Lade die vorläufigen Logos von https://fitmitjodit.
 3. Beide Sprachen: UI-Tests einmal auf Deutsch und einmal auf Englisch. Ein Test schlägt fehl, wenn ein Text nur in einer Sprache vorhanden ist.
 4. Bedienungshilfen: automatische Prüfung der Hauptansichten (performAccessibilityAudit), VoiceOver-Labels auf allen Bedienelementen, Bausteine und Blöcke auch ohne Ziehen bedienbar.
 5. Build ohne Warnungen. Kein auskommentierter oder übersprungener Test, um grün zu werden. Ein Test, der sich nicht reparieren lässt, wird im Bericht als offen genannt.
-6. Was der Simulator nicht prüfen kann, kommt in `docs/MORGEN-CHECKLISTE.md` als Gerätetest: Ducking, Signale im Hintergrund, Live Activity auf dem Sperrbildschirm, Spotify-Link, iCloud-Sync zwischen zwei Geräten, AirDrop, Haptik, Watch-Fernbedienung mit echtem iPhone, Musiksteuerung auf der Uhr.
+6. Was der Simulator nicht prüfen kann, kommt in `docs/MORGEN-CHECKLISTE.md` als Gerätetest: Ducking, Signale im Hintergrund, Live Activity auf dem Sperrbildschirm, Spotify-Link, iCloud-Sync zwischen zwei Geräten, AirDrop, Haptik, Watch-Fernbedienung mit echtem iPhone, Weiterleitung Uhr → iPhone → iPad im Kurs-WLAN (auch nach Sperren des iPhone), Musiksteuerung auf der Uhr.
 
 ## DISTRIBUTION
 Werkzeug: fastlane, authentifiziert mit dem App-Store-Connect-API-Schlüssel aus `docs/EINGABEN.md`. Die ganze Kette wird als Teil 0 mit einem leeren Gerüst getestet (Build 1), bevor die App gebaut wird. Was die API nicht kann (App-Datenschutz, allenfalls App-Eintrag, Altersfreigabe, Preis), wird einmalig direkt nach dem Kettentest im Browser eingetragen, nach den Regeln des Vollprompts.
@@ -164,7 +165,7 @@ Reihenfolge:
 14. CI und Pull Request
 15. Berichte
 
-Nach jedem Teil muss der Build für iPad- und iPhone-Simulator fehlerfrei sein und die Tests müssen laufen, bevor du weitermachst. Die Teile 1 bis 10 haben Vorrang: Eine App, die sauber läuft, ist wichtiger als ein vollständiger Store-Eintrag. Die Watch-App (10a) kommt nach den Teilen 1 bis 10 und vor Teil 11. Lade nach Teil 5 und nach Teil 10a je einen Zwischenstand nach TestFlight, damit auch bei einem Abbruch ein testbarer Build bereitliegt.
+Nach jedem Teil muss der Build für iPad- und iPhone-Simulator fehlerfrei sein und die Tests müssen laufen, bevor du weitermachst. Die Teile 1 bis 10 haben Vorrang: Eine App, die sauber läuft, ist wichtiger als ein vollständiger Store-Eintrag. Die Watch-App (10a) ist Pflicht, inklusive Weiterleitung zum iPad. Sie kommt nach den Teilen 1 bis 10 und vor Teil 11 und hat Vorrang vor Store-Eintrag und CI. Lade nach Teil 5 und nach Teil 10a je einen Zwischenstand nach TestFlight, damit auch bei einem Abbruch ein testbarer Build bereitliegt.
 
 ## NICHT
 Kein Benutzerkonto, kein eigener Server, keine Analyse- oder Werbe-SDKs. Keine Steuerung von Spotify über SDK oder API und keine eigene Anzeige des laufenden Titels; erlaubt ist nur die System-Ansicht `NowPlayingView` auf der Uhr. Kein HealthKit, keine eigenständige Watch-App ohne iPhone, keine Workout-Session auf der Uhr. Keine fremden Sounddateien, Bilder oder Schriften ohne klare Lizenz. Keine Zugangsdaten, kein API-Schlüssel und keine `EINGABEN.md` im Repository. Keine Einreichung zur Prüfung, keine Veröffentlichung der App. App-Namen nicht eigenmächtig kürzen, sondern melden, falls er auf dem Homescreen abgeschnitten wird.
@@ -181,7 +182,7 @@ Kein Benutzerkonto, kein eigener Server, keine Analyse- oder Werbe-SDKs. Keine S
 9. Archiv und .ipa liegen unter `build/`.
 10. Der Build 1.0 ist in TestFlight grün nach der Definition in DISTRIBUTION.
 11. Store-Eintrag in de-DE und en-US ausgefüllt, Screenshots für iPhone und iPad in beiden Sprachen hochgeladen.
-12. Watch-App zeigt das laufende Training, schaltet automatisch weiter, Pause/Vor/Zurück/Stopp steuern das iPhone (im Simulator mit gepaartem iPhone-Simulator geprüft, sonst als Gerätetest gemeldet).
+12. Watch-App zeigt das laufende Training, schaltet automatisch weiter, Pause/Vor/Zurück/Stopp steuern das iPhone und über die Weiterleitung das iPad (im Simulator mit gepaartem iPhone-Simulator geprüft, sonst als Gerätetest gemeldet).
 13. docs/Privacy.md auf main erreichbar, Issues offen, beide URLs im Store-Eintrag.
 14. GitHub-Actions-Lauf auf dem Pull Request grün.
 

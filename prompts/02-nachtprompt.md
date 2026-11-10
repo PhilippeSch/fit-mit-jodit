@@ -79,7 +79,8 @@ C. REGELN FÜR DEN REST DER NACHT
    einem Abbruch ein testbarer Build bereitliegt.
 4. Sparsam arbeiten. Du machst Architektur, Datenmodell,
    Baukasten-Logik, Timer, Hintergrund-Audio, Live Activity,
-   Sync, iPhone Duo, Watch-Synchronisierung und die Abnahme selbst. Klar abgegrenzte
+   Sync, iPhone Duo, Watch-Synchronisierung, Weiterleitung zum iPad
+   und die Abnahme selbst. Klar abgegrenzte
    Aufgaben gehen an swift-helfer, Builds und Tests an
    build-pruefer. Immer nur ein Subagent gleichzeitig, keine
    Worktrees, keine parallelen Builds. Lies Build-Logs nicht
