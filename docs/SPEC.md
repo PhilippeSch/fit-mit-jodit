@@ -131,11 +131,17 @@ Werkzeug: fastlane, authentifiziert mit dem App-Store-Connect-API-Schlüssel aus
 8. Nicht einreichen. `submit_for_review` bleibt aus.
 9. Fehlt der API-Schlüssel oder der App-Eintrag: alles lokal vorbereiten (Metadaten, Screenshots, Archiv) und in `docs/BERICHT.md` den einen Befehl nennen, der am Morgen alles hochlädt.
 
-## WEBSEITE FÜR DATENSCHUTZ UND SUPPORT
-App Store Connect verlangt eine Datenschutz-URL und eine Support-URL. Erstelle eine schlichte statische Seite in Deutsch und Englisch: Datenschutzerklärung (die App erhebt und überträgt keine Daten, Trainings liegen auf dem Gerät und in der privaten iCloud des Nutzers) und Support mit Kontaktadresse aus `docs/EINGABEN.md`. Veröffentliche sie über GitHub Pages in einem eigenen öffentlichen Repository, aber nur wenn in `docs/EINGABEN.md` «SEITE_VEROEFFENTLICHEN: ja» steht und eine Kontaktadresse eingetragen ist. Sonst nur vorbereiten und melden.
+## DATENSCHUTZ UND SUPPORT
+App Store Connect verlangt eine Datenschutz-URL und eine Support-URL. Keine eigene Webseite, kein GitHub Pages, sondern wie bei den anderen Apps des Entwicklers (Vorbild: github.com/PhilippeSch/CyclePulse):
+1. Das Projekt-Repository `PhilippeSch/fit-mit-jodit` ist öffentlich, Issues sind eingeschaltet.
+2. Datenschutz: `docs/Privacy.md` im Repository, Englisch und Deutsch auf einer Seite (Sprungmarken oben), mit Datum. Inhalt: die App erhebt und überträgt keine Daten, kein Server, kein Konto, keine Analyse, Trainings liegen auf dem Gerät und in der privaten iCloud des Nutzers, iPhone und Watch tauschen Daten direkt aus, Spotify wird nur per Link geöffnet. Kontakt: Support-Adresse aus `docs/EINGABEN.md`. Aufbau wie `docs/Privacy.md` in CyclePulse.
+3. Datenschutz-URL: `https://github.com/PhilippeSch/fit-mit-jodit/blob/main/docs/Privacy.md`
+4. Support-URL: `https://github.com/PhilippeSch/fit-mit-jodit/issues`
+5. Store-Texte zusätzlich lesbar unter `AppStore/Store-de.md` und `AppStore/Store-en.md` ablegen (wie in CyclePulse), Quelle für fastlane bleibt `fastlane/metadata`.
+6. Weil das Repository öffentlich ist: nie Telefonnummer, Team-ID, Schlüssel oder Inhalte aus `docs/EINGABEN.md` committen.
 
 ## CI
-GitHub Actions im privaten Repository: ein Workflow, der auf macOS baut und die Unit-Tests auf einem iPhone-Simulator laufen lässt. Auslöser: Pull Requests und manueller Start, nicht jeder Push (macOS-Minuten zählen zehnfach). Xcode-Version fest auf die Version setzen, die im Kettentest auf dem GitHub-Runner funktioniert hat. Kein Signing und keine Geheimnisse in GitHub. Arbeite auf einem Branch, öffne am Ende einen Pull Request, warte auf den Lauf und repariere, bis er grün ist. Merge erst bei grünem Lauf.
+GitHub Actions im öffentlichen Repository: ein Workflow, der auf macOS baut und die Unit-Tests auf einem iPhone-Simulator laufen lässt. Auslöser: Pull Requests und manueller Start, nicht jeder Push (macOS-Minuten zählen zehnfach). Xcode-Version fest auf die Version setzen, die im Kettentest auf dem GitHub-Runner funktioniert hat. Kein Signing und keine Geheimnisse in GitHub. Arbeite auf einem Branch, öffne am Ende einen Pull Request, warte auf den Lauf und repariere, bis er grün ist. Merge erst bei grünem Lauf.
 
 ## VORGEHEN
 Reihenfolge:
@@ -153,7 +159,7 @@ Reihenfolge:
 10. iPhone Duo und alle Fenstergrössen
 10a. Apple-Watch-Begleit-App (Fernbedienung, Haptik, Trainingsliste, Musiksteuerung)
 11. UI-Tests, Bedienungshilfen, Screenshots
-12. Webseite für Datenschutz und Support
+12. Datenschutz-Seite (docs/Privacy.md) und Support über Issues
 13. Store-Texte, Archiv, Upload, TestFlight grün
 14. CI und Pull Request
 15. Berichte
@@ -176,7 +182,7 @@ Kein Benutzerkonto, kein eigener Server, keine Analyse- oder Werbe-SDKs. Keine S
 10. Der Build 1.0 ist in TestFlight grün nach der Definition in DISTRIBUTION.
 11. Store-Eintrag in de-DE und en-US ausgefüllt, Screenshots für iPhone und iPad in beiden Sprachen hochgeladen.
 12. Watch-App zeigt das laufende Training, schaltet automatisch weiter, Pause/Vor/Zurück/Stopp steuern das iPhone (im Simulator mit gepaartem iPhone-Simulator geprüft, sonst als Gerätetest gemeldet).
-13. Datenschutz- und Support-Seite erreichbar, URLs im Store-Eintrag.
+13. docs/Privacy.md auf main erreichbar, Issues offen, beide URLs im Store-Eintrag.
 14. GitHub-Actions-Lauf auf dem Pull Request grün.
 
 ## BERICHTE

@@ -65,8 +65,8 @@ Das eigene Chrome-Profil ist die Bedingung dafür: So erreicht der Agent nur App
 ## Kosten und Grenzen
 1. Der Umfang ist gross: App mit Baukasten, drei Gerätetypen, Tests, Screenshots, Store-Eintrag, CI. Ob alles in eine Nacht und ins Nutzungsfenster passt, kann ich nicht zusichern. Darum haben die Teile 1 bis 10 Vorrang, es gibt zwei Zwischenstände in TestFlight, und `docs/PROGRESS.md` erlaubt am Morgen ein «weiter».
 2. Weil der Startprompt nur prüft, zeigt sich ein Problem mit Signing oder Upload erst im Kettentest, also nach dem Start des Vollprompts. Scheitert er, baut Claude Code die App trotzdem und bereitet den Upload lokal vor.
-3. GitHub Actions: macOS-Läufe zählen im privaten Repository zehnfach gegen die Freiminuten (2'000 im Gratis-Plan, also rund 200 echte Minuten). Der Workflow läuft deshalb nur bei Pull Requests und von Hand.
-4. Die Datenschutz- und Support-Seite braucht ein öffentliches Repository für GitHub Pages. Sie wird nur veröffentlicht, wenn du es in `EINGABEN.md` erlaubst.
+3. GitHub Actions: Das Repository ist öffentlich, Standard-Runner sind dort kostenlos. Der Workflow läuft trotzdem nur bei Pull Requests und von Hand.
+4. Datenschutz und Support wie bei CyclePulse: `docs/Privacy.md` im öffentlichen Repository und GitHub Issues als Support-URL.
 5. Die Angaben zum iPhone Duo stammen aus MacRumors und einem Entwicklerblog, nicht aus Apples Doku. Claude Code liest vor der Umsetzung Apples eigene Doku.
 
 ## Quellen

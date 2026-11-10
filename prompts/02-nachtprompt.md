@@ -12,8 +12,9 @@ Bevor du eine Funktion baust, beweise mit einem leeren Gerüst,
 dass die ganze Kette funktioniert:
 1. git-Repository anlegen (.gitignore liegt bereit, mit
    git status prüfen, dass docs/EINGABEN.md und Schlüssel
-   ignoriert sind), privates GitHub-Repository anlegen, pushen
-   (Repository und erster Commit existieren bereits: prüfen, pushen).
+   ignoriert sind), GitHub-Repository anlegen, pushen
+   (öffentliches Repository und erster Commit existieren bereits:
+   prüfen, pushen).
 2. Xcode-Projekt «FitMitJodit» anlegen: SwiftUI, iPhone und
    iPad, iOS 17.0, Unit- und UI-Test-Target, dazu ein leeres
    watchOS-Begleit-Target (watchOS 10.0, eingebettet in die App), Bundle-ID und
@@ -65,7 +66,7 @@ C. REGELN FÜR DEN REST DER NACHT
    notieren. Fehlen Werte in docs/EINGABEN.md: Platzhalter
    verwenden, lokal alles vorbereiten, im Bericht nennen.
 2. Reihenfolge wie in der SPEC. Die Teile 1 bis 10a (die App
-   selbst) haben Vorrang vor Store-Eintrag, Webseite und CI.
+   selbst) haben Vorrang vor Store-Eintrag, Datenschutz-Seite und CI.
    Nach jedem Teil bauen, testen, committen, pushen und
    docs/PROGRESS.md nachführen (erledigt, offen, nächster
    Schritt), damit ich am Morgen mit «weiter» fortsetzen kann.
@@ -99,8 +100,7 @@ C. REGELN FÜR DEN REST DER NACHT
    «Fehlende Compliance», keine Warnung, interner Gruppe
    zugewiesen. Warte auf die Verarbeitung, statt den Upload
    als Erfolg zu melden.
-9. GitHub: nur dieses Repository und, falls in EINGABEN.md
-   erlaubt, das Repository für die Webseite. Kein force push,
+9. GitHub: nur dieses Repository, es ist öffentlich. Kein force push,
    nichts löschen, keine Geheimnisse in GitHub ablegen.
 10. Nichts ausserhalb dieses Ordners ändern, keine neuen
     Programme installieren.
