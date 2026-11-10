@@ -19,14 +19,6 @@ struct WorkoutDetailView: View {
                             Label("Exportieren", systemImage: "square.and.arrow.up")
                         }
                         .accessibilityIdentifier("export")
-                        Button {
-                            app.start(w)
-                        } label: {
-                            Label("Starten", systemImage: "play.fill")
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(StepSequence.expand(w).isEmpty)
-                        .accessibilityIdentifier("start")
                     }
                 }
         }

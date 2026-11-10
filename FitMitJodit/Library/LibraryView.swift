@@ -27,7 +27,7 @@ struct RootView: View {
             if hSize == .regular, selection == nil { selection = app.store.sorted.first?.id }
         }
         .fullScreenCover(item: Binding(get: { app.session }, set: { if $0 == nil { app.stop() } })) { session in
-            RunView(session: session)
+            WidthSimulator { RunView(session: session) }
         }
         .onChange(of: app.store.workouts) { PhoneConnectivity.shared.pushWorkouts() }
         .alert(String(localized: "Fernbedienung erlauben?"),

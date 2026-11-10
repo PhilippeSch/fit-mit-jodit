@@ -30,12 +30,11 @@ platform :ios do
     File.write(VERSION_FILE, text)
   end
 
-  desc "Naechste Build-Nummer: hoeher als jede in TestFlight"
+  desc "Build-Nummer als Zeitstempel YYYYMMDDHHMM (wie in den anderen Projekten), immer hoeher als die letzte"
   lane :bump do
-    asc_key
-    latest = latest_testflight_build_number(app_identifier: APP_ID, initial_build_number: 0) rescue 0
+    n = Time.now.strftime("%Y%m%d%H%M").to_i
     local = File.read(VERSION_FILE)[/APP_BUILD_NUMBER = (\d+)/, 1].to_i
-    n = [latest.to_i + 1, local].max
+    n = local + 1 if n <= local
     set_build_number(n)
     UI.message("Build-Nummer: #{n}")
     n
@@ -46,8 +45,8 @@ platform :ios do
     asc_key
     get_certificates(development: false, output_path: "build/signing", keychain_path: File.expand_path("~/Library/Keychains/login.keychain-db"))
     [APP_ID, "#{APP_ID}.watchkitapp", "#{APP_ID}.widgets"].each do |bid|
-      get_provisioning_profile(app_identifier: bid, output_path: "build/signing",
-                               filename: "#{bid}.mobileprovision", readonly: false, skip_install: false)
+      get_provisioning_profile(app_identifier: bid, output_path: "build/signing", force: true,
+                               filename: "#{bid}.mobileprovision", skip_install: false)
     end
   end
 

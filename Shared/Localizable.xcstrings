@@ -1538,6 +1538,16 @@
           }
         }
       }
+    },
+    "%@ pro Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ per round"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

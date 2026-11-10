@@ -3,10 +3,12 @@ APPLE_TEAM_ID = PZ2HQ4532Q
 APP_BUNDLE_ID = ch.fitmitjodit.timer
 ICLOUD_CONTAINER = iCloud.ch.fitmitjodit.timer
 
-// iCloud-Sync (CloudKit) ein: APP_ENTITLEMENTS auf die CloudKit-Variante setzen und
+// iCloud-Sync (CloudKit) ist eingeschaltet (Container am 11.11.2026 angelegt). Zum Ausschalten:
+// APP_ENTITLEMENTS = FitMitJodit/FitMitJodit.entitlements und FMJ_CLOUDKIT_CONTAINER leer.
+// Früher: APP_ENTITLEMENTS auf die CloudKit-Variante setzen und
 // FMJ_CLOUDKIT_CONTAINER = $(ICLOUD_CONTAINER). Voraussetzung: Container existiert und ist der App-ID zugewiesen,
 // danach "fastlane ios signing" mit neuen Profilen.
-APP_ENTITLEMENTS = FitMitJodit/FitMitJodit.entitlements
-FMJ_CLOUDKIT_CONTAINER =
+APP_ENTITLEMENTS = FitMitJodit/FitMitJodit-CloudKit.entitlements
+FMJ_CLOUDKIT_CONTAINER = $(ICLOUD_CONTAINER)
 
 #include "Version.xcconfig"

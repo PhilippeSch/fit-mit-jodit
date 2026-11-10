@@ -80,6 +80,17 @@ struct EditorView: View {
             .font(.subheadline.monospacedDigit())
             .foregroundStyle(.secondary)
             .accessibilityElement(children: .combine)
+            // Starten gross und immer sichtbar, auch bei einem Drittel der Breite.
+            Button {
+                app.start(model.workout)
+            } label: {
+                Label(String(localized: "Starten"), systemImage: "play.fill")
+                    .font(.title3.bold())
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(StepSequence.expand(model.workout).isEmpty)
+            .accessibilityIdentifier("start")
 
             ScrollView {
                 TimelineStrip(model: model, sheet: $sheet)
@@ -226,7 +237,7 @@ struct RoundView: View {
                 .accessibilityLabel(Text("Runde, \(round.repeats) mal"))
                 .accessibilityHint(Text("Antippen ändert die Anzahl Durchgänge."))
                 .accessibilityIdentifier("roundCounter")
-                Text(DurationFormat.clock(round.secondsPerPass * round.repeats))
+                Text(String(localized: "\(DurationFormat.clock(round.secondsPerPass)) pro Runde"))
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
                 Spacer(minLength: 0)

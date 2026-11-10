@@ -25,7 +25,27 @@ final class AppModel {
             UserDefaults.standard.removePersistentDomain(forName: domain)
         }
         let container = PersistenceFactory.makeContainer(inMemory: uiTesting)
-        return AppModel(store: WorkoutStore(container: container))
+        let store = WorkoutStore(container: container)
+        if args.contains("-screenshotData") { seedScreenshotData(store) }
+        return AppModel(store: store)
+    }
+
+    /// Nur für Store-Screenshots: Zirkel 45/15 mit Übungsnamen in der Gerätesprache und als Favorit.
+    private static func seedScreenshotData(_ store: WorkoutStore) {
+        guard var w = store.workouts.first(where: { $0.templateKey == "circuit4515" }) else { return }
+        let ids = ["squats", "push_ups", "burpees"]
+        let names = ids.compactMap { id in ExerciseCatalog.all.first { $0.id == id }.map { ExerciseCatalog.localizedName($0) } }
+        w.items = w.items.map { item in
+            guard case .round(var r) = item else { return item }
+            var n = 0
+            for i in r.blocks.indices where r.blocks[i].kind == .work {
+                if n < names.count { r.blocks[i].exerciseName = names[n] }
+                n += 1
+            }
+            return .round(r)
+        }
+        w.isFavorite = true
+        store.upsert(w)
     }
 
     func observeSession(_ f: @escaping (RunSession?) -> Void) { sessionObservers.append(f) }

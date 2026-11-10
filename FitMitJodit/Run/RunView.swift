@@ -130,7 +130,7 @@ private struct RunContent: View {
             }
             if part != .countdown {
             VStack(spacing: 4) {
-                if let next = st.nextStep {
+                if let next = st.nextStep, !(step?.kind == .rest && next.hasName) {
                     Text("Danach: \(next.displayName) · \(DurationFormat.short(next.seconds))")
                         .font(.system(size: max(fontSize * 0.09, 16), weight: .medium))
                         .lineLimit(1).minimumScaleFactor(0.6)

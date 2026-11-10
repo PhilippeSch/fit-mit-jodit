@@ -21,8 +21,26 @@ final class WatchLink: NSObject {
 
     func activate() {
         if ProcessInfo.processInfo.arguments.contains("-uiTesting") {
-            workouts = [WorkoutSummary(id: UUID(), name: "Zirkel 45/15", totalSeconds: 840, isFavorite: true),
-                        WorkoutSummary(id: UUID(), name: "Tabata", totalSeconds: 230, isFavorite: false)]
+            let de = Locale.current.language.languageCode?.identifier == "de"
+            workouts = [WorkoutSummary(id: UUID(), name: de ? "Zirkel 45/15" : "Circuit 45/15", totalSeconds: 840, isFavorite: true),
+                        WorkoutSummary(id: UUID(), name: "Tabata", totalSeconds: 230, isFavorite: false),
+                        WorkoutSummary(id: UUID(), name: de ? "Kraft" : "Strength", totalSeconds: 1170, isFavorite: false)]
+            // Für Screenshots: laufendes Beispieltraining (Arbeit oder Pause).
+            let args = ProcessInfo.processInfo.arguments
+            if args.contains("-watchDemoRun") || args.contains("-watchDemoRest") {
+                let names = de ? ["Kniebeugen", "Liegestütze", "Burpees"] : ["Squats", "Push-ups", "Burpees"]
+                var steps: [Step] = []
+                for r in 1...4 {
+                    for (i, n) in names.enumerated() {
+                        steps.append(Step(kind: .work, seconds: 45, exerciseName: n, round: r, roundCount: 4))
+                        steps.append(Step(kind: .rest, seconds: i < 2 ? 15 : 60, round: r, roundCount: 4))
+                    }
+                }
+                let offset: TimeInterval = args.contains("-watchDemoRest") ? 45 + 3 : 13
+                let engine = TimerEngine(steps: steps, startAt: Date().addingTimeInterval(-offset))
+                snapshot = RemoteSnapshot(workoutID: UUID(), workoutName: workouts[0].name, engine: engine,
+                                          hostName: "iPad", hostIsPad: true)
+            }
             return
         }
         guard WCSession.isSupported() else { return }

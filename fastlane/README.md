@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios bump
 ```
 
-Naechste Build-Nummer: hoeher als jede in TestFlight
+Build-Nummer als Zeitstempel YYYYMMDDHHMM (wie in den anderen Projekten), immer hoeher als die letzte
 
 ### ios signing
 

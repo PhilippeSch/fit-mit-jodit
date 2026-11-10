@@ -35,12 +35,29 @@ final class AudioSignalPlayer: NSObject, SignalSink {
 
     // MARK: Sitzung
 
-    private func configure(duck: Bool) {
-        let s = AVAudioSession.sharedInstance()
-        var opts: AVAudioSession.CategoryOptions = [.mixWithOthers]
-        if duck { opts.insert(.duckOthers) }
-        try? s.setCategory(.playback, mode: .default, options: opts)
-        try? s.setActive(true)
+    /// Sitzung auf einer eigenen Warteschlange umstellen: setActive kann blockieren und gehört nicht auf den Haupt-Thread.
+    private static let sessionQueue = DispatchQueue(label: "ch.fitmitjodit.audiosession")
+
+    private func configure(duck: Bool, then: (@Sendable () -> Void)? = nil) {
+        Self.sessionQueue.async {
+            let s = AVAudioSession.sharedInstance()
+            var opts: AVAudioSession.CategoryOptions = [.mixWithOthers]
+            if duck { opts.insert(.duckOthers) }
+            try? s.setCategory(.playback, mode: .default, options: opts)
+            try? s.setActive(true)
+            then?()
+        }
+    }
+
+    private func deactivate(thenReconfigure: Bool) {
+        Self.sessionQueue.async {
+            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            if thenReconfigure {
+                let s = AVAudioSession.sharedInstance()
+                try? s.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+                try? s.setActive(true)
+            }
+        }
     }
 
     private func ensureEngine() {
@@ -70,7 +87,7 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         player.stop()
         speech.stopSpeaking(at: .immediate)
         engine.stop()
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        deactivate(thenReconfigure: false)
     }
 
     private func duckForAWhile(_ seconds: Double) {
@@ -86,13 +103,11 @@ final class AudioSignalPlayer: NSObject, SignalSink {
     private func unduck() {
         if keepAliveActive {
             // Ohne duckOthers neu aktivieren: andere Musik kehrt auf volle Lautstärke zurück.
-            let s = AVAudioSession.sharedInstance()
-            try? s.setActive(false, options: .notifyOthersOnDeactivation)
-            configure(duck: false)
+            deactivate(thenReconfigure: true)
             ensureEngine()
             if !silence.isPlaying { silence.play() }
         } else {
-            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            deactivate(thenReconfigure: false)
         }
     }
 

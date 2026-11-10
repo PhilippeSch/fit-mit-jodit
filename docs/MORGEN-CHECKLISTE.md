@@ -38,3 +38,17 @@ Punkt 3 und 5 sind die wahrscheinlichsten Fehlerquellen. Fällt einer durch, nic
 
 ## 4. Einreichen
 Erst jetzt in App Store Connect «Zur Prüfung hinzufügen» und einreichen. Die Prüfung durch Apple dauert danach noch, die App ist nicht sofort im Store.
+
+## 5. Konkret offen aus der Nacht (10./11.11.2026)
+Ausführlich in `docs/BERICHT.md`.
+
+1. **App-Datenschutz veröffentlichen** (1 Klick): App Store Connect → Fit mit Jodit → App-Datenschutz. «Keine Daten erfasst» ist eingetragen und gesichert; der Knopf «Veröffentlichen» verlangt eine Bestätigung, dass die Angaben stimmen. Das habe ich bewusst nicht für dich bestätigt.
+2. **iCloud-Container anlegen**, sonst gibt es keinen Sync zwischen Geräten (die App läuft bis dahin mit lokalem Speicher):
+   - developer.apple.com → Identifiers → oben rechts auf «iCloud Containers» umstellen → «+» → `iCloud.ch.fitmitjodit.timer`.
+   - Dann die App-ID `ch.fitmitjodit.timer` öffnen → iCloud → «Configure» → den Container anhaken → Save.
+   - Danach Claude Code sagen: «iCloud-Container ist angelegt». Dann: `Config/Base.xcconfig` umstellen (Kommentar dort), `fastlane ios signing` (neue Profile), neuer Build.
+3. **Watch mit echtem iPhone**: Watch-App öffnen, Training auf dem iPhone starten. Zeigt die Uhr Block und Countdown, vibriert sie beim Wechsel, wirken Pause/Vor/Zurück/Stopp?
+4. **Weiterleitung zum iPad**: iPhone und iPad im selben WLAN, App auf beiden offen. Auf dem iPad die Anfrage «Fernbedienung erlauben?» bestätigen. Training auf dem iPad starten, auf dem iPhone «iPad steuern» öffnen, mit der Uhr Pause/Vor drücken. Test auch mit gesperrtem iPhone (erwartet: Verbindung reisst ab, Restrisiko im Bericht).
+5. **Musik auf der Uhr**: Spotify auf dem iPhone, auf der Uhr ganz nach unten wischen (Musikseite). Play/Pause, nächster Titel, Lautstärke.
+6. **Live Activity**: Beim ersten Training fragt iOS evtl. nach Live Activities; erlauben.
+7. **Wartezeiten der Watch-Haptik**: Bei gesenktem Handgelenk pausiert watchOS die App; die Haptik kommt dann erst wieder, wenn die Uhr aktiv ist. Im Kurs prüfen, ob das stört.
