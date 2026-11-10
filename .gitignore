@@ -1,0 +1,33 @@
+# Geheimnisse und persönliche Werte: nie committen
+docs/EINGABEN.md
+*.p8
+*.p12
+*.mobileprovision
+.env
+.env.*
+
+# Build-Ergebnisse
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+.swiftpm/
+.build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/test_output/
+fastlane/screenshots/**/*.png
+vendor/bundle/
+
+# macOS
+.DS_Store
