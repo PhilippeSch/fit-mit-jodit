@@ -1,4 +1,25 @@
 import SwiftUI
+#if os(iOS)
+import UIKit
+
+extension Font.TextStyle {
+    var uiStyle: UIFont.TextStyle {
+        switch self {
+        case .largeTitle: return .largeTitle
+        case .title: return .title1
+        case .title2: return .title2
+        case .title3: return .title3
+        case .headline: return .headline
+        case .subheadline: return .subheadline
+        case .callout: return .callout
+        case .caption: return .caption1
+        case .caption2: return .caption2
+        case .footnote: return .footnote
+        default: return .body
+        }
+    }
+}
+#endif
 
 /// Zentrale Farben und Schriften. Die drei Blockfarben sind fest und unabhängig von der Markenfarbe.
 /// Alle drei erreichen mit weisser Schrift mindestens Kontrast 4.5:1 (WCAG AA).
@@ -10,7 +31,8 @@ enum Theme {
     /// Vorbereitung: Blau (#1D4ED8, Kontrast zu Weiss 6.7:1)
     static let prep = Color(red: 0x1D / 255, green: 0x4E / 255, blue: 0xD8 / 255)
 
-    /// Markenfarbe für Bibliothek, Baukasten und Knöpfe (aus fitmitjodit.ch abgeleitet, siehe Branding).
+    /// Markenfarbe für Bibliothek, Baukasten und Knöpfe. Abgeleitet aus fitmitjodit.ch (Text #404040,
+    /// Akzent #7A7575): warmes Dunkelgrau #5E5858 (hell) bzw. #D6D0D0 (dunkel), Asset «AccentColor».
     static let brand = Color("AccentColor")
     /// Dunkler Grund wie im App-Icon.
     static let ink = Color(red: 0x14 / 255, green: 0x16 / 255, blue: 0x1C / 255)
@@ -21,6 +43,17 @@ enum Theme {
         case .rest: return rest
         case .prep: return prep
         }
+    }
+
+    /// Titel-Schrift wie auf fitmitjodit.ch: Raleway (SIL Open Font License, in der App gebündelt).
+    /// Auf der Uhr und im Widget nicht gebündelt: dort Systemschrift.
+    static func title(_ style: Font.TextStyle = .title2, weight: Font.Weight = .bold) -> Font {
+        #if os(iOS)
+        if UIFont(name: "Raleway", size: 12) != nil {
+            return Font.custom("Raleway", size: UIFont.preferredFont(forTextStyle: style.uiStyle).pointSize, relativeTo: style).weight(weight)
+        }
+        #endif
+        return Font.system(style, design: .default).weight(weight)
     }
 
     /// Schrift für den grossen Countdown: monospaced Ziffern, damit nichts springt.

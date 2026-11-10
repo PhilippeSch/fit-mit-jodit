@@ -20,16 +20,40 @@ struct RunView: View {
                 FinishedView(session: session)
             } else {
                 GeometryReader { geo in
-                    RunContent(session: session, size: geo.size)
-                        .frame(width: geo.size.width, height: geo.size.height)
+                    if let fold = geo.fold {
+                        // iPhone Duo aufgeklappt: nichts Wichtiges auf dem Falz.
+                        // Links/oben Blockname und Info, rechts/unten Countdown und Knöpfe.
+                        let halves = fold.halves(in: geo.size)
+                        ZStack(alignment: .topLeading) {
+                            RunContent(session: session, size: halves.first.size, part: .info)
+                                .frame(width: halves.first.width, height: halves.first.height)
+                                .offset(x: halves.first.minX, y: halves.first.minY)
+                            RunContent(session: session, size: halves.second.size, part: .countdown)
+                                .frame(width: halves.second.width, height: halves.second.height)
+                                .offset(x: halves.second.minX, y: halves.second.minY)
+                            if controlsVisible || st.isPaused {
+                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
+                                    .frame(width: halves.second.width, height: halves.second.height)
+                                    .offset(x: halves.second.minX, y: halves.second.minY)
+                                    .transition(.opacity)
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture { showControls() }
+                    } else {
+                        ZStack {
+                            RunContent(session: session, size: geo.size, part: .all)
+                                .frame(width: geo.size.width, height: geo.size.height)
+                                .contentShape(Rectangle())
+                                .onTapGesture { showControls() }
+                            if controlsVisible || st.isPaused {
+                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
+                                    .transition(.opacity)
+                            }
+                        }
+                    }
                 }
-                .contentShape(Rectangle())
-                .onTapGesture { showControls() }
                 .accessibilityAction(named: Text("Bedienelemente zeigen")) { showControls() }
-                if controlsVisible || st.isPaused {
-                    RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
-                        .transition(.opacity)
-                }
             }
         }
         .foregroundStyle(.white)
@@ -58,8 +82,10 @@ struct RunView: View {
 }
 
 private struct RunContent: View {
+    enum Part { case all, info, countdown }
     let session: RunSession
     let size: CGSize
+    var part: Part = .all
 
     var body: some View {
         let st = session.state
@@ -67,11 +93,12 @@ private struct RunContent: View {
         // Countdown so gross wie möglich: begrenzt durch Breite (4 Zeichen) und Höhe.
         let digits = DurationFormat.clock(st.displaySeconds)
         let byWidth = size.width / (CGFloat(max(digits.count, 4)) * 0.62)
-        let byHeight = size.height * 0.48
+        let byHeight = size.height * (part == .countdown ? 0.6 : 0.48)
         let fontSize = max(min(byWidth, byHeight), 48)
         let compact = size.width < 420
         VStack(spacing: compact ? 6 : 12) {
             Spacer(minLength: 0)
+            if part != .countdown {
             Text(title(step))
                 .font(.system(size: max(fontSize * 0.2, 24), weight: .heavy, design: .rounded))
                 .lineLimit(2)
@@ -83,6 +110,8 @@ private struct RunContent: View {
                     .font(.system(size: max(fontSize * 0.12, 18), weight: .semibold, design: .rounded))
                     .lineLimit(1).minimumScaleFactor(0.5)
             }
+            }
+            if part != .info {
             Text(digits)
                 .font(Theme.countdownFont(size: fontSize))
                 .lineLimit(1)
@@ -96,6 +125,8 @@ private struct RunContent: View {
                     .background(.black.opacity(0.25), in: Capsule())
                     .accessibilityIdentifier("pausedBadge")
             }
+            }
+            if part != .countdown {
             VStack(spacing: 4) {
                 if let next = st.nextStep {
                     Text("Danach: \(next.displayName) · \(DurationFormat.short(next.seconds))")
@@ -110,7 +141,9 @@ private struct RunContent: View {
                 }
             }
             .opacity(0.92)
+            }
             Spacer(minLength: 0)
+            if part != .info {
             ProgressView(value: st.progress)
                 .tint(.white)
                 .scaleEffect(x: 1, y: 2, anchor: .center)
@@ -118,6 +151,7 @@ private struct RunContent: View {
                 .padding(.bottom, compact ? 12 : 24)
                 .accessibilityLabel(Text("Gesamtfortschritt"))
                 .accessibilityValue(Text("\(Int(st.progress * 100)) Prozent"))
+            }
         }
         .padding(.horizontal, compact ? 8 : 24)
     }
@@ -183,7 +217,7 @@ private struct FinishedView: View {
             RingMark()
                 .frame(width: 120, height: 120)
                 .accessibilityHidden(true)
-            Text("Geschafft").font(.system(size: 56, weight: .heavy, design: .rounded))
+            Text("Geschafft").font(Theme.title(.largeTitle, weight: .heavy)).scaleEffect(1.4)
                 .accessibilityIdentifier("finishedTitle")
             Text("Gesamtzeit \(session.totalTimeText)").font(.title2.monospacedDigit())
             HStack(spacing: 16) {
@@ -211,7 +245,7 @@ struct RingMark: View {
                     .stroke(i % 2 == 0 ? Theme.work : Theme.rest, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .rotationEffect(.degrees(-90))
             }
-            Text("J").font(.system(size: 54, weight: .heavy, design: .rounded))
+            Text(verbatim: "J").font(.system(size: 54, weight: .heavy, design: .rounded))
         }
     }
 }

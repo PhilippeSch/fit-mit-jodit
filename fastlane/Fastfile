@@ -45,7 +45,7 @@ platform :ios do
   lane :signing do
     asc_key
     get_certificates(development: false, output_path: "build/signing", keychain_path: File.expand_path("~/Library/Keychains/login.keychain-db"))
-    [APP_ID, "#{APP_ID}.watchkitapp"].each do |bid|
+    [APP_ID, "#{APP_ID}.watchkitapp", "#{APP_ID}.widgets"].each do |bid|
       get_provisioning_profile(app_identifier: bid, output_path: "build/signing",
                                filename: "#{bid}.mobileprovision", readonly: false, skip_install: false)
     end

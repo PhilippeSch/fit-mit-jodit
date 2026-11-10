@@ -16,7 +16,15 @@ struct EditorView: View {
         GeometryReader { geo in
             let sideBySide = hSize == .regular && geo.size.width >= 640
             Group {
-                if sideBySide {
+                if let fold = geo.fold, fold.isVertical {
+                    // iPhone Duo aufgeklappt: Zeitleiste links, Palette rechts, der Falz liegt zwischen beiden.
+                    HStack(alignment: .top, spacing: fold.rect.width) {
+                        timelineColumn
+                            .frame(width: fold.rect.minX)
+                        PaletteView(model: model, axis: .vertical, sheet: $sheet, placedCount: $placedCount)
+                            .frame(width: max(geo.size.width - fold.rect.maxX, 0))
+                    }
+                } else if sideBySide {
                     HStack(alignment: .top, spacing: 0) {
                         timelineColumn
                         Divider()
@@ -59,7 +67,7 @@ struct EditorView: View {
     private var timelineColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
             TextField(String(localized: "Name des Trainings"), text: Binding(get: { model.workout.name }, set: { model.setName($0) }))
-                .font(.title2.bold())
+                .font(Theme.title(.title2))
                 .textFieldStyle(.plain)
                 .submitLabel(.done)
                 .accessibilityIdentifier("workoutName")

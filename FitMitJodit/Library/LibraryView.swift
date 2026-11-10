@@ -136,7 +136,7 @@ struct LibraryRow: View {
                     Image(systemName: "star.fill").foregroundStyle(.yellow)
                         .accessibilityLabel(Text("Favorit"))
                 }
-                Text(workout.name).font(.headline).lineLimit(2)
+                Text(workout.name).font(Theme.title(.headline)).lineLimit(2)
                 Spacer(minLength: 8)
                 Text(DurationFormat.clock(workout.totalSeconds))
                     .font(.subheadline.monospacedDigit())

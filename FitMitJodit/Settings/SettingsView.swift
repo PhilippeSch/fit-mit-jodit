@@ -9,6 +9,17 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
+                    HStack(spacing: 16) {
+                        Image("LogoFMJ").resizable().scaledToFit().frame(height: 64)
+                        Image("LogoJodit").resizable().scaledToFit().frame(height: 64)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .listRowBackground(Theme.ink)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("fitmitjodit"))
+                }
+                Section {
                     Stepper(value: $store.settings.leadInSeconds, in: 0...30, step: 5) {
                         LabeledContent(String(localized: "Vorlauf"), value: DurationFormat.short(store.settings.leadInSeconds))
                     }

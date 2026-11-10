@@ -4,6 +4,10 @@
 <dict>
 	<key>FMJCloudKitContainer</key>
 	<string>$(FMJ_CLOUDKIT_CONTAINER)</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Raleway.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

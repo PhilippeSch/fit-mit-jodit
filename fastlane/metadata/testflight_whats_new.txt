@@ -1,1 +1,1 @@
-Leeres Gerüst zum Testen der Kette. Noch keine Funktionen.
+Zwischenstand nach Teil 5/6: Bibliothek mit Vorlagen, Baukasten, Laufansicht, Töne und Ansagen, Live Activity, Spotify-Link, Export. Noch ohne Watch-App-Funktionen und ohne Übersetzung.

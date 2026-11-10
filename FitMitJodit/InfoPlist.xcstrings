@@ -1,0 +1,55 @@
+{
+  "sourceLanguage" : "de",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit mit Jodit"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit mit Jodit"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "FitMitJodit"
+          }
+        }
+      }
+    },
+    "Fit mit Jodit Training" : {
+
+    },
+    "NSLocalNetworkUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit mit Jodit verbindet iPhone und iPad im lokalen Netz, damit die Apple Watch ein Training auf dem iPad steuern kann."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fit mit Jodit connects your iPhone and iPad on the local network so your Apple Watch can control a workout running on the iPad."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
