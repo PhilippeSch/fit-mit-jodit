@@ -16,11 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Neueste installierte Xcode-Version waehlen; die tatsaechlich benutzte
-      # Version steht im Log und in docs/PROGRESS.md.
+      # Fest auf Xcode 26.6: diese Version hat im Kettentest (10.11.2026) auf dem
+      # Runner funktioniert. Fehlt sie im Runner-Image, die neueste nehmen.
       - name: Xcode waehlen
         run: |
-          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          latest=/Applications/Xcode_26.6.0.app
+          [ -d "$latest" ] || latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
           echo "Xcode: $latest"
           sudo xcode-select -switch "$latest"
           xcodebuild -version

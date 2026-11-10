@@ -43,7 +43,7 @@ TARGETS = [
              "INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone": "\"UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight\"",
              "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
              "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
-             "CODE_SIGN_ENTITLEMENTS": "FitMitJodit/FitMitJodit.entitlements",
+             "CODE_SIGN_ENTITLEMENTS": "$(APP_ENTITLEMENTS)",
              "SDKROOT": "iphoneos",
              "SUPPORTED_PLATFORMS": "\"iphoneos iphonesimulator\"",
              "SUPPORTS_MACCATALYST": "NO",

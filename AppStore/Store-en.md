@@ -1,0 +1,52 @@
+# Store Texts (English)
+
+## Name
+
+Fit mit Jodit
+
+## Subtitle
+
+Interval timer for classes
+
+## Promotional Text
+
+Build workouts from blocks and run them full screen on the iPad. With a remote control on Apple Watch.
+
+## Description
+
+Fit mit Jodit is an interval timer for group workouts. The coach builds the workout beforehand; in class it runs full screen on the iPad and stays readable from several metres away.
+
+BUILD WORKOUTS FROM BLOCKS
+At the bottom are blocks such as 45 s work, 15 s rest or 1 min rest. Tap to add them to the timeline. Select several blocks and tap "x 4" to turn them into a round. Exercise names are optional, picked from a list of about 60 exercises or typed in.
+
+IN CLASS
+Work is green, rest orange, preparation blue, always with a label. A large countdown with the next block and the round below. The buttons hide themselves; one tap brings them back. Beeps in the last seconds and at halftime, spoken cues if you want them.
+
+APPLE WATCH
+The Watch app shows the current block with its countdown and taps your wrist when it changes. Pause, skip and back work from the wrist, also for a workout on the iPad while the iPhone is on the same Wi-Fi. Music playing on the iPhone can be controlled from the watch too.
+
+MUSIC
+Each workout can store a Spotify link that opens the playlist in Spotify. On the iPad, Spotify fits next to the timer in Split View and the timer stays readable.
+
+ALSO
+Four templates to start with (Circuit 45/15, Tabata, Strength, Warm-up), favourites and search, sync through your own iCloud, export of single workouts as a file. For iPad, iPhone and iPhone Duo. No account, no ads, no data collection.
+
+## Keywords
+
+interval,timer,circuit,tabata,HIIT,group,class,workout,coach,trainer,fitness,rounds
+
+## Support URL
+
+https://github.com/PhilippeSch/fit-mit-jodit/issues
+
+## Marketing URL
+
+https://fitmitjodit.ch
+
+## Privacy Policy URL
+
+https://github.com/PhilippeSch/fit-mit-jodit/blob/main/docs/Privacy.md
+
+## Copyright
+
+2026 Fit mit Jodit
