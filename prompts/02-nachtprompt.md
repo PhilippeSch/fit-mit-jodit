@@ -25,6 +25,9 @@ dass die ganze Kette funktioniert:
    iPhone Duo (mehrere Displays). Screenshots dort über
    XCUIScreen im UI-Test erzeugen. Unter macOS gibt es kein
    `timeout`.
+   Apple Watch: Das Simulator-Werkzeug hat keine Freigabe,
+   Watch nur über xcodebuild und `xcrun simctl` bedienen
+   (Screenshots per simctl funktionieren dort).
 3. fastlane mit dem API-Schlüssel einrichten. Bundle-ID mit
    iCloud registrieren, falls sie fehlt.
 4. Version 1.0, Build 1: signieren, archivieren, hochladen,
