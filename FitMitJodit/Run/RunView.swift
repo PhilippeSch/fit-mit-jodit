@@ -1,0 +1,217 @@
+import SwiftUI
+
+/// Laufansicht. Liest sich aus 5 m, passt sich jeder Fenstergrösse an (Drittel bis Vollbild).
+struct RunView: View {
+    @Environment(AppModel.self) private var app
+    @Environment(\.scenePhase) private var scenePhase
+    let session: RunSession
+    @State private var controlsVisible = false
+    @State private var hideTask: Task<Void, Never>?
+    @State private var confirmStop = false
+
+    var body: some View {
+        let st = session.state
+        let kind = st.step?.kind ?? .prep
+        ZStack {
+            (session.isFinished ? Theme.ink : Theme.color(for: kind))
+                .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.3), value: kind)
+            if session.isFinished {
+                FinishedView(session: session)
+            } else {
+                GeometryReader { geo in
+                    RunContent(session: session, size: geo.size)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture { showControls() }
+                .accessibilityAction(named: Text("Bedienelemente zeigen")) { showControls() }
+                if controlsVisible || st.isPaused {
+                    RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
+                        .transition(.opacity)
+                }
+            }
+        }
+        .foregroundStyle(.white)
+        .statusBarHidden(!controlsVisible)
+        .persistentSystemOverlays(.hidden)
+        .animation(.easeInOut(duration: 0.2), value: controlsVisible)
+        .confirmationDialog(Text("Training beenden?"), isPresented: $confirmStop, titleVisibility: .visible) {
+            Button("Beenden", role: .destructive) { app.stop() }
+                .accessibilityIdentifier("confirmStop")
+            Button("Weiter trainieren", role: .cancel) {}
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { app.refresh() }
+        }
+        .accessibilityIdentifier("runView")
+    }
+
+    private func showControls() {
+        controlsVisible = true
+        hideTask?.cancel()
+        hideTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(4))
+            if !Task.isCancelled { controlsVisible = false }
+        }
+    }
+}
+
+private struct RunContent: View {
+    let session: RunSession
+    let size: CGSize
+
+    var body: some View {
+        let st = session.state
+        let step = st.step
+        // Countdown so gross wie möglich: begrenzt durch Breite (4 Zeichen) und Höhe.
+        let digits = DurationFormat.clock(st.displaySeconds)
+        let byWidth = size.width / (CGFloat(max(digits.count, 4)) * 0.62)
+        let byHeight = size.height * 0.48
+        let fontSize = max(min(byWidth, byHeight), 48)
+        let compact = size.width < 420
+        VStack(spacing: compact ? 6 : 12) {
+            Spacer(minLength: 0)
+            Text(title(step))
+                .font(.system(size: max(fontSize * 0.2, 24), weight: .heavy, design: .rounded))
+                .lineLimit(2)
+                .minimumScaleFactor(0.5)
+                .multilineTextAlignment(.center)
+                .accessibilityIdentifier("runTitle")
+            if let step, step.kind == .rest, let next = st.nextStep, next.hasName, let name = next.exerciseName {
+                Text("Gleich: \(name)")
+                    .font(.system(size: max(fontSize * 0.12, 18), weight: .semibold, design: .rounded))
+                    .lineLimit(1).minimumScaleFactor(0.5)
+            }
+            Text(digits)
+                .font(Theme.countdownFont(size: fontSize))
+                .lineLimit(1)
+                .minimumScaleFactor(0.3)
+                .contentTransition(.numericText(countsDown: true))
+                .accessibilityIdentifier("countdown")
+                .accessibilityLabel(Text("\(st.displaySeconds) Sekunden"))
+            if st.isPaused {
+                Text("Pausiert").font(.title.bold())
+                    .padding(.horizontal, 16).padding(.vertical, 6)
+                    .background(.black.opacity(0.25), in: Capsule())
+                    .accessibilityIdentifier("pausedBadge")
+            }
+            VStack(spacing: 4) {
+                if let next = st.nextStep {
+                    Text("Danach: \(next.displayName) · \(DurationFormat.short(next.seconds))")
+                        .font(.system(size: max(fontSize * 0.09, 16), weight: .medium))
+                        .lineLimit(1).minimumScaleFactor(0.6)
+                        .accessibilityIdentifier("nextBlock")
+                }
+                if let r = session.roundText {
+                    Text(r)
+                        .font(.system(size: max(fontSize * 0.09, 16), weight: .medium).monospacedDigit())
+                        .accessibilityIdentifier("roundText")
+                }
+            }
+            .opacity(0.92)
+            Spacer(minLength: 0)
+            ProgressView(value: st.progress)
+                .tint(.white)
+                .scaleEffect(x: 1, y: 2, anchor: .center)
+                .padding(.horizontal, compact ? 16 : 40)
+                .padding(.bottom, compact ? 12 : 24)
+                .accessibilityLabel(Text("Gesamtfortschritt"))
+                .accessibilityValue(Text("\(Int(st.progress * 100)) Prozent"))
+        }
+        .padding(.horizontal, compact ? 8 : 24)
+    }
+
+    private func title(_ step: Step?) -> String {
+        guard let step else { return "" }
+        if step.isLeadIn { return step.displayName }
+        if step.kind == .rest { return BlockKind.rest.label }
+        return step.displayName
+    }
+}
+
+private struct RunControls: View {
+    let session: RunSession
+    @Binding var confirmStop: Bool
+    let onInteract: () -> Void
+
+    var body: some View {
+        VStack {
+            HStack {
+                Button { confirmStop = true; onInteract() } label: {
+                    Label("Stopp", systemImage: "xmark")
+                }
+                .accessibilityIdentifier("stop")
+                Spacer()
+                SpotifyButton(link: session.workout.spotifyLink)
+            }
+            .font(.title3.bold())
+            .padding()
+            Spacer()
+            HStack(spacing: 36) {
+                control("backward.end.fill", String(localized: "Block zurück"), id: "skipBack") { session.skipBack() }
+                control(session.state.isPaused ? "play.fill" : "pause.fill",
+                        session.state.isPaused ? String(localized: "Weiter") : String(localized: "Pause"), id: "pauseResume", big: true) {
+                    session.togglePause()
+                }
+                control("forward.end.fill", String(localized: "Block vor"), id: "skipForward") { session.skipForward() }
+            }
+            .padding(.bottom, 48)
+        }
+        .buttonStyle(.plain)
+        .background(.black.opacity(0.2))
+    }
+
+    private func control(_ icon: String, _ label: String, id: String, big: Bool = false, action: @escaping () -> Void) -> some View {
+        Button { action(); onInteract() } label: {
+            Image(systemName: icon)
+                .font(.system(size: big ? 44 : 30, weight: .bold))
+                .frame(width: big ? 96 : 72, height: big ? 96 : 72)
+                .background(.black.opacity(0.3), in: Circle())
+        }
+        .accessibilityLabel(Text(label))
+        .accessibilityIdentifier(id)
+    }
+}
+
+private struct FinishedView: View {
+    @Environment(AppModel.self) private var app
+    let session: RunSession
+
+    var body: some View {
+        VStack(spacing: 24) {
+            RingMark()
+                .frame(width: 120, height: 120)
+                .accessibilityHidden(true)
+            Text("Geschafft").font(.system(size: 56, weight: .heavy, design: .rounded))
+                .accessibilityIdentifier("finishedTitle")
+            Text("Gesamtzeit \(session.totalTimeText)").font(.title2.monospacedDigit())
+            HStack(spacing: 16) {
+                Button { app.start(session.workout) } label: { Label("Nochmals", systemImage: "arrow.counterclockwise") }
+                    .buttonStyle(.bordered)
+                    .accessibilityIdentifier("again")
+                Button { app.stop() } label: { Label("Fertig", systemImage: "checkmark") }
+                    .buttonStyle(.borderedProminent)
+                    .accessibilityIdentifier("done")
+            }
+            .font(.title3.bold())
+            .tint(.white)
+        }
+        .padding()
+    }
+}
+
+/// Ringmotiv aus dem App-Icon: grüne und orange Segmente.
+struct RingMark: View {
+    var body: some View {
+        ZStack {
+            ForEach(0..<8, id: \.self) { i in
+                Circle()
+                    .trim(from: CGFloat(i) / 8 + 0.01, to: CGFloat(i + 1) / 8 - 0.01)
+                    .stroke(i % 2 == 0 ? Theme.work : Theme.rest, style: StrokeStyle(lineWidth: 14, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+            }
+            Text("J").font(.system(size: 54, weight: .heavy, design: .rounded))
+        }
+    }
+}

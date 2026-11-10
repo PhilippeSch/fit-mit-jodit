@@ -164,11 +164,16 @@ final class TimerEngineTests: XCTestCase {
     func testEngineIsCodableForWatchSync() throws {
         let clock = ManualClock()
         var e = engine(clock: clock)
-        clock.advance(33)
-        e.pause(at: clock.now)
+        clock.advance(33.437)
         let data = try JSONEncoder.fmj.encode(e)
         let back = try JSONDecoder.fmj.decode(TimerEngine.self, from: data)
-        XCTAssertEqual(back.state(at: clock.now), e.state(at: clock.now))
+        // Laufend und pausiert: Zustand auf beiden Seiten auf die Millisekunde gleich.
+        XCTAssertEqual(back.state(at: clock.now).remaining, e.state(at: clock.now).remaining, accuracy: 0.002)
+        e.pause(at: clock.now)
+        let back2 = try JSONDecoder.fmj.decode(TimerEngine.self, from: try JSONEncoder.fmj.encode(e))
+        clock.advance(10)
+        XCTAssertEqual(back2.state(at: clock.now).remaining, e.state(at: clock.now).remaining, accuracy: 0.002)
+        XCTAssertTrue(back2.isPaused)
     }
 }
 

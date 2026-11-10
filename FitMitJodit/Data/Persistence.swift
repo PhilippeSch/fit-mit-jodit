@@ -50,23 +50,6 @@ final class StoredValue {
     }
 }
 
-extension JSONEncoder {
-    static var fmj: JSONEncoder {
-        let e = JSONEncoder()
-        e.dateEncodingStrategy = .iso8601
-        e.outputFormatting = [.sortedKeys]
-        return e
-    }
-}
-
-extension JSONDecoder {
-    static var fmj: JSONDecoder {
-        let d = JSONDecoder()
-        d.dateDecodingStrategy = .iso8601
-        return d
-    }
-}
-
 enum PersistenceFactory {
     static let schema = Schema([StoredWorkout.self, StoredValue.self])
 

@@ -35,6 +35,7 @@ TARGETS = [
              "GENERATE_INFOPLIST_FILE": "YES",
              "INFOPLIST_KEY_CFBundleDisplayName": "\"Fit mit Jodit\"",
              "INFOPLIST_KEY_LSApplicationCategoryType": "\"public.app-category.healthcare-fitness\"",
+             "INFOPLIST_KEY_NSLocalNetworkUsageDescription": "Fit mit Jodit verbindet iPhone und iPad im lokalen Netz, damit die Apple Watch ein Training auf dem iPad steuern kann.",
              "INFOPLIST_KEY_ITSAppUsesNonExemptEncryption": "NO",
              "INFOPLIST_KEY_UIApplicationSceneManifest_Generation": "YES",
              "INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents": "YES",
