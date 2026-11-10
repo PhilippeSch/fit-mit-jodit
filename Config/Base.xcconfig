@@ -1,0 +1,6 @@
+// Zentrale Werte fuer alle Targets. Team-ID und Bundle-ID nur hier aendern.
+APPLE_TEAM_ID = PZ2HQ4532Q
+APP_BUNDLE_ID = ch.fitmitjodit.timer
+ICLOUD_CONTAINER = iCloud.ch.fitmitjodit.timer
+
+#include "Version.xcconfig"

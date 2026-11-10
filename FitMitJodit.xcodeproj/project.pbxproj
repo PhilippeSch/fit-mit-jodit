@@ -1,0 +1,786 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D9BEA37192E02337A7C147A7 /* FitMitJoditWatch in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B9324E13D1B1761247DF2C0D; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB4D5E99EBBABA50CC3933A1 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = 76DED3A96A6E23F6F9446183;
+			remoteInfo = FitMitJoditWatch;
+		};
+		FC50A02577495CCF60297108 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = 56A20B07B8D5146A0C5234E0;
+			remoteInfo = FitMitJodit;
+		};
+		2F549E4A2FB5C709F63E71D3 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = 56A20B07B8D5146A0C5234E0;
+			remoteInfo = FitMitJodit;
+		};
+		875677876B83FB8A83F15074 = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 46F86FAA6BBF9AC94A7E4595;
+			proxyType = 1;
+			remoteGlobalIDString = 76DED3A96A6E23F6F9446183;
+			remoteInfo = FitMitJoditWatch;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		118B90F9A3B4FC49C9FA08FB /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				D9BEA37192E02337A7C147A7,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		38579FA901F258218E184444 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FitMitJodit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9324E13D1B1761247DF2C0D = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FitMitJoditWatch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB8406B4E072BD1FF6009A3E = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FitMitJoditTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA76DF53A87FB5C05045C7EC = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FitMitJoditUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		41C1959ABAA95BC3F470B30F = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "FitMitJoditWatchUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DF9C7F36FFD0BF4C2CD96DF /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		1B8872D946262FAA3B8F1506 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		895CA67F44CDE8075CE9A89E = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 56A20B07B8D5146A0C5234E0;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		50E971E0332AE95EA3B0DDF7 /* FitMitJodit */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				895CA67F44CDE8075CE9A89E,
+			);
+			path = FitMitJodit;
+			sourceTree = "<group>";
+		};
+		D879CD73C217CE75E4CCD454 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		36844D8767BC8C5ED3C9F098 /* FitMitJoditWatch */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitMitJoditWatch;
+			sourceTree = "<group>";
+		};
+		3DD6B18E81057FAA0F15E0F9 /* FitMitJoditTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitMitJoditTests;
+			sourceTree = "<group>";
+		};
+		996FFAAE04C04FE6F90225CD /* FitMitJoditUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitMitJoditUITests;
+			sourceTree = "<group>";
+		};
+		15B2D9D1DD0BA84BCCD12DD4 /* FitMitJoditWatchUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitMitJoditWatchUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5F60FB6848C4069091269409 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9C0CE34F2C4F67F3C4712C6 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		72A9B69B338D93440828EF28 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BF4B84268249A8B6E6C43FFF = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		727BEF9BE5D902C2F50675F4 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4EAE695AD1F489F78EA3E1C6 = {
+			isa = PBXGroup;
+			children = (
+				50E971E0332AE95EA3B0DDF7,
+				D879CD73C217CE75E4CCD454,
+				36844D8767BC8C5ED3C9F098,
+				3DD6B18E81057FAA0F15E0F9,
+				996FFAAE04C04FE6F90225CD,
+				15B2D9D1DD0BA84BCCD12DD4,
+				4898BA602D87BE762B0F8BD0,
+				1D5F545FBA1B7116946BB4C6,
+			);
+			sourceTree = "<group>";
+		};
+		1D5F545FBA1B7116946BB4C6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38579FA901F258218E184444,
+				B9324E13D1B1761247DF2C0D,
+				AB8406B4E072BD1FF6009A3E,
+				CA76DF53A87FB5C05045C7EC,
+				41C1959ABAA95BC3F470B30F,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4898BA602D87BE762B0F8BD0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				8DF9C7F36FFD0BF4C2CD96DF,
+				1B8872D946262FAA3B8F1506,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56A20B07B8D5146A0C5234E0 /* FitMitJodit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F85B8A906FFD29D338FFE065;
+			buildPhases = (
+				6A7615A2256ECFB8AACC12E1,
+				5F60FB6848C4069091269409,
+				9DF321B0785442639F906473,
+				118B90F9A3B4FC49C9FA08FB,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				902FFD97F0EE019F94EF6F17,
+			);
+			fileSystemSynchronizedGroups = (
+				50E971E0332AE95EA3B0DDF7,
+				D879CD73C217CE75E4CCD454,
+			);
+			name = FitMitJodit;
+			productName = FitMitJodit;
+			productReference = 38579FA901F258218E184444;
+			productType = "com.apple.product-type.application";
+		};
+		76DED3A96A6E23F6F9446183 /* FitMitJoditWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2D3CF3EDBF3F34CCFEEBA28;
+			buildPhases = (
+				3AED8517FE5EC84772F8D5CB,
+				D9C0CE34F2C4F67F3C4712C6,
+				19D28F23419CD8FAAC71CF9B,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				36844D8767BC8C5ED3C9F098,
+				D879CD73C217CE75E4CCD454,
+			);
+			name = FitMitJoditWatch;
+			productName = FitMitJoditWatch;
+			productReference = B9324E13D1B1761247DF2C0D;
+			productType = "com.apple.product-type.application";
+		};
+		7B33A1766426F1F583A77B37 /* FitMitJoditTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F160B7874A53CE0551DD84A;
+			buildPhases = (
+				08ECEE3A92DB3FE292912CD5,
+				72A9B69B338D93440828EF28,
+				B380FCB5CA0830916F5E8B20,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				399F07EE9EAF829E83BC5BB4,
+			);
+			fileSystemSynchronizedGroups = (
+				3DD6B18E81057FAA0F15E0F9,
+			);
+			name = FitMitJoditTests;
+			productName = FitMitJoditTests;
+			productReference = AB8406B4E072BD1FF6009A3E;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7B65DE41F1FB0661F393C585 /* FitMitJoditUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE4BA69EEF82A146990610BB;
+			buildPhases = (
+				6D9C26FFBD7758CEA04FCF8C,
+				BF4B84268249A8B6E6C43FFF,
+				B88EF43D40BBFF8DE02CC51C,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D01969EDC11B1E2EEA5E15B,
+			);
+			fileSystemSynchronizedGroups = (
+				996FFAAE04C04FE6F90225CD,
+			);
+			name = FitMitJoditUITests;
+			productName = FitMitJoditUITests;
+			productReference = CA76DF53A87FB5C05045C7EC;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F260DAE74BF2801BA03ED20A /* FitMitJoditWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 212DD752746A05895CEEE6C5;
+			buildPhases = (
+				6DB0C11B50A8B0AFE1174C87,
+				727BEF9BE5D902C2F50675F4,
+				5ED5A416ED83CB3A5834ED56,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1E93F1C5759AB791FE8F5436,
+			);
+			fileSystemSynchronizedGroups = (
+				15B2D9D1DD0BA84BCCD12DD4,
+			);
+			name = FitMitJoditWatchUITests;
+			productName = FitMitJoditWatchUITests;
+			productReference = 41C1959ABAA95BC3F470B30F;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2720;
+				LastUpgradeCheck = 2720;
+				TargetAttributes = {
+					56A20B07B8D5146A0C5234E0 = {
+						CreatedOnToolsVersion = 27.2;
+					};
+					76DED3A96A6E23F6F9446183 = {
+						CreatedOnToolsVersion = 27.2;
+					};
+					7B33A1766426F1F583A77B37 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 56A20B07B8D5146A0C5234E0;
+					};
+					7B65DE41F1FB0661F393C585 = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 56A20B07B8D5146A0C5234E0;
+					};
+					F260DAE74BF2801BA03ED20A = {
+						CreatedOnToolsVersion = 27.2;
+						TestTargetID = 76DED3A96A6E23F6F9446183;
+					};
+				};
+			};
+			buildConfigurationList = B61A476A5531CC175278BDCF;
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+				en,
+				Base,
+			);
+			mainGroup = 4EAE695AD1F489F78EA3E1C6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1D5F545FBA1B7116946BB4C6;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				56A20B07B8D5146A0C5234E0,
+				76DED3A96A6E23F6F9446183,
+				7B33A1766426F1F583A77B37,
+				7B65DE41F1FB0661F393C585,
+				F260DAE74BF2801BA03ED20A,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9DF321B0785442639F906473 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		19D28F23419CD8FAAC71CF9B = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B380FCB5CA0830916F5E8B20 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B88EF43D40BBFF8DE02CC51C = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5ED5A416ED83CB3A5834ED56 = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6A7615A2256ECFB8AACC12E1 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3AED8517FE5EC84772F8D5CB = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08ECEE3A92DB3FE292912CD5 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D9C26FFBD7758CEA04FCF8C = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DB0C11B50A8B0AFE1174C87 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		902FFD97F0EE019F94EF6F17 = {
+			isa = PBXTargetDependency;
+			target = 76DED3A96A6E23F6F9446183;
+			targetProxy = BB4D5E99EBBABA50CC3933A1;
+		};
+		399F07EE9EAF829E83BC5BB4 = {
+			isa = PBXTargetDependency;
+			target = 56A20B07B8D5146A0C5234E0;
+			targetProxy = FC50A02577495CCF60297108;
+		};
+		3D01969EDC11B1E2EEA5E15B = {
+			isa = PBXTargetDependency;
+			target = 56A20B07B8D5146A0C5234E0;
+			targetProxy = 2F549E4A2FB5C709F63E71D3;
+		};
+		1E93F1C5759AB791FE8F5436 = {
+			isa = PBXTargetDependency;
+			target = 76DED3A96A6E23F6F9446183;
+			targetProxy = 875677876B83FB8A83F15074;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		80DB6ACE13380ADC3D86D6C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DF9C7F36FFD0BF4C2CD96DF;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "$(APPLE_TEAM_ID)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = "$(APP_MARKETING_VERSION)";
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		08723DE70035A45CE7E33CC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DF9C7F36FFD0BF4C2CD96DF;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "$(APP_BUILD_NUMBER)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "$(APPLE_TEAM_ID)";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = "$(APP_MARKETING_VERSION)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 5.0;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		358BE9794203CAAB8776FE14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FitMitJodit/FitMitJodit.entitlements;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FitMitJodit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
+				PRODUCT_MODULE_NAME = FitMitJodit;
+				PRODUCT_NAME = FitMitJodit;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5D2007B50EB7D4D9EB03B294 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FitMitJodit/FitMitJodit.entitlements;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FitMitJodit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID)";
+				PRODUCT_MODULE_NAME = FitMitJodit;
+				PRODUCT_NAME = FitMitJodit;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B8FF3CEB8991081224A00539 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_MODULE_NAME = FitMitJoditWatch;
+				PRODUCT_NAME = FitMitJoditWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		D4182C884411388FBB00568F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(APP_BUNDLE_ID)";
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).watchkitapp";
+				PRODUCT_MODULE_NAME = FitMitJoditWatch;
+				PRODUCT_NAME = FitMitJoditWatch;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		46DA78C2C74C2AD1AA337DC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitMitJodit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitMitJodit";
+			};
+			name = Debug;
+		};
+		7AC293C7DCF73E8AA6499485 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitMitJodit.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitMitJodit";
+			};
+			name = Release;
+		};
+		58CDD61864194D6102876879 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FitMitJodit;
+			};
+			name = Debug;
+		};
+		622FFF50B786BE38220D870A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FitMitJodit;
+			};
+			name = Release;
+		};
+		84A25EF124688DC422F41999 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).watchkitapp.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = FitMitJoditWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		490ECAC5E0E217B0F61C3519 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_ID).watchkitapp.uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = FitMitJoditWatch;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B61A476A5531CC175278BDCF = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80DB6ACE13380ADC3D86D6C5,
+				08723DE70035A45CE7E33CC1,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F85B8A906FFD29D338FFE065 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				358BE9794203CAAB8776FE14,
+				5D2007B50EB7D4D9EB03B294,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2D3CF3EDBF3F34CCFEEBA28 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8FF3CEB8991081224A00539,
+				D4182C884411388FBB00568F,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F160B7874A53CE0551DD84A = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46DA78C2C74C2AD1AA337DC7,
+				7AC293C7DCF73E8AA6499485,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BE4BA69EEF82A146990610BB = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58CDD61864194D6102876879,
+				622FFF50B786BE38220D870A,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		212DD752746A05895CEEE6C5 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84A25EF124688DC422F41999,
+				490ECAC5E0E217B0F61C3519,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}
