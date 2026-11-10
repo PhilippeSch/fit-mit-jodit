@@ -1,0 +1,52 @@
+name: CI
+
+# Nur bei Pull Requests und von Hand: macOS-Laeufe sind teuer.
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      # Neueste installierte Xcode-Version waehlen; die tatsaechlich benutzte
+      # Version steht im Log und in docs/PROGRESS.md.
+      - name: Xcode waehlen
+        run: |
+          latest=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Xcode: $latest"
+          sudo xcode-select -switch "$latest"
+          xcodebuild -version
+
+      - name: Watch-App bauen (ohne Signing)
+        run: |
+          xcodebuild build \
+            -project FitMitJodit.xcodeproj \
+            -scheme FitMitJoditWatch \
+            -destination 'generic/platform=watchOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Unit-Tests auf iPhone-Simulator
+        run: |
+          udid=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; print(next(x['udid'] for k in sorted(d, reverse=True) if 'iOS' in k for x in d[k] if x['name'].startswith('iPhone')))")
+          echo "Simulator: $udid"
+          xcodebuild test \
+            -project FitMitJodit.xcodeproj \
+            -scheme FitMitJoditUnit \
+            -destination "platform=iOS Simulator,id=$udid" \
+            -parallel-testing-enabled NO \
+            -resultBundlePath TestResults.xcresult
+
+      - name: Testergebnisse sichern
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult

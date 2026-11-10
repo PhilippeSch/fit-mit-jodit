@@ -1,0 +1,99 @@
+# Fit mit Jodit: Upload nach TestFlight und Store-Texte.
+# Einreichen zur Pruefung ist bewusst nirgends eingebaut.
+default_platform(:ios)
+
+PROJECT = "FitMitJodit.xcodeproj"
+SCHEME = "FitMitJodit"
+APP_ID = "ch.fitmitjodit.timer"
+TEAM_ID = "PZ2HQ4532Q"
+GROUP = "Intern"
+VERSION_FILE = File.expand_path("../Config/Version.xcconfig", __dir__)
+
+platform :ios do
+  def asc_key
+    app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_filepath: ENV.fetch("ASC_KEY_PATH"),
+      duration: 1200,
+      in_house: false
+    )
+  end
+
+  def auth_xcargs
+    "-allowProvisioningUpdates -authenticationKeyPath #{ENV.fetch('ASC_KEY_PATH')} " \
+      "-authenticationKeyID #{ENV.fetch('ASC_KEY_ID')} -authenticationKeyIssuerID #{ENV.fetch('ASC_ISSUER_ID')}"
+  end
+
+  def set_build_number(n)
+    text = File.read(VERSION_FILE).sub(/APP_BUILD_NUMBER = \d+/, "APP_BUILD_NUMBER = #{n}")
+    File.write(VERSION_FILE, text)
+  end
+
+  desc "Naechste Build-Nummer: hoeher als jede in TestFlight"
+  lane :bump do
+    asc_key
+    latest = latest_testflight_build_number(app_identifier: APP_ID, initial_build_number: 0) rescue 0
+    local = File.read(VERSION_FILE)[/APP_BUILD_NUMBER = (\d+)/, 1].to_i
+    n = [latest.to_i + 1, local].max
+    set_build_number(n)
+    UI.message("Build-Nummer: #{n}")
+    n
+  end
+
+  desc "Archiv und .ipa unter build/"
+  lane :archive do
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      configuration: "Release",
+      output_directory: "build",
+      archive_path: "build/FitMitJodit.xcarchive",
+      output_name: "FitMitJodit.ipa",
+      derived_data_path: "build/DerivedDataRelease",
+      export_method: "app-store",
+      export_options: { signingStyle: "automatic", teamID: TEAM_ID, manageAppVersionAndBuildNumber: false },
+      xcargs: auth_xcargs,
+      clean: true
+    )
+  end
+
+  desc "Build hochladen, auf Verarbeitung warten, interner Gruppe zuweisen"
+  lane :beta do |opts|
+    asc_key
+    bump unless opts[:keep_build_number]
+    archive
+    changelog = File.exist?("metadata/testflight_whats_new.txt") ? File.read("metadata/testflight_whats_new.txt") : "Zwischenstand"
+    upload_to_testflight(
+      ipa: "build/FitMitJodit.ipa",
+      app_identifier: APP_ID,
+      skip_waiting_for_build_processing: false,
+      wait_processing_timeout_duration: 3600,
+      distribute_external: false,
+      groups: [GROUP],
+      changelog: changelog,
+      uses_non_exempt_encryption: false
+    )
+  end
+
+  desc "Store-Texte (und optional Screenshots) hochladen, ohne Einreichung"
+  lane :metadata do |opts|
+    asc_key
+    deliver(
+      app_identifier: APP_ID,
+      app_version: File.read(VERSION_FILE)[/APP_MARKETING_VERSION = ([\d.]+)/, 1],
+      skip_binary_upload: true,
+      skip_screenshots: !opts[:screenshots],
+      overwrite_screenshots: !!opts[:screenshots],
+      skip_metadata: false,
+      skip_app_version_update: false,
+      submit_for_review: false,
+      automatic_release: false,
+      force: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false,
+      metadata_path: "fastlane/metadata",
+      screenshots_path: "fastlane/screenshots"
+    )
+  end
+end
