@@ -20,6 +20,21 @@ class FlowUITests: XCTestCase {
     private func tap(_ id: String, file: StaticString = #filePath, line: UInt = #line) {
         let e = app.descendants(matching: .any)[id].firstMatch
         XCTAssertTrue(e.waitForExistence(timeout: 10), "\(id) fehlt", file: file, line: line)
+        // Warten, bis Übergänge (Navigation, Blätter) abgeschlossen sind.
+        let hittable = expectation(for: NSPredicate(format: "isHittable == true"), evaluatedWith: e)
+        wait(for: [hittable], timeout: 5)
+        e.tap()
+    }
+
+    /// Wischt die Palette, bis der Baustein sichtbar ist (wie von Hand).
+    private func tapInPalette(_ id: String) {
+        let e = app.descendants(matching: .any)[id].firstMatch
+        XCTAssertTrue(e.waitForExistence(timeout: 5), "\(id) fehlt")
+        var tries = 0
+        while !e.isHittable && tries < 6 {
+            app.descendants(matching: .any)["palette"].firstMatch.swipeLeft()
+            tries += 1
+        }
         e.tap()
     }
 
@@ -70,7 +85,8 @@ class FlowUITests: XCTestCase {
         let name = first.label
         first.tap()
         XCTAssertTrue(tiles("tile-work-45").firstMatch.label.contains(name))
-        // Duplizieren und löschen
+        // Duplizieren und löschen (Auswahl nach «Übung wählen» erst aufheben)
+        tap("deselect")
         tiles("tile-work-45").firstMatch.tap()
         tap("duplicate")
         XCTAssertEqual(tiles("tile-work-45").count, 2)
@@ -90,8 +106,7 @@ class FlowUITests: XCTestCase {
         tap("addPaletteItem")
         tap("addCustomBlock")
         XCTAssertTrue(app.descendants(matching: .any)["palette-work-40"].waitForExistence(timeout: 5))
-        // Rückgängig
-        tap("palette-work-40")
+        tapInPalette("palette-work-40")
         XCTAssertTrue(tiles("tile-work-40").firstMatch.waitForExistence(timeout: 3))
     }
 
@@ -118,6 +133,7 @@ class FlowUITests: XCTestCase {
         let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
         XCTAssertTrue(circuit.waitForExistence(timeout: 10))
         circuit.tap()
+        XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
         tap("start")
         XCTAssertTrue(app.descendants(matching: .any)["countdown"].waitForExistence(timeout: 10))
         // Knöpfe einblenden, pausieren
@@ -131,7 +147,9 @@ class FlowUITests: XCTestCase {
         // Stopp mit Bestätigung
         tap("stop")
         tap("confirmStop")
-        XCTAssertTrue(app.buttons["newWorkout"].waitForExistence(timeout: 10))
+        // Zurück im Training, die Laufansicht ist weg.
+        XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.descendants(matching: .any)["countdown"].exists)
     }
 
     func testSignalsOnOff() {

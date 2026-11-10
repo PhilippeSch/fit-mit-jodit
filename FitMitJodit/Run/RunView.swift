@@ -8,6 +8,7 @@ struct RunView: View {
     @State private var controlsVisible = false
     @State private var hideTask: Task<Void, Never>?
     @State private var confirmStop = false
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
 
     var body: some View {
         let st = session.state
@@ -31,7 +32,7 @@ struct RunView: View {
                             RunContent(session: session, size: halves.second.size, part: .countdown)
                                 .frame(width: halves.second.width, height: halves.second.height)
                                 .offset(x: halves.second.minX, y: halves.second.minY)
-                            if controlsVisible || st.isPaused {
+                            if controlsVisible || st.isPaused || voiceOver {
                                 RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
                                     .frame(width: halves.second.width, height: halves.second.height)
                                     .offset(x: halves.second.minX, y: halves.second.minY)
@@ -46,14 +47,14 @@ struct RunView: View {
                                 .frame(width: geo.size.width, height: geo.size.height)
                                 .contentShape(Rectangle())
                                 .onTapGesture { showControls() }
-                            if controlsVisible || st.isPaused {
+                            if controlsVisible || st.isPaused || voiceOver {
                                 RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
                                     .transition(.opacity)
                             }
                         }
                     }
                 }
-                .accessibilityAction(named: Text("Bedienelemente zeigen")) { showControls() }
+
             }
         }
         .foregroundStyle(.white)
@@ -68,6 +69,7 @@ struct RunView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { app.refresh() }
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("runView")
     }
 

@@ -57,7 +57,10 @@ enum PersistenceFactory {
     /// nicht in Tests. Fällt iCloud aus, läuft die App mit lokalem Speicher weiter.
     static func makeContainer(inMemory: Bool = false) -> ModelContainer {
         if inMemory {
-            return try! ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+            // Eigener Name je Container: sonst teilt SwiftData die Standard-Datei der App.
+            let config = ModelConfiguration("mem-\(UUID().uuidString)", schema: schema, isStoredInMemoryOnly: true,
+                                            cloudKitDatabase: .none)
+            return try! ModelContainer(for: schema, configurations: config)
         }
         if let id = Bundle.main.object(forInfoDictionaryKey: "FMJCloudKitContainer") as? String,
            !id.isEmpty, !id.hasPrefix("$"),
@@ -69,6 +72,6 @@ enum PersistenceFactory {
             return c
         }
         // Letzter Ausweg: im Speicher, damit die App nie abstürzt.
-        return try! ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        return makeContainer(inMemory: true)
     }
 }

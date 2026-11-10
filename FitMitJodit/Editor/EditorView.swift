@@ -272,8 +272,9 @@ struct SelectionBar: View {
     @Binding var sheet: EditorSheet?
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
+        // Bricht in Zeilen um, damit auf schmalen Breiten alle Aktionen sichtbar sind.
+        FlowLayout(spacing: 8, lineSpacing: 8) {
+            Group {
                 bar(String(localized: "Übung"), "figure.strengthtraining.traditional", id: "pickExercise") { sheet = .exercise }
                 bar(String(localized: "Dauer"), "timer", id: "pickDuration") { sheet = .duration }
                 bar(String(localized: "Duplizieren"), "plus.square.on.square", id: "duplicate") { model.duplicateSelection() }
@@ -282,8 +283,8 @@ struct SelectionBar: View {
                     .disabled(!model.canMakeRound)
                 bar(String(localized: "Fertig"), "checkmark", id: "deselect") { model.clearSelection() }
             }
-            .padding(.vertical, 4)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(8)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
         .accessibilityElement(children: .contain)

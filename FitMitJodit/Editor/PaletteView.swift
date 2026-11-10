@@ -10,6 +10,17 @@ struct PaletteView: View {
 
     var body: some View {
         let content = Group {
+            Button {
+                sheet = .newPaletteItem
+            } label: {
+                Image(systemName: "plus")
+                    .font(.title2.bold())
+                    .frame(width: 64, height: 64)
+                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Eigenen Baustein anlegen"))
+            .accessibilityIdentifier("addPaletteItem")
             ForEach(app.store.palette) { item in
                 PaletteTile(item: item) {
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
@@ -22,17 +33,7 @@ struct PaletteView: View {
                     app.store.removePaletteItem(item)
                 }
             }
-            Button {
-                sheet = .newPaletteItem
-            } label: {
-                Image(systemName: "plus")
-                    .font(.title2.bold())
-                    .frame(width: 64, height: 64)
-                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 12))
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Text("Eigenen Baustein anlegen"))
-            .accessibilityIdentifier("addPaletteItem")
+
         }
         VStack(alignment: .leading, spacing: 8) {
             Text("Bausteine")
