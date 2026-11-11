@@ -1980,16 +1980,6 @@
         }
       }
     },
-    "iOS-Einstellungen öffnen › Bedienungshilfen › Gesprochene Inhalte › Stimmen." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open iOS Settings › Accessibility › Spoken Content › Voices."
-          }
-        }
-      }
-    },
     "«Deutsch» wählen und eine Stimme mit «Premium» laden, z. B. «Anna (Premium)»." : {
       "localizations" : {
         "en" : {
@@ -2020,12 +2010,12 @@
         }
       }
     },
-    "Einstellungen öffnen" : {
+    "iOS-Einstellungen › Bedienungshilfen › Lesen & Sprechen › Stimmen." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open Settings"
+            "value" : "iOS Settings › Accessibility › Read & Speak › Voices."
           }
         }
       }

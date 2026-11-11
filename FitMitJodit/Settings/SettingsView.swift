@@ -60,14 +60,6 @@ struct SettingsView: View {
                             }
                         }
                         .accessibilityIdentifier("voicePicker")
-                        Button(String(localized: "Stimme probehören")) {
-                            var s = store.settings.signals
-                            s.voiceMode = .always
-                            let sample = Announcements.getReady(next: Step(kind: .work, seconds: 45,
-                                exerciseName: ExerciseCatalog.all.first { $0.id == "squats" }.map { ExerciseCatalog.localizedName($0) }))
-                            app.signalPlayer?.play(.announcement(sample), settings: s)
-                        }
-                        .accessibilityIdentifier("voiceSample")
                         VoiceStatusCard()
                             .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
                     }

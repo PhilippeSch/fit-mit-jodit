@@ -35,19 +35,11 @@ struct VoiceStatusCard: View {
             }
             if basic {
                 VStack(alignment: .leading, spacing: 6) {
-                    step(1, String(localized: "iOS-Einstellungen öffnen › Bedienungshilfen › Gesprochene Inhalte › Stimmen."))
+                    step(1, String(localized: "iOS-Einstellungen › Bedienungshilfen › Lesen & Sprechen › Stimmen."))
                     step(2, VoiceCatalog.appLanguage == "de" ? String(localized: "«Deutsch» wählen und eine Stimme mit «Premium» laden, z. B. «Anna (Premium)».")
                                                          : String(localized: "«English» wählen und eine Stimme mit «Premium» laden, z. B. «Ava (Premium)»."))
                     step(3, String(localized: "Zurück in die App: Die neue Stimme wird automatisch verwendet."))
                 }
-                Button {
-                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
-                } label: {
-                    Label(String(localized: "Einstellungen öffnen"), systemImage: "gear")
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .buttonStyle(.bordered)
-                .accessibilityIdentifier("openVoiceSettings")
             }
             Button {
                 var s = app.store.settings.signals
