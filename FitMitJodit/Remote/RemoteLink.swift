@@ -86,6 +86,8 @@ final class RemoteLink: NSObject {
                               hostName: isPad ? String(localized: "iPad") : String(localized: "iPhone"), hostIsPad: isPad)
     }
 
+    func sendStart(_ w: Workout) { send(.startWorkout(w)) }
+
     func sendCommand(_ c: RemoteCommand, workoutID: UUID? = nil) {
         send(.command(c, workoutID: workoutID))
     }
@@ -107,6 +109,11 @@ final class RemoteLink: NSObject {
         case .command(let c, let id):
             guard let app else { return }
             RemoteCommandHandler.apply(c, workoutID: id, to: app)
+            broadcastState()
+        case .startWorkout(let w):
+            guard let app else { return }
+            // Bekanntes Training lokal nehmen (aktuelle Fassung), sonst das mitgeschickte.
+            app.start(app.store.workout(id: w.id) ?? w)
             broadcastState()
         case .workouts, .target:
             break

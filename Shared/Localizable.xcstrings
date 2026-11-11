@@ -433,17 +433,6 @@
         }
       }
     },
-    "Bedienelemente zeigen" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show controls"
-          }
-        }
-      }
-    },
     "Beenden" : {
       "localizations" : {
         "en" : {
@@ -1374,17 +1363,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit round"
-          }
-        }
-      }
-    },
-    "Runde, %lld mal" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Round, × %lld"
           }
         }
       }

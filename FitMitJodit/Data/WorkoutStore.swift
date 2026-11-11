@@ -1,10 +1,26 @@
+import CryptoKit
 import Foundation
 import Observation
 import SwiftData
 
 /// Mitgelieferte Vorlagen (SPEC Teil 1).
 enum Templates {
-    static func all() -> [Workout] { [circuit, tabata, strength, warmup, fullBody, core] }
+    /// Vorlagen mit fester ID je Schlüssel: Auf zwei Geräten angelegt, werden sie über iCloud zu einem Eintrag.
+    static func all() -> [Workout] {
+        [circuit, tabata, strength, warmup, fullBody, core].map { w in
+            var w = w
+            if let key = w.templateKey { w.id = id(for: key) }
+            return w
+        }
+    }
+
+    /// Stabile UUID aus dem Vorlagen-Schlüssel (MD5 der Zeichenkette, nur als Kennung, nicht kryptografisch).
+    static func id(for key: String) -> UUID {
+        var d = Array(Insecure.MD5.hash(data: Data("fmj.template.\(key)".utf8)))
+        d[6] = (d[6] & 0x0F) | 0x30 // Version 3
+        d[8] = (d[8] & 0x3F) | 0x80
+        return UUID(uuid: (d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8], d[9], d[10], d[11], d[12], d[13], d[14], d[15]))
+    }
 
     /// Übungsname aus dem Katalog in der Gerätesprache.
     private static func ex(_ id: String) -> String? {
@@ -109,7 +125,10 @@ final class WorkoutStore {
     private(set) var workouts: [Workout] = []
     private(set) var palette: [PaletteItem] = PaletteItem.defaults
     private(set) var customExerciseNames: [String] = []
-    var settings = AppSettings() { didSet { if settings != oldValue { saveValue(settings, key: Keys.settings) } } }
+    var settings = AppSettings() { didSet { if !isLoading, settings != oldValue { saveValue(settings, key: Keys.settings) } } }
+    /// Während des Ladens nichts zurückschreiben (sonst überschreibt ein alter Stand neuere Änderungen anderer Geräte).
+    @ObservationIgnored private var isLoading = false
+    @ObservationIgnored private var remoteObserver: NSObjectProtocol?
 
     let context: ModelContext
     private let defaults: UserDefaults
@@ -118,6 +137,7 @@ final class WorkoutStore {
         static let palette = "palette"
         static let names = "customExerciseNames"
         static let settings = "settings"
+        static let seededTemplates = "seededTemplates"
     }
 
     init(container: ModelContainer, defaults: UserDefaults = .standard) {
@@ -126,6 +146,10 @@ final class WorkoutStore {
         context.autosaveEnabled = true
         reload()
         seedTemplatesIfNeeded()
+        // Änderungen aus iCloud (andere Geräte) sofort übernehmen.
+        remoteObserver = NotificationCenter.default.addObserver(forName: .NSPersistentStoreRemoteChange, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.reload() }
+        }
     }
 
     // MARK: Laden
@@ -141,27 +165,62 @@ final class WorkoutStore {
                 byID[s.workoutID] = s
             }
         }
-        workouts = byID.values.compactMap(\.workout)
-        palette = loadValue([PaletteItem].self, key: Keys.palette) ?? PaletteItem.defaults
-        customExerciseNames = loadValue([String].self, key: Keys.names) ?? []
-        if let s = loadValue(AppSettings.self, key: Keys.settings) { settings = s }
+        // Dieselbe Vorlage zweimal (z. B. von zwei Geräten vor dem ersten Sync): neueste behalten.
+        var byTemplate: [String: StoredWorkout] = [:]
+        for st in byID.values {
+            guard let key = st.templateKey else { continue }
+            if let other = byTemplate[key] {
+                let (keep, drop) = st.modifiedAt > other.modifiedAt ? (st, other) : (other, st)
+                byTemplate[key] = keep
+                byID[drop.workoutID] = nil
+                context.delete(drop)
+            } else {
+                byTemplate[key] = st
+            }
+        }
+        if context.hasChanges { try? context.save() }
+        let loaded = byID.values.compactMap(\.workout)
+        if loaded != workouts { workouts = loaded }
+        isLoading = true
+        defer { isLoading = false }
+        let p = loadValue([PaletteItem].self, key: Keys.palette) ?? PaletteItem.defaults
+        if p != palette { palette = p }
+        let n = loadValue([String].self, key: Keys.names) ?? []
+        if n != customExerciseNames { customExerciseNames = n }
+        if let s = loadValue(AppSettings.self, key: Keys.settings), s != settings { settings = s }
     }
 
     /// Jede Vorlage genau einmal anlegen (auch neue Vorlagen nach einem Update), nie eine gelöschte zurückholen.
+    /// Welche schon angelegt wurden, steht lokal und zusätzlich über iCloud synchronisiert.
     func seedTemplatesIfNeeded() {
         let keysKey = "fmj.templatesSeeded.keys"
         var seeded = Set(defaults.stringArray(forKey: keysKey) ?? [])
+        seeded.formUnion(loadValue([String].self, key: Keys.seededTemplates) ?? [])
         // Übergang von der ersten Fassung: die vier ursprünglichen Vorlagen gelten als angelegt.
         if defaults.bool(forKey: "fmj.templatesSeeded.v1") {
             seeded.formUnion(["circuit4515", "tabata", "strength", "warmup"])
         }
         let present = Set(workouts.compactMap(\.templateKey))
+        var changed = false
         for t in Templates.all() {
             guard let key = t.templateKey, !seeded.contains(key) else { continue }
             if !present.contains(key) { upsert(t) }
             seeded.insert(key)
+            changed = true
         }
         defaults.set(Array(seeded).sorted(), forKey: keysKey)
+        if changed { saveValue(Array(seeded).sorted(), key: Keys.seededTemplates) }
+    }
+
+    /// Änderung aus dem Baukasten übernehmen: nur die Felder, die der Baukasten wirklich geändert hat,
+    /// in die aktuelle Fassung schreiben (Name, Favorit oder «zuletzt benutzt» aus der Bibliothek bleiben erhalten).
+    func applyEdit(from old: Workout, to new: Workout) {
+        var cur = workout(id: new.id) ?? new
+        if old.items != new.items { cur.items = new.items }
+        if old.name != new.name { cur.name = new.name }
+        if old.skipTrailingRest != new.skipTrailingRest { cur.skipTrailingRest = new.skipTrailingRest }
+        if old.spotifyLink != new.spotifyLink { cur.spotifyLink = new.spotifyLink }
+        upsert(cur)
     }
 
     // MARK: Sortierung

@@ -25,10 +25,18 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         engine.connect(player, to: engine.mainMixerNode, format: format)
         engine.connect(silence, to: engine.mainMixerNode, format: format)
         speech.delegate = self
+        // Kategorie einmal synchron setzen (mischbar), bevor irgendetwas abgespielt wird.
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
         NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] note in
             let type = (note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt).flatMap(AVAudioSession.InterruptionType.init)
             MainActor.assumeIsolated {
-                if type == .ended, self?.keepAliveActive == true { self?.startKeepAlive() }
+                if type == .ended, self?.keepAliveActive == true { self?.resumeAudio() }
+            }
+        }
+        // Ändert sich die Audio-Hardware (Kopfhörer, Bluetooth), stoppt die Engine: während eines Trainings neu starten.
+        NotificationCenter.default.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated {
+                if self?.keepAliveActive == true { self?.resumeAudio() }
             }
         }
     }
@@ -36,27 +44,20 @@ final class AudioSignalPlayer: NSObject, SignalSink {
     // MARK: Sitzung
 
     /// Sitzung auf einer eigenen Warteschlange umstellen: setActive kann blockieren und gehört nicht auf den Haupt-Thread.
+    /// Engine und Stille-Spur werden erst danach (wieder auf dem Main-Thread) gestartet.
     private static let sessionQueue = DispatchQueue(label: "ch.fitmitjodit.audiosession")
 
-    private func configure(duck: Bool, then: (@Sendable () -> Void)? = nil) {
+    private func session(deactivateFirst: Bool, duck: Bool, active: Bool, then: (@MainActor () -> Void)? = nil) {
         Self.sessionQueue.async {
             let s = AVAudioSession.sharedInstance()
-            var opts: AVAudioSession.CategoryOptions = [.mixWithOthers]
-            if duck { opts.insert(.duckOthers) }
-            try? s.setCategory(.playback, mode: .default, options: opts)
-            try? s.setActive(true)
-            then?()
-        }
-    }
-
-    private func deactivate(thenReconfigure: Bool) {
-        Self.sessionQueue.async {
-            try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-            if thenReconfigure {
-                let s = AVAudioSession.sharedInstance()
-                try? s.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            if deactivateFirst { try? s.setActive(false, options: .notifyOthersOnDeactivation) }
+            if active {
+                var opts: AVAudioSession.CategoryOptions = [.mixWithOthers]
+                if duck { opts.insert(.duckOthers) }
+                try? s.setCategory(.playback, mode: .default, options: opts)
                 try? s.setActive(true)
             }
+            if let then { DispatchQueue.main.async { MainActor.assumeIsolated { then() } } }
         }
     }
 
@@ -67,31 +68,65 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         }
     }
 
-    /// Während eines Trainings aufrufen: hält die App im Hintergrund lebendig.
-    func startKeepAlive() {
-        keepAliveActive = true
-        configure(duck: false)
-        ensureEngine()
+    private lazy var silenceBuffer: AVAudioPCMBuffer? = {
         let frames = AVAudioFrameCount(format.sampleRate)
-        if let buf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames) {
-            buf.frameLength = frames // Nullen = Stille
+        let buf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)
+        buf?.frameLength = frames // Nullen = Stille
+        return buf
+    }()
+
+    /// Engine und Stille-Spur (wieder) starten; die Stille wird nur einmal eingereiht.
+    private func resumeAudio() {
+        guard keepAliveActive else { return }
+        ensureEngine()
+        if !silence.isPlaying, let buf = silenceBuffer {
+            silence.stop()
             silence.scheduleBuffer(buf, at: nil, options: .loops)
             silence.volume = 0
             silence.play()
         }
     }
 
+    /// Während eines Trainings aufrufen: hält die App im Hintergrund lebendig. Mehrfache Aufrufe sind harmlos.
+    func startKeepAlive() {
+        cancelPendingStop()
+        guard !keepAliveActive else { return }
+        keepAliveActive = true
+        session(deactivateFirst: false, duck: false, active: true) { [weak self] in self?.resumeAudio() }
+    }
+
+    private var stopTask: Task<Void, Never>?
+
+    private func cancelPendingStop() {
+        stopTask?.cancel()
+        stopTask = nil
+    }
+
+    /// Training beendet: Schlusston und «Geschafft» ausklingen lassen, dann die Sitzung freigeben.
+    func finishKeepAlive(after seconds: Double = 3.5) {
+        cancelPendingStop()
+        stopTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(seconds))
+            guard let self, !Task.isCancelled else { return }
+            self.stopKeepAlive()
+        }
+    }
+
+    /// Sofort stoppen (Training abgebrochen).
     func stopKeepAlive() {
+        cancelPendingStop()
+        guard keepAliveActive else { return }
         keepAliveActive = false
+        unduckTask?.cancel()
         silence.stop()
         player.stop()
         speech.stopSpeaking(at: .immediate)
         engine.stop()
-        deactivate(thenReconfigure: false)
+        session(deactivateFirst: true, duck: false, active: false)
     }
 
     private func duckForAWhile(_ seconds: Double) {
-        configure(duck: true)
+        session(deactivateFirst: false, duck: true, active: true) { [weak self] in self?.resumeAudio() }
         unduckTask?.cancel()
         unduckTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .seconds(seconds))
@@ -103,11 +138,10 @@ final class AudioSignalPlayer: NSObject, SignalSink {
     private func unduck() {
         if keepAliveActive {
             // Ohne duckOthers neu aktivieren: andere Musik kehrt auf volle Lautstärke zurück.
-            deactivate(thenReconfigure: true)
-            ensureEngine()
-            if !silence.isPlaying { silence.play() }
+            // setActive(false) stoppt die Engine – darum erst danach wieder starten.
+            session(deactivateFirst: true, duck: false, active: true) { [weak self] in self?.resumeAudio() }
         } else {
-            deactivate(thenReconfigure: false)
+            session(deactivateFirst: true, duck: false, active: false)
         }
     }
 
@@ -140,7 +174,7 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         let buf: AVAudioPCMBuffer
         if let b = cache[key] { buf = b } else if let b = make() { cache[key] = b; buf = b } else { return }
         duckForAWhile(Double(buf.frameLength) / format.sampleRate + 0.4)
-        ensureEngine()
+        ensureEngine() // Kategorie ist seit dem Start mischbar gesetzt
         player.volume = Float(volume)
         player.scheduleBuffer(buf, at: nil, options: .interrupts)
         if !player.isPlaying { player.play() }

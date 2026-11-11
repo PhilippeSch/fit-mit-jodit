@@ -38,11 +38,16 @@ enum RemoteMessage: Codable, Sendable, Equatable {
     case workouts([WorkoutSummary])
     /// Antwort des iPhone, wohin es Befehle schickt und ob die Verbindung steht.
     case target(name: String, connected: Bool)
+    /// iPhone → iPad: Training mit vollständigem Inhalt starten (die ID allein ist auf dem iPad evtl. unbekannt).
+    case startWorkout(Workout)
 
     func encoded() -> Data { (try? JSONEncoder.fmj.encode(self)) ?? Data() }
 
     static func decode(_ data: Data) -> RemoteMessage? { try? JSONDecoder.fmj.decode(RemoteMessage.self, from: data) }
 
     static let key = "m"
+    /// Getrennte Schlüssel im Application Context, damit Liste und Zustand sich nicht gegenseitig ersetzen.
+    static let contextWorkoutsKey = "w"
+    static let contextSnapshotKey = "s"
 }
 

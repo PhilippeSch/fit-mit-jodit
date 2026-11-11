@@ -33,7 +33,12 @@ struct FitMitJoditApp: App {
         guard app.signalPlayer == nil else { return }
         app.signalPlayer = player
         app.observeSession { [player] session in
-            if let s = session, !s.isFinished { player.startKeepAlive() } else { player.stopKeepAlive() }
+            if let s = session {
+                // Beim Abschluss Schlusston und «Geschafft» ausklingen lassen, nicht hart abwürgen.
+                if s.isFinished { player.finishKeepAlive() } else { player.startKeepAlive() }
+            } else {
+                player.stopKeepAlive()
+            }
         }
         LiveActivityController.shared.attach(to: app)
         PhoneConnectivity.shared.attach(to: app)

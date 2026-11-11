@@ -67,17 +67,6 @@ final class AppModel {
         return s
     }
 
-    /// Übernimmt ein Training, das auf einem anderen Gerät läuft (Weiterleitung), ohne es neu zu starten.
-    func adoptRemote(workout: Workout, engine: TimerEngine) {
-        if session?.workout.id != workout.id {
-            let s = RunSession(workout: workout, settings: store.settings)
-            s.sink = signalPlayer
-            s.onControlChange = { [weak self] in self?.notifySession() }
-            session = s
-        }
-        session?.adopt(engine)
-    }
-
     func stop() {
         ticker?.invalidate()
         ticker = nil
@@ -105,6 +94,8 @@ final class AppModel {
     /// Nach Rückkehr aus dem Hintergrund sofort neu rechnen.
     func refresh() {
         session?.tick()
+        // Live Activity, Uhr usw. neu abgleichen (z. B. Live Activity, die im Hintergrund nicht starten durfte).
+        if session != nil { notifySession() }
         if let s = session, !s.isFinished, ticker == nil { startTicker() }
     }
 }
