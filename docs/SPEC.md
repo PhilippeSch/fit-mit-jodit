@@ -30,10 +30,16 @@ Beim ersten Start liegen vier Vorlagen bereit, die sich kopieren und ändern las
 3. Kraft: 4 Übungen à 60 s, 30 s Pause dazwischen, 90 s Pause, 3 Runden
 4. Warm-up: 6 Übungen à 30 s ohne Pause
 
+Zusätzlich zwei Vorlagen für Teilnehmende zu Hause, mit Übungsnamen und Ansage: «Ganzkörper 20» (10 Übungen à 40 s, 20 s Pause, 2 Runden) und «Bauch & Rumpf 10» (5 Übungen à 45 s, 15 s Pause, 2 Runden). Neue Vorlagen erscheinen auch nach einem Update, gelöschte kommen nicht zurück.
+
+**Zielgruppen:** Jodit im Kurs (Trainings oft ohne Übungsnamen) und Teilnehmende zu Hause (Trainings mit Namen und Ansage).
+
+**Willkommen und Werbung:** Beim ersten Start ein Willkommensbildschirm «Willkommen bei Fit mit Jodit» mit Foto von Jodit. Im Abschlussbild und in den Einstellungen eine Karte «Trainiere mit Jodit» mit Foto und Link zu fitmitjodit.ch. Fotos vorläufig von fitmitjodit.ch, als austauschbare Assets («PhotoWelcome», «PhotoGroup»); Originale folgen.
+
 ### 2. Baukasten (Editor)
 Aufbau von oben nach unten: Namensfeld, Zeitleiste, Palette.
 
-**Zeitleiste:** die Blöcke des Trainings als farbige Kacheln in Reihenfolge. Die Breite entspricht der Dauer, auf der Kachel stehen Dauer und, falls vergeben, der Übungsname. Auf schmalen Breiten bricht die Zeitleiste in Zeilen um. Gesamtdauer und Anzahl Runden stehen laufend darüber.
+**Zeitleiste:** die Blöcke des Trainings als farbige Kacheln in Reihenfolge. Die Breite entspricht der Dauer, auf der Kachel stehen Dauer und, falls vergeben, der Übungsname. Auf schmalen Breiten bricht die Zeitleiste in Zeilen um. Auch die Blöcke innerhalb einer Runde brechen um; die ganze Spalte scrollt, damit auch lange Trainings auf dem iPhone bearbeitbar bleiben. Gesamtdauer und Anzahl Runden stehen laufend darüber.
 
 **Palette:** Bausteine zum Antippen. Start mit 45 s Arbeit, 30 s Arbeit, 15 s Pause, 1 min Pause, 10 s Vorbereitung. Antippen hängt den Baustein ans Ende der Zeitleiste, oder hinter den markierten Block. Baustein halten ändert seine Dauer (Rad in 5-Sekunden-Schritten, 5 s bis 10 min). «+» legt einen eigenen Baustein an (Typ und Dauer). Die Palette gilt für alle Trainings und bleibt gespeichert, Bausteine lassen sich daraus wieder entfernen.
 
@@ -60,7 +66,7 @@ Sehr grosser Countdown, darüber der Name des aktuellen Blocks, darunter der nä
 Einzeln abschaltbar, mit eigener Lautstärke:
 1. Töne in den letzten 3 Sekunden und ein Startsignal beim Blockwechsel. Standard: ein.
 2. Signal bei Halbzeit des Blocks. Standard: ein.
-3. Sprachansagen in der App-Sprache. Standard: aus. Eingeschaltet sagt die Stimme zu Beginn einer Pause «Pause» und, falls vorhanden, «gleich: Kniebeugen», zu Beginn einer Übung den Übungsnamen oder ohne Namen «Los», dazu «Letzte Runde» und «Geschafft». Kein gesprochener Countdown.
+3. Sprachansagen in der App-Sprache. Modus «Aus», «Automatisch» (Standard) oder «Immer»; «Automatisch» spricht nur bei Trainings mit Übungsnamen (Teilnehmende zu Hause), Trainings ohne Namen (Kursstunde, Jodit sagt selbst an) bleiben bei den Tönen. Ausführliche Ansagen (Standard ein): Dauer mitsagen («Kniebeugen, 45 Sekunden»), 6 s vor Ende einer Pause «Bereit machen: Liegestütze, 45 Sekunden», in Arbeitsblöcken ab 30 s «Noch 10 Sekunden». (Geändert am 11.11.2026, vorher: Standard aus.) Eingeschaltet sagt die Stimme zu Beginn einer Pause «Pause» und, falls vorhanden, «gleich: Kniebeugen», zu Beginn einer Übung den Übungsnamen oder ohne Namen «Los», dazu «Letzte Runde» und «Geschafft». Kein gesprochener Countdown.
 
 Drei Ton-Sets zur Wahl: sportliche Piepser (Standard), Boxglocke, sanfter Gong. Erzeuge die Töne selbst (synthetisch), verwende keine fremden Sounddateien. Während Ton und Ansage wird die Musik anderer Apps kurz leiser und kehrt danach auf volle Lautstärke zurück.
 

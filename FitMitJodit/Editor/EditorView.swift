@@ -64,47 +64,53 @@ struct EditorView: View {
         }
     }
 
+    /// Die ganze Spalte scrollt (Name, Kopf, Start, Zeitleiste), damit auch lange Trainings auf kleinen
+    /// Bildschirmen bearbeitbar bleiben. Die Auswahl-Leiste liegt fest am unteren Rand der Spalte.
     private var timelineColumn: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            TextField(String(localized: "Name des Trainings"), text: Binding(get: { model.workout.name }, set: { model.setName($0) }))
-                .font(Theme.title(.title2))
-                .textFieldStyle(.plain)
-                .submitLabel(.done)
-                .accessibilityIdentifier("workoutName")
-            HStack(spacing: 16) {
-                Label(DurationFormat.clock(model.workout.totalSeconds), systemImage: "clock")
-                    .accessibilityIdentifier("totalDuration")
-                Label(model.workout.roundCount == 1 ? String(localized: "1 Runde") : String(localized: "\(model.workout.roundCount) Runden"),
-                      systemImage: "repeat")
-                Spacer()
-            }
-            .font(.subheadline.monospacedDigit())
-            .foregroundStyle(.secondary)
-            .accessibilityElement(children: .combine)
-            // Starten gross und immer sichtbar, auch bei einem Drittel der Breite.
-            Button {
-                app.start(model.workout)
-            } label: {
-                Label(String(localized: "Starten"), systemImage: "play.fill")
-                    .font(.title3.bold())
-                    .frame(maxWidth: .infinity, minHeight: 44)
-            }
-            .buttonStyle(.borderedProminent)
-            .disabled(StepSequence.expand(model.workout).isEmpty)
-            .accessibilityIdentifier("start")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                TextField(String(localized: "Name des Trainings"), text: Binding(get: { model.workout.name }, set: { model.setName($0) }))
+                    .font(Theme.title(.title2))
+                    .textFieldStyle(.plain)
+                    .submitLabel(.done)
+                    .accessibilityIdentifier("workoutName")
+                HStack(spacing: 16) {
+                    Label(DurationFormat.clock(model.workout.totalSeconds), systemImage: "clock")
+                        .accessibilityIdentifier("totalDuration")
+                    Label(model.workout.roundCount == 1 ? String(localized: "1 Runde") : String(localized: "\(model.workout.roundCount) Runden"),
+                          systemImage: "repeat")
+                    Spacer()
+                }
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .accessibilityElement(children: .combine)
+                // Starten gross und immer sichtbar, auch bei einem Drittel der Breite.
+                Button {
+                    app.start(model.workout)
+                } label: {
+                    Label(String(localized: "Starten"), systemImage: "play.fill")
+                        .font(.title3.bold())
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(StepSequence.expand(model.workout).isEmpty)
+                .accessibilityIdentifier("start")
 
-            ScrollView {
                 TimelineStrip(model: model, sheet: $sheet)
                     .padding(.bottom, 12)
             }
-            .scrollDismissesKeyboard(.immediately)
-
+            .padding()
+        }
+        .scrollDismissesKeyboard(.immediately)
+        .accessibilityIdentifier("editorScroll")
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             if !model.selection.isEmpty {
                 SelectionBar(model: model, sheet: $sheet)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .padding()
         .animation(.spring(response: 0.35, dampingFraction: 0.8), value: model.selection.isEmpty)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
@@ -337,8 +343,10 @@ struct FlowLayout: Layout {
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let maxW = proposal.width ?? .infinity
         var x: CGFloat = 0, y: CGFloat = 0, lineH: CGFloat = 0, widest: CGFloat = 0
+        // Kinder bekommen die verfügbare Breite (Runden brechen so selbst um); Kacheln haben eine feste natürliche Grösse.
+        let childProposal = ProposedViewSize(width: maxW.isFinite ? maxW : nil, height: nil)
         for v in subviews {
-            let s = v.sizeThatFits(.unspecified)
+            let s = v.sizeThatFits(childProposal)
             if x > 0, x + s.width > maxW + 0.5 { y += lineH + lineSpacing; x = 0; lineH = 0 }
             x += s.width + spacing
             lineH = max(lineH, s.height)
@@ -350,8 +358,9 @@ struct FlowLayout: Layout {
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         var x = bounds.minX, y = bounds.minY, lineH: CGFloat = 0
+        let childProposal = ProposedViewSize(width: bounds.width, height: nil)
         for v in subviews {
-            let s = v.sizeThatFits(.unspecified)
+            let s = v.sizeThatFits(childProposal)
             if x > bounds.minX, x + s.width > bounds.maxX + 0.5 { y += lineH + lineSpacing; x = bounds.minX; lineH = 0 }
             v.place(at: CGPoint(x: x, y: y), proposal: .init(s))
             x += s.width + spacing

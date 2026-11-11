@@ -215,25 +215,33 @@ private struct FinishedView: View {
     let session: RunSession
 
     var body: some View {
-        VStack(spacing: 24) {
-            RingMark()
-                .frame(width: 120, height: 120)
-                .accessibilityHidden(true)
-            Text("Geschafft").font(Theme.title(.largeTitle, weight: .heavy)).scaleEffect(1.4)
-                .accessibilityIdentifier("finishedTitle")
-            Text("Gesamtzeit \(session.totalTimeText)").font(.title2.monospacedDigit())
-            HStack(spacing: 16) {
-                Button { app.start(session.workout) } label: { Label("Nochmals", systemImage: "arrow.counterclockwise") }
-                    .buttonStyle(.bordered)
-                    .accessibilityIdentifier("again")
-                Button { app.stop() } label: { Label("Fertig", systemImage: "checkmark") }
-                    .buttonStyle(.borderedProminent)
-                    .accessibilityIdentifier("done")
+        ScrollView {
+            VStack(spacing: 24) {
+                RingMark()
+                    .frame(width: 120, height: 120)
+                    .accessibilityHidden(true)
+                Text("Geschafft").font(Theme.title(.largeTitle, weight: .heavy)).scaleEffect(1.4)
+                    .accessibilityIdentifier("finishedTitle")
+                Text("Gesamtzeit \(session.totalTimeText)").font(.title2.monospacedDigit())
+                HStack(spacing: 16) {
+                    Button { app.start(session.workout) } label: { Label("Nochmals", systemImage: "arrow.counterclockwise") }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("again")
+                    Button { app.stop() } label: { Label("Fertig", systemImage: "checkmark") }
+                        .buttonStyle(.borderedProminent)
+                        .accessibilityIdentifier("done")
+                }
+                .font(.title3.bold())
+                .tint(.white)
+                // Werbung für Jodits Trainings mit direktem Link zur Website.
+                JoditPromoCard()
+                    .frame(maxWidth: 520)
+                    .environment(\.colorScheme, .light)
             }
-            .font(.title3.bold())
-            .tint(.white)
+            .padding()
+            .padding(.top, 40)
+            .frame(maxWidth: .infinity)
         }
-        .padding()
     }
 }
 

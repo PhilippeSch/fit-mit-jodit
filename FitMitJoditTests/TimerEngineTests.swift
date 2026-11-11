@@ -239,3 +239,72 @@ final class SignalTests: XCTestCase {
         XCTAssertFalse(texts.contains { ["3", "2", "1"].contains($0) })
     }
 }
+
+final class DetailedAnnouncementTests: XCTestCase {
+    private func texts(_ w: Workout, detailed: Bool, leadIn: Int = 10) -> [(TimeInterval, String)] {
+        var s = SignalSettings()
+        s.voiceEnabled = true
+        s.voiceDetailed = detailed
+        let steps = StepSequence.withLeadIn(StepSequence.expand(w), leadInSeconds: leadIn)
+        return SignalPlanner.plan(steps: steps, settings: s).compactMap { if case .announcement(let t) = $0.kind { return ($0.at, t) } else { return nil } }
+    }
+
+    func testDurationsGetReadyAndTenSeconds() {
+        let w = Workout(name: "x", items: [
+            .block(Block(kind: .work, seconds: 45, exerciseName: "Kniebeugen")),
+            .block(Block(kind: .rest, seconds: 15)),
+            .block(Block(kind: .work, seconds: 45)),
+        ])
+        let t = texts(w, detailed: true)
+        let kn = String(localized: "\("Kniebeugen"), \(Announcements.spoken(45))")
+        // Vorlauf kündigt die erste Übung an
+        XCTAssertEqual(t.first?.0, 0)
+        XCTAssertTrue(t.first?.1.contains(kn) ?? false, "\(t.first?.1 ?? "")")
+        // Start der Übung mit Dauer
+        XCTAssertTrue(t.contains { $0.0 == 10 && $0.1 == kn })
+        // «Noch 10 Sekunden» bei 45-s-Blöcken
+        XCTAssertTrue(t.contains { $0.0 == 45 && $0.1 == Announcements.tenSecondsLeft })
+        // Pause mit Dauer, «Bereit machen» 6 s vor Ende der Pause (Pause 55–70)
+        XCTAssertTrue(t.contains { $0.0 == 55 && $0.1.hasPrefix(String(localized: "Pause, \(Announcements.spoken(15))")) })
+        XCTAssertTrue(t.contains { $0.0 == 64 && $0.1 == Announcements.getReady(next: Step(kind: .work, seconds: 45)) })
+        // Ohne Namen: «45 Sekunden Arbeit, los»
+        XCTAssertTrue(t.contains { $0.0 == 70 && $0.1 == String(localized: "\(Announcements.spoken(45)) Arbeit, los") })
+        XCTAssertEqual(t.last?.1, Announcements.finished)
+    }
+
+    func testDetailedOffKeepsShortCues() {
+        let t = texts(Templates.tabata, detailed: false, leadIn: 0).map(\.1)
+        XCTAssertFalse(t.contains(Announcements.tenSecondsLeft))
+        XCTAssertTrue(t.contains(String(localized: "Los")))
+    }
+
+    func testAutoModeSpeaksOnlyWithExerciseNames() {
+        let s = SignalSettings()
+        XCTAssertEqual(s.voiceMode, .auto)
+        XCTAssertFalse(s.speaks(StepSequence.expand(Templates.circuit)), "Kursstunde ohne Namen: nur Töne")
+        let named = Workout(name: "x", items: [.block(Block(kind: .work, seconds: 30, exerciseName: "Plank"))])
+        XCTAssertTrue(s.speaks(StepSequence.expand(named)))
+        let anns = SignalPlanner.plan(steps: StepSequence.expand(named), settings: s).filter { if case .announcement = $0.kind { return true } else { return false } }
+        XCTAssertFalse(anns.isEmpty)
+    }
+
+    func testSpokenDurations() {
+        XCTAssertEqual(Announcements.spoken(45), String(localized: "\(45) Sekunden"))
+        XCTAssertEqual(Announcements.spoken(60), String(localized: "1 Minute"))
+        XCTAssertEqual(Announcements.spoken(90), String(localized: "1 Minute") + " 30")
+        XCTAssertEqual(Announcements.spoken(120), String(localized: "\(2) Minuten"))
+    }
+
+    func testOldSettingsDecodeWithDefaults() throws {
+        let old = #"{"tonesEnabled":false,"tonesVolume":0.5,"halftimeEnabled":true,"halftimeVolume":0.8,"voiceEnabled":true,"voiceVolume":1,"toneSet":"softGong"}"#
+        let s = try JSONDecoder.fmj.decode(SignalSettings.self, from: Data(old.utf8))
+        XCTAssertFalse(s.tonesEnabled)
+        XCTAssertEqual(s.toneSet, .softGong)
+        XCTAssertTrue(s.voiceDetailed)
+        XCTAssertEqual(s.voiceMode, .always, "früher eingeschaltete Ansagen bleiben an")
+        let off = try JSONDecoder.fmj.decode(SignalSettings.self, from: Data(#"{"voiceEnabled":false}"#.utf8))
+        XCTAssertEqual(off.voiceMode, .auto)
+        let app = try JSONDecoder.fmj.decode(AppSettings.self, from: Data(#"{"leadInSeconds":20}"#.utf8))
+        XCTAssertEqual(app.leadInSeconds, 20)
+    }
+}

@@ -4,7 +4,38 @@ import SwiftData
 
 /// Mitgelieferte Vorlagen (SPEC Teil 1).
 enum Templates {
-    static func all() -> [Workout] { [circuit, tabata, strength, warmup] }
+    static func all() -> [Workout] { [circuit, tabata, strength, warmup, fullBody, core] }
+
+    /// Übungsname aus dem Katalog in der Gerätesprache.
+    private static func ex(_ id: String) -> String? {
+        ExerciseCatalog.all.first { $0.id == id }.map { ExerciseCatalog.localizedName($0) }
+    }
+
+    /// Für Teilnehmende zu Hause: mit Übungsnamen, damit die Stimme ansagt, was kommt.
+    /// 10 Übungen à 40 s, 20 s Pause, 2 Runden (20 Minuten).
+    static var fullBody: Workout {
+        let ids = ["jumping_jacks", "squats", "push_ups", "forward_lunges", "plank",
+                   "mountain_climbers", "glute_bridge", "burpees", "russian_twists", "side_plank"]
+        var blocks: [Block] = []
+        for id in ids {
+            blocks.append(Block(kind: .work, seconds: 40, exerciseName: ex(id)))
+            blocks.append(Block(kind: .rest, seconds: 20))
+        }
+        return Workout(name: String(localized: "Ganzkörper 20"),
+                       items: [.round(Round(repeats: 2, blocks: blocks))], templateKey: "fullbody20")
+    }
+
+    /// Bauch und Rumpf: 5 Übungen à 45 s, 15 s Pause, 2 Runden (10 Minuten).
+    static var core: Workout {
+        let ids = ["crunches", "plank", "bicycle_crunches", "dead_bug", "side_plank"]
+        var blocks: [Block] = []
+        for id in ids {
+            blocks.append(Block(kind: .work, seconds: 45, exerciseName: ex(id)))
+            blocks.append(Block(kind: .rest, seconds: 15))
+        }
+        return Workout(name: String(localized: "Bauch & Rumpf 10"),
+                       items: [.round(Round(repeats: 2, blocks: blocks))], templateKey: "core10")
+    }
 
     static var circuit: Workout {
         let blocks: [Block] = [
@@ -60,6 +91,16 @@ struct AppSettings: Codable, Equatable, Sendable {
     /// Vorlauf vor dem ersten Block, 0 bis 30 s.
     var leadInSeconds: Int = 10
     var hasSeenSplitViewHint = false
+
+    init() {}
+
+    /// Tolerant einlesen, damit neue Felder bei einem Update keine Einstellungen zurücksetzen.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        signals = try c.decodeIfPresent(SignalSettings.self, forKey: .signals) ?? SignalSettings()
+        leadInSeconds = try c.decodeIfPresent(Int.self, forKey: .leadInSeconds) ?? 10
+        hasSeenSplitViewHint = try c.decodeIfPresent(Bool.self, forKey: .hasSeenSplitViewHint) ?? false
+    }
 }
 
 @MainActor
@@ -106,16 +147,21 @@ final class WorkoutStore {
         if let s = loadValue(AppSettings.self, key: Keys.settings) { settings = s }
     }
 
-    /// Vorlagen nur anlegen, wenn noch keine mit diesem Schlüssel existiert (auch nach Sync).
+    /// Jede Vorlage genau einmal anlegen (auch neue Vorlagen nach einem Update), nie eine gelöschte zurückholen.
     func seedTemplatesIfNeeded() {
-        let present = Set(workouts.compactMap(\.templateKey))
-        let seededKey = "fmj.templatesSeeded.v1"
-        let alreadySeeded = defaults.bool(forKey: seededKey)
-        guard !alreadySeeded else { return }
-        for t in Templates.all() where !present.contains(t.templateKey ?? "") {
-            upsert(t)
+        let keysKey = "fmj.templatesSeeded.keys"
+        var seeded = Set(defaults.stringArray(forKey: keysKey) ?? [])
+        // Übergang von der ersten Fassung: die vier ursprünglichen Vorlagen gelten als angelegt.
+        if defaults.bool(forKey: "fmj.templatesSeeded.v1") {
+            seeded.formUnion(["circuit4515", "tabata", "strength", "warmup"])
         }
-        defaults.set(true, forKey: seededKey)
+        let present = Set(workouts.compactMap(\.templateKey))
+        for t in Templates.all() {
+            guard let key = t.templateKey, !seeded.contains(key) else { continue }
+            if !present.contains(key) { upsert(t) }
+            seeded.insert(key)
+        }
+        defaults.set(Array(seeded).sorted(), forKey: keysKey)
     }
 
     // MARK: Sortierung

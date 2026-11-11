@@ -39,9 +39,19 @@ struct SettingsView: View {
                     if store.settings.signals.halftimeEnabled {
                         volume($store.settings.signals.halftimeVolume, String(localized: "Lautstärke Halbzeit"))
                     }
-                    Toggle(String(localized: "Sprachansagen"), isOn: $store.settings.signals.voiceEnabled)
-                        .accessibilityIdentifier("toggleVoice")
-                    if store.settings.signals.voiceEnabled {
+                    Picker(String(localized: "Sprachansagen"), selection: $store.settings.signals.voiceMode) {
+                        Text("Aus").tag(VoiceMode.off)
+                        Text("Automatisch").tag(VoiceMode.auto)
+                        Text("Immer").tag(VoiceMode.always)
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityIdentifier("voiceMode")
+                    Text(voiceModeHint(store.settings.signals.voiceMode))
+                        .font(.footnote).foregroundStyle(.secondary)
+                    if store.settings.signals.voiceMode != .off {
+                        Toggle(String(localized: "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)"),
+                               isOn: $store.settings.signals.voiceDetailed)
+                            .accessibilityIdentifier("toggleVoiceDetailed")
                         volume($store.settings.signals.voiceVolume, String(localized: "Lautstärke Ansagen"))
                     }
                     Picker(String(localized: "Ton-Set"), selection: $store.settings.signals.toneSet) {
@@ -61,6 +71,10 @@ struct SettingsView: View {
                     Text("Während Ton und Ansage wird Musik aus anderen Apps kurz leiser.")
                 }
 
+                Section {
+                    JoditPromoCard(compact: true)
+                        .listRowInsets(EdgeInsets())
+                }
                 Section(String(localized: "Musik daneben")) {
                     SplitViewHintContent()
                 }
@@ -78,6 +92,14 @@ struct SettingsView: View {
                         .accessibilityIdentifier("closeSettings")
                 }
             }
+        }
+    }
+
+    private func voiceModeHint(_ m: VoiceMode) -> String {
+        switch m {
+        case .off: return String(localized: "Nur Töne, keine Stimme.")
+        case .auto: return String(localized: "Die Stimme sagt Trainings mit Übungsnamen an (z. B. «Kniebeugen, 45 Sekunden»). Trainings ohne Namen, etwa im Kurs, bleiben bei den Tönen.")
+        case .always: return String(localized: "Die Stimme sagt jedes Training an, ohne Namen mit «Arbeit» und «Pause».")
         }
     }
 
