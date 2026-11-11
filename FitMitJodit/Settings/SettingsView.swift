@@ -10,8 +10,8 @@ struct SettingsView: View {
             Form {
                 Section {
                     HStack(spacing: 16) {
-                        Image("LogoFMJ").resizable().scaledToFit().frame(height: 64)
-                        Image("LogoJodit").resizable().scaledToFit().frame(height: 64)
+                        Image("LogoFMJ").resizable().scaledToFit().frame(height: 120)
+                        Image("LogoJodit").resizable().scaledToFit().frame(height: 120)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
@@ -99,6 +99,7 @@ struct SettingsView: View {
                     LabeledContent(String(localized: "Version"), value: Bundle.main.versionString)
                 }
             }
+            .tint(Theme.work) // Schalter «ein» eindeutig grün
             .navigationTitle(Text("Einstellungen"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
