@@ -41,6 +41,28 @@
         }
       }
     },
+    "%@ Arbeit" : {
+      "comment" : "Arbeit mit Dauer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of work"
+          }
+        }
+      }
+    },
+    "%@ Arbeit, los" : {
+      "comment" : "Arbeit ohne Namen mit Dauer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ of work, go"
+          }
+        }
+      }
+    },
     "%@ Kopie" : {
       "localizations" : {
         "en" : {
@@ -62,7 +84,18 @@
         }
       }
     },
+    "%@ pro Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ per round"
+          }
+        }
+      }
+    },
     "%@, %@" : {
+      "comment" : "Übung mit Dauer",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -125,6 +158,17 @@
         }
       }
     },
+    "%lld Minuten" : {
+      "comment" : "gesprochene Dauer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld minutes"
+          }
+        }
+      }
+    },
     "%lld Prozent" : {
       "localizations" : {
         "en" : {
@@ -157,6 +201,7 @@
       }
     },
     "%lld Sekunden" : {
+      "comment" : "gesprochene Dauer",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -182,6 +227,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "× %lld"
+          }
+        }
+      }
+    },
+    "1 Minute" : {
+      "comment" : "gesprochene Dauer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 minute"
+          }
+        }
+      }
+    },
+    "1 Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 round"
           }
         }
       }
@@ -247,6 +313,16 @@
         }
       }
     },
+    "Arbeit grün, Pause orange, Vorbereitung blau – gut lesbar aus mehreren Metern." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work green, rest orange, prep blue – easy to read from several metres away."
+          }
+        }
+      }
+    },
     "Auf dem iPad (und dem aufgeklappten iPhone Duo) Fit mit Jodit und Spotify nebeneinander anordnen: über die Fenstersteuerung oben links oder indem du Spotify aus dem Dock neben Fit mit Jodit ziehst. Fit mit Jodit darf schmal sein, der Timer bleibt lesbar." : {
       "localizations" : {
         "en" : {
@@ -267,12 +343,32 @@
         }
       }
     },
+    "Auf dem iPad passt Spotify daneben, der Timer bleibt lesbar." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On iPad, Spotify fits alongside and the timer stays readable."
+          }
+        }
+      }
+    },
     "Auf dem iPhone läuft Spotify im Hintergrund weiter, die Signale kommen trotzdem." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "On the iPhone, Spotify keeps playing in the background, and the signals still come through."
+          }
+        }
+      }
+    },
+    "Aus" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
           }
         }
       }
@@ -287,6 +383,36 @@
         }
       }
     },
+    "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed cues (duration, “Get ready”, “10 seconds left”)"
+          }
+        }
+      }
+    },
+    "Automatisch" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic"
+          }
+        }
+      }
+    },
+    "Bauch & Rumpf 10" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Core 10"
+          }
+        }
+      }
+    },
     "Bausteine" : {
       "localizations" : {
         "en" : {
@@ -297,7 +423,18 @@
         }
       }
     },
+    "Bausteine antippen, markieren und «mal N» für Runden." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap blocks, select them and use “× N” for rounds."
+          }
+        }
+      }
+    },
     "Bedienelemente zeigen" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -334,6 +471,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get ready"
+          }
+        }
+      }
+    },
+    "Bereit machen: %@" : {
+      "comment" : "Sprachansage vor der nächsten Übung",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get ready: %@"
           }
         }
       }
@@ -464,6 +612,26 @@
         }
       }
     },
+    "Die Stimme sagt jedes Training an, ohne Namen mit «Arbeit» und «Pause»." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The voice announces every workout, using “Work” and “Rest” where there are no names."
+          }
+        }
+      }
+    },
+    "Die Stimme sagt Trainings mit Übungsnamen an (z. B. «Kniebeugen, 45 Sekunden»). Trainings ohne Namen, etwa im Kurs, bleiben bei den Tönen." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The voice announces workouts that have exercise names (e.g. “Squats, 45 seconds”). Workouts without names, such as in class, use tones only."
+          }
+        }
+      }
+    },
     "Dieser Spotify-Link zeigt nicht auf eine Playlist, ein Album, einen Song, eine Künstlerin oder einen Podcast." : {
       "localizations" : {
         "en" : {
@@ -587,6 +755,16 @@
     "fitmitjodit" : {
       "shouldTranslate" : false
     },
+    "Ganzkörper 20" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Body 20"
+          }
+        }
+      }
+    },
     "Gesamtfortschritt" : {
       "localizations" : {
         "en" : {
@@ -619,7 +797,7 @@
       }
     },
     "gleich: %@" : {
-      "comment" : "Sprachansage, nächste Übung",
+      "comment" : "Sprachansage, nächste Übung\nVorlauf, erste Übung",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -635,6 +813,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next: %@"
+          }
+        }
+      }
+    },
+    "Group Fitness mit Jodit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Group fitness with Jodit"
+          }
+        }
+      }
+    },
+    "Group Fitness, Personal Training, Reformer Training und Schmerzcoaching in Bülach und Rafz." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Group fitness, personal training, reformer training and pain coaching in Bülach and Rafz."
           }
         }
       }
@@ -665,6 +863,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "https://open.spotify.com/playlist/…"
+          }
+        }
+      }
+    },
+    "Immer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Always"
           }
         }
       }
@@ -745,6 +953,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iPhone unreachable. Is the app open on the iPhone?"
+          }
+        }
+      }
+    },
+    "Jodit beim Training" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jodit training"
           }
         }
       }
@@ -861,6 +1079,16 @@
         }
       }
     },
+    "Los geht's" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let's go"
+          }
+        }
+      }
+    },
     "Löschen" : {
       "localizations" : {
         "en" : {
@@ -877,6 +1105,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "× N"
+          }
+        }
+      }
+    },
+    "Mit der Apple Watch steuern, Musik läuft in Spotify weiter." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control it from Apple Watch while your music keeps playing in Spotify."
           }
         }
       }
@@ -971,12 +1209,33 @@
         }
       }
     },
+    "Noch 10 Sekunden" : {
+      "comment" : "Sprachansage",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 seconds left"
+          }
+        }
+      }
+    },
     "Nochmals" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Again"
+          }
+        }
+      }
+    },
+    "Nur Töne, keine Stimme." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tones only, no voice."
           }
         }
       }
@@ -1028,6 +1287,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Skip rest at the end"
+          }
+        }
+      }
+    },
+    "Pause, %@" : {
+      "comment" : "Sprachansage Pause mit Dauer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rest, %@"
           }
         }
       }
@@ -1109,11 +1379,22 @@
       }
     },
     "Runde, %lld mal" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Round, × %lld"
+          }
+        }
+      }
+    },
+    "Runde, %lld mal, %@ pro Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round, %lld times, %@ per round"
           }
         }
       }
@@ -1284,6 +1565,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Beeps (last 3 seconds, block changes)"
+          }
+        }
+      }
+    },
+    "Trainiere mit Jodit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Train with Jodit"
           }
         }
       }
@@ -1519,6 +1810,16 @@
         }
       }
     },
+    "Willkommen bei Fit mit Jodit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Fit mit Jodit"
+          }
+        }
+      }
+    },
     "Wische nach oben, um ein Training zu starten." : {
       "localizations" : {
         "en" : {
@@ -1539,32 +1840,32 @@
         }
       }
     },
-    "%@ pro Runde" : {
+    "Zu fitmitjodit.ch" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ per round"
+            "value" : "Visit fitmitjodit.ch"
           }
         }
       }
     },
-    "Runde, %lld mal, %@ pro Runde" : {
+    "Der Intervall-Timer von Jodit – für die Kurse und für dein Training zu Hause." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Round, %lld times, %@ per round"
+            "value" : "Jodit's interval timer – for her classes and for your workout at home."
           }
         }
       }
     },
-    "1 Runde" : {
+    "Fertige Trainings mit Ansage: Die Stimme sagt, welche Übung kommt und wie lange." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "1 round"
+            "value" : "Ready-made workouts with voice cues: you hear which exercise comes next and for how long."
           }
         }
       }

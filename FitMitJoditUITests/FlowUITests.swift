@@ -116,6 +116,30 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(tiles("tile-work-40").firstMatch.waitForExistence(timeout: 3))
     }
 
+    /// Lange Trainings: bis zum letzten Block scrollen und ihn bearbeiten (Fehler aus dem Gerätetest am 11.11.2026).
+    func testScrollToLastBlockInLongWorkout() {
+        let row = app.descendants(matching: .any).matching(NSPredicate(format: "identifier == 'workout-Kraft' OR identifier == 'workout-Strength'")).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 10))
+        row.tap()
+        XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
+        // Erst einen Block markieren, damit die Auswahl-Leiste Platz braucht.
+        tiles("tile-work-60").firstMatch.tap()
+        let last = tiles("tile-rest-90").firstMatch
+        XCTAssertTrue(last.waitForExistence(timeout: 5))
+        // Sichtbar = vollständig über der Auswahl-Leiste und Palette (unteres Drittel frei lassen).
+        let visibleBottom = app.windows.firstMatch.frame.height * 0.6
+        var tries = 0
+        while (last.frame.maxY > visibleBottom || last.frame.minY < 100) && tries < 8 {
+            app.scrollViews["editorScroll"].firstMatch.swipeUp(velocity: .slow)
+            tries += 1
+        }
+        XCTAssertLessThanOrEqual(last.frame.maxY, visibleBottom, "Letzter Block nicht erreichbar")
+        last.tap()
+        tap("pickDuration")
+        XCTAssertTrue(app.buttons["applyDuration"].waitForExistence(timeout: 5))
+        tap("applyDuration")
+    }
+
     func testFavoriteAndDelete() {
         let row = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-'")).element(boundBy: 2)
         XCTAssertTrue(row.waitForExistence(timeout: 10))
@@ -163,12 +187,17 @@ class FlowUITests: XCTestCase {
         let tones = app.switches["toggleTones"]
         XCTAssertTrue(tones.waitForExistence(timeout: 5))
         XCTAssertEqual(tones.value as? String, "1")
-        let voice = app.switches["toggleVoice"]
-        XCTAssertEqual(voice.value as? String, "0", "Ansagen standardmässig aus")
+        // Ansagen standardmässig «Automatisch» (nur Trainings mit Übungsnamen)
+        let auto = app.buttons[language == "de" ? "Automatisch" : "Automatic"]
+        XCTAssertTrue(auto.waitForExistence(timeout: 5))
+        XCTAssertTrue(auto.isSelected, "Ansagen standardmässig «Automatisch»")
         tones.switches.firstMatch.tap()
         XCTAssertEqual(tones.value as? String, "0")
-        voice.switches.firstMatch.tap()
-        XCTAssertEqual(voice.value as? String, "1")
+        app.buttons[language == "de" ? "Aus" : "Off"].tap()
+        XCTAssertTrue(app.buttons[language == "de" ? "Aus" : "Off"].isSelected)
+        XCTAssertFalse(app.switches["toggleVoiceDetailed"].exists)
+        app.buttons[language == "de" ? "Immer" : "Always"].tap()
+        XCTAssertTrue(app.switches["toggleVoiceDetailed"].waitForExistence(timeout: 3))
         tap("closeSettings")
     }
 

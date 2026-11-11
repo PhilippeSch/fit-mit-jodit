@@ -5,7 +5,9 @@ struct FitMitJoditApp: App {
     @State private var app = AppModel.makeDefault()
     @State private var player = AudioSignalPlayer()
     @State private var importError: String?
-    @State private var showHint = false
+    @State private var showWelcome = false
+    /// Pro Gerät einmal (nicht über iCloud, darum UserDefaults statt AppSettings).
+    @AppStorage("fmj.welcomeSeen.v1") private var welcomeSeen = false
 
     var body: some Scene {
         WindowGroup {
@@ -16,8 +18,12 @@ struct FitMitJoditApp: App {
                 .alert(String(localized: "Import nicht möglich"), isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
                     Button("OK", role: .cancel) {}
                 } message: { Text(importError ?? "") }
-                .sheet(isPresented: $showHint, onDismiss: { app.store.settings.hasSeenSplitViewHint = true }) {
-                    SplitViewHintSheet()
+                .fullScreenCover(isPresented: $showWelcome) {
+                    WelcomeView {
+                        welcomeSeen = true
+                        app.store.settings.hasSeenSplitViewHint = true
+                        showWelcome = false
+                    }
                 }
         }
     }
@@ -38,8 +44,9 @@ struct FitMitJoditApp: App {
            let w = app.store.workouts.first(where: { $0.templateKey == args[i + 1] }) {
             app.start(w)
         }
-        if !uiTesting, !app.store.settings.hasSeenSplitViewHint, UIDevice.current.userInterfaceIdiom == .pad {
-            showHint = true
+        // Willkommen beim ersten Start (enthält auf dem iPad den Hinweis zu Spotify daneben).
+        if (!uiTesting && !welcomeSeen) || args.contains("-showWelcome") {
+            showWelcome = true
         }
     }
 
