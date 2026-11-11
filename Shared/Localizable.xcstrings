@@ -383,16 +383,6 @@
         }
       }
     },
-    "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detailed cues (duration, “Get ready”, “10 seconds left”)"
-          }
-        }
-      }
-    },
     "Automatisch" : {
       "localizations" : {
         "en" : {
@@ -1994,6 +1984,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iOS Settings › Accessibility › Read & Speak › Voices."
+          }
+        }
+      }
+    },
+    "Ausführliche Ansagen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed cues"
+          }
+        }
+      }
+    },
+    "Mit Dauer, «Bereit machen» und «Noch 10 Sekunden»" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With duration, “Get ready” and “10 seconds left”"
           }
         }
       }

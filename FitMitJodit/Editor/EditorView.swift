@@ -312,6 +312,9 @@ struct RoundView: View {
 struct SelectionBar: View {
     @Bindable var model: EditorModel
     @Binding var sheet: EditorSheet?
+    /// Auf schmaler Breite nur Symbole (Beschriftung bleibt für VoiceOver), damit die Leiste kompakt bleibt.
+    @Environment(\.horizontalSizeClass) private var hSize
+    private var compact: Bool { hSize == .compact }
 
     var body: some View {
         // Bricht in Zeilen um, damit auf schmalen Breiten alle Aktionen sichtbar sind.
@@ -325,9 +328,9 @@ struct SelectionBar: View {
                 }
                 bar(String(localized: "Duplizieren"), "plus.square.on.square", id: "duplicate") { model.duplicateSelection() }
                 bar(String(localized: "Löschen"), "trash", id: "deleteBlocks", role: .destructive) { model.deleteSelection() }
-                bar(String(localized: "mal N"), "repeat", id: "makeRound") { sheet = .repeats }
+                bar(String(localized: "mal N"), "repeat", id: "makeRound", keepTitle: true) { sheet = .repeats }
                     .disabled(!model.canMakeRound)
-                bar(String(localized: "Fertig"), "checkmark", id: "deselect") { model.clearSelection() }
+                bar(String(localized: "Fertig"), "checkmark", id: "deselect", keepTitle: true) { model.clearSelection() }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -337,13 +340,22 @@ struct SelectionBar: View {
         .accessibilityLabel(Text("\(model.selection.count) markiert"))
     }
 
-    private func bar(_ title: String, _ icon: String, id: String, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
+    @ViewBuilder
+    private func bar(_ title: String, _ icon: String, id: String, role: ButtonRole? = nil, keepTitle: Bool = false,
+                     action: @escaping () -> Void) -> some View {
         Button(role: role, action: action) {
-            Label(title, systemImage: icon)
-                .labelStyle(.titleAndIcon)
-                .font(.subheadline.weight(.semibold))
+            if compact && !keepTitle {
+                Image(systemName: icon)
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 28, minHeight: 28)
+            } else {
+                Label(title, systemImage: icon)
+                    .labelStyle(.titleAndIcon)
+                    .font(.subheadline.weight(.semibold))
+            }
         }
         .buttonStyle(.bordered)
+        .accessibilityLabel(Text(title))
         .accessibilityIdentifier(id)
     }
 }

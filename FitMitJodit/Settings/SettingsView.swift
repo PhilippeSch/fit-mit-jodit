@@ -49,9 +49,14 @@ struct SettingsView: View {
                     Text(voiceModeHint(store.settings.signals.voiceMode))
                         .font(.footnote).foregroundStyle(.secondary)
                     if store.settings.signals.voiceMode != .off {
-                        Toggle(String(localized: "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)"),
-                               isOn: $store.settings.signals.voiceDetailed)
-                            .accessibilityIdentifier("toggleVoiceDetailed")
+                        Toggle(isOn: $store.settings.signals.voiceDetailed) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Ausführliche Ansagen")
+                                Text("Mit Dauer, «Bereit machen» und «Noch 10 Sekunden»")
+                                    .font(.footnote).foregroundStyle(.secondary)
+                            }
+                        }
+                        .accessibilityIdentifier("toggleVoiceDetailed")
                         volume($store.settings.signals.voiceVolume, String(localized: "Lautstärke Ansagen"))
                         Picker(String(localized: "Stimme"), selection: $store.settings.signals.voiceIdentifier) {
                             Text("Automatisch (beste installierte)").tag(String?.none)

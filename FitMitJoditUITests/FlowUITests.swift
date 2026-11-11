@@ -126,15 +126,11 @@ class FlowUITests: XCTestCase {
         tiles("tile-work-60").firstMatch.tap()
         let last = tiles("tile-rest-90").firstMatch
         XCTAssertTrue(last.waitForExistence(timeout: 5))
-        // Sichtbar = vollständig über der Auswahl-Leiste und Palette (unteres Drittel frei lassen).
-        let visibleBottom = app.windows.firstMatch.frame.height * 0.6
-        var tries = 0
-        while (last.frame.maxY > visibleBottom || last.frame.minY < 100) && tries < 8 {
-            app.scrollViews["editorScroll"].firstMatch.swipeUp(velocity: .slow)
-            tries += 1
-        }
-        XCTAssertLessThanOrEqual(last.frame.maxY, visibleBottom, "Letzter Block nicht erreichbar")
+        sleep(1) // Auswahl-Leiste gleitet herein
+        // Antippen scrollt den Block ins Bild (wie von Hand). Liegt er unter Leiste oder Palette,
+        // trifft der Tipp nicht den Block und er wird nicht markiert.
         last.tap()
+        XCTAssertTrue(last.isSelected, "Letzter Block nicht erreichbar oder nicht markierbar")
         tap("pickDuration")
         XCTAssertTrue(app.buttons["applyDuration"].waitForExistence(timeout: 5))
         tap("applyDuration")
@@ -197,7 +193,11 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons[language == "de" ? "Aus" : "Off"].isSelected)
         XCTAssertFalse(app.switches["toggleVoiceDetailed"].exists)
         app.buttons[language == "de" ? "Immer" : "Always"].tap()
-        XCTAssertTrue(app.switches["toggleVoiceDetailed"].waitForExistence(timeout: 3))
+        // Auf kleineren Blättern (iPad) liegt der Schalter evtl. unterhalb des sichtbaren Bereichs
+        let detailed = app.switches["toggleVoiceDetailed"]
+        var t = 0
+        while !detailed.waitForExistence(timeout: 1) && t < 4 { app.swipeUp(); t += 1 }
+        XCTAssertTrue(detailed.exists)
         tap("closeSettings")
     }
 
