@@ -164,7 +164,18 @@ struct AppSettings: Codable, Equatable, Sendable {
 @MainActor
 @Observable
 final class WorkoutStore {
-    private(set) var workouts: [Workout] = []
+    private(set) var workouts: [Workout] = [] { didSet { scheduleShortcutUpdate() } }
+    @ObservationIgnored private var shortcutTask: Task<Void, Never>?
+
+    /// Siri-Sätze mit Trainingsnamen («Starte Tabata mit Fit mit Jodit») nachführen, gebündelt nach Änderungen.
+    private func scheduleShortcutUpdate() {
+        shortcutTask?.cancel()
+        shortcutTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            FitMitJoditShortcuts.updateAppShortcutParameters()
+        }
+    }
     private(set) var palette: [PaletteItem] = PaletteItem.defaults
     private(set) var customExerciseNames: [String] = []
     var settings = AppSettings() { didSet { if !isLoading, settings != oldValue { saveValue(settings, key: Keys.settings) } } }

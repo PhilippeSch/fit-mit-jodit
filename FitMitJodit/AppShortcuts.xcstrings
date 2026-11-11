@@ -1,0 +1,76 @@
+{
+  "sourceLanguage" : "de",
+  "strings" : {
+    "Starte ${workout} mit ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start ${workout} with ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} ${workout} starten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start ${workout} in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Starte ein Training mit ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a workout with ${applicationName}"
+          }
+        }
+      }
+    },
+    "Pause in ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause ${applicationName}"
+          }
+        }
+      }
+    },
+    "Weiter in ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume ${applicationName}"
+          }
+        }
+      }
+    },
+    "Nächster Block in ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next block in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Training beenden in ${applicationName}" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop workout in ${applicationName}"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

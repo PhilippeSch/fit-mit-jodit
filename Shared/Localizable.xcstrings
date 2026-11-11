@@ -2097,6 +2097,156 @@
           }
         }
       }
+    },
+    "Training" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout"
+          }
+        }
+      }
+    },
+    "Dieses Training gibt es nicht mehr." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This workout no longer exists."
+          }
+        }
+      }
+    },
+    "Es läuft kein Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No workout is running."
+          }
+        }
+      }
+    },
+    "Training starten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Workout"
+          }
+        }
+      }
+    },
+    "Startet ein Training in Fit mit Jodit." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a workout in Fit mit Jodit."
+          }
+        }
+      }
+    },
+    "Training pausieren oder fortsetzen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause or Resume Workout"
+          }
+        }
+      }
+    },
+    "Pausiert das laufende Training oder setzt es fort." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pauses or resumes the running workout."
+          }
+        }
+      }
+    },
+    "Pausiert." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused."
+          }
+        }
+      }
+    },
+    "Weiter geht's." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let's go."
+          }
+        }
+      }
+    },
+    "Nächster Block" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Block"
+          }
+        }
+      }
+    },
+    "Springt im laufenden Training zum nächsten Block." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skips to the next block in the running workout."
+          }
+        }
+      }
+    },
+    "Training beenden" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Workout"
+          }
+        }
+      }
+    },
+    "Beendet das laufende Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stops the running workout."
+          }
+        }
+      }
+    },
+    "Pause / Weiter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause / Resume"
+          }
+        }
+      }
+    },
+    "${workout} starten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start ${workout}"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

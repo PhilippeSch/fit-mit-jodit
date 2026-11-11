@@ -21,6 +21,9 @@ final class AppModel {
         self.runPersistence = RunPersistence(defaults: defaults)
     }
 
+    /// Eine Instanz für Oberfläche, Siri und Kurzbefehle.
+    static let shared = makeDefault()
+
     static func makeDefault() -> AppModel {
         let args = ProcessInfo.processInfo.arguments
         let uiTesting = args.contains("-uiTesting")

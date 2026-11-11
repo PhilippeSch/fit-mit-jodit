@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct FitMitJoditApp: App {
-    @State private var app = AppModel.makeDefault()
+    @State private var app = AppModel.shared
     @State private var player = AudioSignalPlayer()
     @State private var importError: String?
     @State private var showWelcome = false
