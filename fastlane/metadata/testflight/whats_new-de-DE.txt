@@ -1,0 +1,16 @@
+Willkommen zur ersten Testversion von Fit mit Jodit!
+
+Bitte einmal alles ausprobieren:
+1. Erster Start: Willkommensbildschirm lesen. Falls dort steht, dass nur die einfache Stimme installiert ist: wie beschrieben eine Premium-Stimme laden (z. B. «Anna (Premium)»), dann «Stimme probehören».
+2. Vorlagen: «Zirkel 45/15», «Tabata», «Kraft», «Warm-up» (für den Kurs, ohne Übungsnamen) sowie «Ganzkörper 20» und «Bauch & Rumpf 10» (für zu Hause, mit Ansage).
+3. Training starten: 10 s Vorlauf (blau), dann Arbeit (grün) und Pause (orange). Einmal auf den Bildschirm tippen: Pause, Block vor/zurück, Stopp.
+4. Ansagen: «Ganzkörper 20» starten – die Stimme sagt Übung und Dauer an, «Bereit machen» und «Noch 10 Sekunden». In den Einstellungen: Ansagen Aus/Automatisch/Immer, Stimme wählen.
+5. Eigenes Training bauen: «+» oben, unten Bausteine antippen (z. B. 3× 45 s Arbeit mit 15 s Pause, 1 min Pause), Blöcke antippen zum Markieren, «mal N» für Runden. Übung wählen, Dauer ändern, duplizieren, löschen, verschieben, rückgängig.
+6. Töne: drei Ton-Sets in den Einstellungen. Mit Spotify im Hintergrund: wird die Musik bei den Tönen leiser?
+7. iPad: Spotify im geteilten Bildschirm daneben – bleibt der Timer lesbar?
+8. Sperrbildschirm: Während des Trainings sperren – Countdown sichtbar?
+9. Spotify-Link: im Training über «…» › Spotify-Link eine Playlist einfügen, dann «In Spotify öffnen».
+10. Apple Watch (falls vorhanden): App auf der Uhr öffnen, Training auf dem iPhone starten, mit der Uhr steuern.
+11. Am Ende: Abschlussbild mit Link zu fitmitjodit.ch.
+
+Rückmeldungen: in TestFlight Screenshot machen › «Feedback senden», oder an fitmitjodit@scheuber.me.

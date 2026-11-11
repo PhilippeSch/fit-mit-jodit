@@ -1,4 +1,0 @@
-Neu:
-1. Stimme: Die App nimmt automatisch die beste installierte Stimme. Ist nur die einfache (robotische) Stimme vorhanden, zeigt der Willkommensbildschirm, wie man eine Premium-Stimme lädt. Einstellungen › Stimme: Auswahl und Probehören.
-2. Dunkelmodus: Knöpfe gut lesbar.
-3. Willkommensbild im Querformat ohne abgeschnittenen Kopf.
