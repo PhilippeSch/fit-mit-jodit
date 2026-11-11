@@ -1,0 +1,18 @@
+Fit mit Jodit ist der Intervall-Timer von Jodit – für ihre Kurse und für das Training zu Hause.
+
+TRAININGS ZUSAMMENKLICKEN
+Unten liegen Bausteine (z. B. 45 s Arbeit, 15 s Pause, 1 min Pause). Antippen hängt sie an. Blöcke markieren und «mal N» macht daraus eine Runde. Übungsnamen sind freiwillig: aus einer Liste mit 60 Übungen oder selbst eingetippt.
+
+IM TRAINING
+Grosser Countdown, aus mehreren Metern lesbar. Arbeit grün, Pause orange, Vorbereitung blau. Töne in den letzten 3 Sekunden und zur Halbzeit. Einmal tippen zeigt Pause, Block vor/zurück und Stopp.
+
+ANSAGEN
+Trainings mit Übungsnamen werden angesagt: «Kniebeugen, 45 Sekunden», «Bereit machen: Liegestütze», «Noch 10 Sekunden». Trainings ohne Namen (z. B. im Kurs) bleiben bei den Tönen. Einstellbar: Aus, Automatisch, Immer.
+
+VORLAGEN
+Zirkel 45/15, Tabata, Kraft, Warm-up sowie «Ganzkörper 20» und «Bauch & Rumpf 10» mit Ansage für zu Hause. Alles lässt sich kopieren und ändern.
+
+WEITERES
+Apple Watch als Fernbedienung (vibriert beim Blockwechsel, Musik steuern). Spotify-Link pro Training, auf dem iPad Spotify im geteilten Bildschirm daneben. Sperrbildschirm zeigt den Countdown. Sync über die eigene iCloud, Training als Datei teilen. Kein Konto, keine Werbung von Dritten, keine Datenerhebung.
+
+Rückmeldungen gern direkt über TestFlight (Screenshot und «Feedback senden») oder an fitmitjodit@scheuber.me.

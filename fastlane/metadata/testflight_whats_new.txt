@@ -1,8 +1,5 @@
-Bitte testen:
-1. Baukasten: 3 × 45 s Arbeit mit 15 s Pause, 1 min Pause, «mal 4» zusammenklicken und starten.
-2. Laufansicht: Vorlauf blau, Arbeit grün, Pause orange; Pause, Block vor/zurück, Stopp.
-3. Töne und Ducking mit Spotify im Hintergrund; Ansagen in den Einstellungen einschalten.
-4. Live Activity auf dem Sperrbildschirm.
-5. Apple Watch: Training vom iPhone steuern, Haptik beim Blockwechsel, Musikseite.
-6. iPad: Spotify daneben legen; Fernbedienung iPhone → iPad im selben WLAN.
-7. iCloud-Sync zwischen zwei Geräten (siehe Morgen-Checkliste: Schema muss einmal nach Production).
+Neu:
+1. Baukasten: Runden brechen auf dem iPhone um, die ganze Ansicht scrollt (lange Trainings bearbeitbar).
+2. Willkommensbildschirm und Karte «Trainiere mit Jodit» mit Link zur Website.
+3. Ansagen «Automatisch»: Trainings mit Übungsnamen werden angesagt, mit Dauer und «Bereit machen».
+4. Neue Vorlagen «Ganzkörper 20» und «Bauch & Rumpf 10» für zu Hause.

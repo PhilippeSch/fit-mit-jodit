@@ -1,0 +1,18 @@
+Fit mit Jodit is Jodit's interval timer – for her classes and for your workout at home.
+
+BUILD WORKOUTS FROM BLOCKS
+At the bottom are blocks (e.g. 45 s work, 15 s rest, 1 min rest). Tap to add them. Select blocks and tap "× N" to make a round. Exercise names are optional: pick from 60 exercises or type your own.
+
+DURING THE WORKOUT
+A large countdown, readable from several metres. Work green, rest orange, prep blue. Beeps in the last 3 seconds and at halftime. One tap shows pause, skip back/forward and stop.
+
+VOICE CUES
+Workouts with exercise names are announced: "Squats, 45 seconds", "Get ready: push-ups", "10 seconds left". Workouts without names (e.g. in class) use tones only. Options: Off, Automatic, Always.
+
+TEMPLATES
+Circuit 45/15, Tabata, Strength, Warm-up plus "Full Body 20" and "Core 10" with voice cues for home. Everything can be copied and edited.
+
+ALSO
+Apple Watch as a remote (taps your wrist at each block change, music controls). Spotify link per workout; on iPad, Spotify fits alongside in Split View. Lock Screen shows the countdown. Sync through your own iCloud, share workouts as files. No account, no third-party ads, no data collection.
+
+Feedback is welcome via TestFlight (screenshot and "Send Feedback") or at fitmitjodit@scheuber.me.
