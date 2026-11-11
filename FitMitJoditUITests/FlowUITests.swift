@@ -178,6 +178,34 @@ class FlowUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["countdown"].exists)
     }
 
+    /// Sperre: Tippen zeigt keine Knöpfe mehr, Entsperren nur mit langem Drücken.
+    func testLockRunScreen() {
+        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
+        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
+        circuit.tap()
+        XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
+        tap("start")
+        let countdown = app.descendants(matching: .any)["countdown"].firstMatch
+        XCTAssertTrue(countdown.waitForExistence(timeout: 10))
+        countdown.tap()
+        tap("lock")
+        let pause = app.descendants(matching: .any)["pauseResume"].firstMatch
+        XCTAssertTrue(pause.waitForNonExistence(timeout: 5))
+        countdown.tap()
+        let unlock = app.descendants(matching: .any)["unlock"].firstMatch
+        XCTAssertTrue(unlock.waitForExistence(timeout: 5))
+        XCTAssertFalse(pause.exists, "Knöpfe trotz Sperre sichtbar")
+        // Kurzes Tippen entsperrt nicht
+        unlock.tap()
+        XCTAssertFalse(pause.exists)
+        unlock.press(forDuration: 1.5)
+        XCTAssertTrue(pause.waitForExistence(timeout: 5))
+        pause.tap() // pausiert: Knöpfe bleiben sichtbar
+        XCTAssertTrue(app.descendants(matching: .any)["pausedBadge"].waitForExistence(timeout: 5))
+        tap("stop")
+        tap("confirmStop")
+    }
+
     func testSignalsOnOff() {
         tap("settings")
         let tones = app.switches["toggleTones"]

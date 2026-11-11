@@ -2057,6 +2057,46 @@
           }
         }
       }
+    },
+    "Sperren" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock"
+          }
+        }
+      }
+    },
+    "Verhindert versehentliches Tippen. Die Uhr steuert weiter." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prevents accidental taps. The watch keeps working."
+          }
+        }
+      }
+    },
+    "Zum Entsperren gedrückt halten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Press and hold to unlock"
+          }
+        }
+      }
+    },
+    "Entsperren" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

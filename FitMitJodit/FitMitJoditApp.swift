@@ -50,6 +50,8 @@ struct FitMitJoditApp: App {
            let w = app.store.workouts.first(where: { $0.templateKey == args[i + 1] }) {
             app.start(w)
         }
+        // Training fortsetzen, falls iOS die App während eines Trainings beendet hat.
+        if !uiTesting || args.contains("-restoreRun") { app.restoreRunIfNeeded() }
         // Willkommen beim ersten Start (enthält auf dem iPad den Hinweis zu Spotify daneben).
         if (!uiTesting && !welcomeSeen) || args.contains("-showWelcome") {
             showWelcome = true

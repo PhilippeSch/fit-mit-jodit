@@ -13,9 +13,12 @@ final class AppModel {
     /// Beobachter für Live Activity, Watch und iPad-Weiterleitung.
     @ObservationIgnored private var sessionObservers: [(RunSession?) -> Void] = []
     @ObservationIgnored private var ticker: Timer?
+    @ObservationIgnored var runPersistence: RunPersistence
+    @ObservationIgnored var clock: AppClock = SystemClock.shared
 
-    init(store: WorkoutStore) {
+    init(store: WorkoutStore, defaults: UserDefaults = .standard) {
         self.store = store
+        self.runPersistence = RunPersistence(defaults: defaults)
     }
 
     static func makeDefault() -> AppModel {
@@ -50,17 +53,39 @@ final class AppModel {
 
     func observeSession(_ f: @escaping (RunSession?) -> Void) { sessionObservers.append(f) }
 
-    private func notifySession() { sessionObservers.forEach { $0(session) } }
+    private func notifySession() {
+        persistRun()
+        sessionObservers.forEach { $0(session) }
+    }
+
+    /// Laufendes Training sichern (bei Start, Blockwechsel und Bedienung), beendetes vergessen.
+    private func persistRun() {
+        if let s = session, !s.isFinished {
+            runPersistence.save(SavedRun(workout: s.workout, engine: s.engine, savedAt: clock.now))
+        } else {
+            runPersistence.clear()
+        }
+    }
+
+    /// Beim Start der App: ein Training, das iOS im Hintergrund beendet hat, an der richtigen Stelle fortsetzen.
+    @discardableResult
+    func restoreRunIfNeeded() -> Bool {
+        guard session == nil, let saved = runPersistence.load(now: clock.now) else { return false }
+        let s = start(saved.workout, markUsed: false)
+        s.adopt(saved.engine)
+        notifySession()
+        return true
+    }
 
     @discardableResult
-    func start(_ workout: Workout) -> RunSession {
+    func start(_ workout: Workout, markUsed: Bool = true) -> RunSession {
         stop()
-        let s = RunSession(workout: workout, settings: store.settings)
+        let s = RunSession(workout: workout, settings: store.settings, clock: clock)
         s.sink = signalPlayer
         s.onControlChange = { [weak self] in self?.notifySession() }
         s.onFinish = { [weak self] in self?.finished() }
         session = s
-        store.markUsed(workout)
+        if markUsed { store.markUsed(workout) }
         UIApplication.shared.isIdleTimerDisabled = true
         startTicker()
         notifySession()

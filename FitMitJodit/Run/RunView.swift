@@ -8,6 +8,9 @@ struct RunView: View {
     @State private var controlsVisible = false
     @State private var hideTask: Task<Void, Never>?
     @State private var confirmStop = false
+    /// Sperre gegen versehentliches Tippen (Uhr und Fernbedienung steuern weiter).
+    @State private var locked = false
+    @State private var lockHintVisible = false
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
 
     var body: some View {
@@ -32,8 +35,8 @@ struct RunView: View {
                             RunContent(session: session, size: halves.second.size, part: .countdown)
                                 .frame(width: halves.second.width, height: halves.second.height)
                                 .offset(x: halves.second.minX, y: halves.second.minY)
-                            if controlsVisible || st.isPaused || voiceOver {
-                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
+                            if !locked && (controlsVisible || st.isPaused || voiceOver) {
+                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls, onLock: lock)
                                     .frame(width: halves.second.width, height: halves.second.height)
                                     .offset(x: halves.second.minX, y: halves.second.minY)
                                     .transition(.opacity)
@@ -47,20 +50,27 @@ struct RunView: View {
                                 .frame(width: geo.size.width, height: geo.size.height)
                                 .contentShape(Rectangle())
                                 .onTapGesture { showControls() }
-                            if controlsVisible || st.isPaused || voiceOver {
-                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls)
+                            if !locked && (controlsVisible || st.isPaused || voiceOver) {
+                                RunControls(session: session, confirmStop: $confirmStop, onInteract: showControls, onLock: lock)
                                     .transition(.opacity)
                             }
                         }
                     }
                 }
-
+                if locked && (lockHintVisible || voiceOver) {
+                    UnlockBadge(onUnlock: unlock, onPressing: { pressing in
+                        // Während des Drückens nicht ausblenden, danach wieder 3 s stehen lassen.
+                        if pressing { hideTask?.cancel() } else if locked { showLockHint() }
+                    })
+                        .transition(.opacity)
+                }
             }
         }
         .foregroundStyle(.white)
         .statusBarHidden(!controlsVisible)
         .persistentSystemOverlays(.hidden)
         .animation(.easeInOut(duration: 0.2), value: controlsVisible)
+        .animation(.easeInOut(duration: 0.2), value: lockHintVisible)
         .confirmationDialog(Text("Training beenden?"), isPresented: $confirmStop, titleVisibility: .visible) {
             Button("Beenden", role: .destructive) { app.stop() }
                 .accessibilityIdentifier("confirmStop")
@@ -73,7 +83,30 @@ struct RunView: View {
         .accessibilityIdentifier("runView")
     }
 
+    private func lock() {
+        locked = true
+        controlsVisible = false
+        hideTask?.cancel()
+        showLockHint()
+    }
+
+    private func unlock() {
+        locked = false
+        lockHintVisible = false
+        showControls()
+    }
+
+    private func showLockHint() {
+        lockHintVisible = true
+        hideTask?.cancel()
+        hideTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(3))
+            if !Task.isCancelled { lockHintVisible = false }
+        }
+    }
+
     private func showControls() {
+        if locked { showLockHint(); return }
         controlsVisible = true
         hideTask?.cancel()
         hideTask = Task { @MainActor in
@@ -170,14 +203,20 @@ private struct RunControls: View {
     let session: RunSession
     @Binding var confirmStop: Bool
     let onInteract: () -> Void
+    let onLock: () -> Void
 
     var body: some View {
         VStack {
-            HStack {
+            HStack(spacing: 20) {
                 Button { confirmStop = true; onInteract() } label: {
                     Label("Stopp", systemImage: "xmark")
                 }
                 .accessibilityIdentifier("stop")
+                Button { onLock() } label: {
+                    Label("Sperren", systemImage: "lock.fill")
+                }
+                .accessibilityHint(Text("Verhindert versehentliches Tippen. Die Uhr steuert weiter."))
+                .accessibilityIdentifier("lock")
                 Spacer()
                 SpotifyButton(link: session.workout.spotifyLink)
             }
@@ -207,6 +246,37 @@ private struct RunControls: View {
         }
         .accessibilityLabel(Text(label))
         .accessibilityIdentifier(id)
+    }
+}
+
+/// Hinweis bei gesperrtem Bildschirm: Entsperren nur mit langem Drücken.
+private struct UnlockBadge: View {
+    let onUnlock: () -> Void
+    let onPressing: (Bool) -> Void
+    @State private var pressing = false
+
+    var body: some View {
+        VStack {
+            HStack(spacing: 12) {
+                Image(systemName: pressing ? "lock.open.fill" : "lock.fill")
+                    .font(.title2.bold())
+                Text("Zum Entsperren gedrückt halten")
+                    .font(.headline)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            .background(.black.opacity(pressing ? 0.6 : 0.4), in: Capsule())
+            .scaleEffect(pressing ? 1.08 : 1)
+            .animation(.easeInOut(duration: 0.2), value: pressing)
+            .onLongPressGesture(minimumDuration: 0.8, perform: onUnlock, onPressingChanged: { pressing = $0; onPressing($0) })
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Entsperren"))
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { onUnlock() }
+            .accessibilityIdentifier("unlock")
+            .padding(.top, 24)
+            Spacer()
+        }
     }
 }
 
