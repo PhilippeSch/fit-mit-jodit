@@ -32,7 +32,7 @@ enum Theme {
     static let prep = Color(red: 0x1D / 255, green: 0x4E / 255, blue: 0xD8 / 255)
 
     /// Markenfarbe für Bibliothek, Baukasten und Knöpfe. Abgeleitet aus fitmitjodit.ch (Text #404040,
-    /// Akzent #7A7575): warmes Dunkelgrau #5E5858 (hell) bzw. #D6D0D0 (dunkel), Asset «AccentColor».
+    /// Akzent #7A7575): warmes Dunkelgrau #5E5858 (hell) bzw. #756D6D (dunkel; Weiss darauf ≥ 4.5:1), Asset «AccentColor».
     static let brand = Color("AccentColor")
     /// Dunkler Grund wie im App-Icon.
     static let ink = Color(red: 0x14 / 255, green: 0x16 / 255, blue: 0x1C / 255)

@@ -119,10 +119,11 @@ final class AudioSignalPlayer: NSObject, SignalSink {
             guard settings.voiceEnabled else { return }
             duckForAWhile(2.5)
             let u = AVSpeechUtterance(string: text)
-            u.voice = AVSpeechSynthesisVoice(language: Locale.current.language.languageCode?.identifier == "de" ? "de-CH" : "en-US")
-                ?? AVSpeechSynthesisVoice(language: Locale.preferredLanguages.first)
+            u.voice = VoiceCatalog.voice(identifier: settings.voiceIdentifier)
             u.volume = Float(settings.voiceVolume)
-            u.rate = AVSpeechUtteranceDefaultSpeechRate
+            // Etwas ruhiger als Standard, mit kurzer Pause davor: wirkt natürlicher und ist im Kurs besser verständlich.
+            u.rate = AVSpeechUtteranceDefaultSpeechRate * 0.95
+            u.preUtteranceDelay = 0.05
             speech.speak(u)
         case .halftime:
             guard settings.halftimeEnabled else { return }

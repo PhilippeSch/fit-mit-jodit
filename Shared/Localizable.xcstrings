@@ -1869,6 +1869,86 @@
           }
         }
       }
+    },
+    "Stimme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voice"
+          }
+        }
+      }
+    },
+    "Automatisch (beste installierte)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic (best installed)"
+          }
+        }
+      }
+    },
+    "Stimme probehören" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview voice"
+          }
+        }
+      }
+    },
+    "Natürlicher klingt eine «Premium»- oder «Erweitert»-Stimme. In den iOS-Einstellungen unter Bedienungshilfen › Gesprochene Inhalte › Stimmen › Deutsch (bzw. English) z. B. «Anna (Premium)» laden. Danach wählt die App sie automatisch." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A “Premium” or “Enhanced” voice sounds much more natural. In iOS Settings go to Accessibility › Spoken Content › Voices › English (or German) and download one, e.g. “Ava (Premium)”. The app then picks it automatically."
+          }
+        }
+      }
+    },
+    "Premium" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
+          }
+        }
+      }
+    },
+    "Erweitert" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enhanced"
+          }
+        }
+      }
+    },
+    "Standard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        }
+      }
+    },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

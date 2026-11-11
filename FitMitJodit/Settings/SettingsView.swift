@@ -53,6 +53,26 @@ struct SettingsView: View {
                                isOn: $store.settings.signals.voiceDetailed)
                             .accessibilityIdentifier("toggleVoiceDetailed")
                         volume($store.settings.signals.voiceVolume, String(localized: "Lautstärke Ansagen"))
+                        Picker(String(localized: "Stimme"), selection: $store.settings.signals.voiceIdentifier) {
+                            Text("Automatisch (beste installierte)").tag(String?.none)
+                            ForEach(VoiceCatalog.voices(), id: \.identifier) { v in
+                                Text("\(v.name) · \(VoiceCatalog.qualityLabel(v.quality))").tag(Optional(v.identifier))
+                            }
+                        }
+                        .accessibilityIdentifier("voicePicker")
+                        Button(String(localized: "Stimme probehören")) {
+                            var s = store.settings.signals
+                            s.voiceMode = .always
+                            let sample = Announcements.getReady(next: Step(kind: .work, seconds: 45,
+                                exerciseName: ExerciseCatalog.all.first { $0.id == "squats" }.map { ExerciseCatalog.localizedName($0) }))
+                            app.signalPlayer?.play(.announcement(sample), settings: s)
+                        }
+                        .accessibilityIdentifier("voiceSample")
+                        if VoiceCatalog.onlyBasicVoices {
+                            Text("Natürlicher klingt eine «Premium»- oder «Erweitert»-Stimme. In den iOS-Einstellungen unter Bedienungshilfen › Gesprochene Inhalte › Stimmen › Deutsch (bzw. English) z. B. «Anna (Premium)» laden. Danach wählt die App sie automatisch.")
+                                .font(.footnote).foregroundStyle(.secondary)
+                                .accessibilityIdentifier("voiceHint")
+                        }
                     }
                     Picker(String(localized: "Ton-Set"), selection: $store.settings.signals.toneSet) {
                         ForEach(ToneSet.allCases) { t in Text(t.label).tag(t) }
