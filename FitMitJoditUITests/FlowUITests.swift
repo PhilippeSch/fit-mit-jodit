@@ -206,6 +206,25 @@ class FlowUITests: XCTestCase {
         tap("confirmStop")
     }
 
+    /// QR-Code im Training zeigen; ein gescannter Link (wie von der Kamera) übernimmt das Training nach Bestätigung.
+    func testShareByQRCodeAndImport() {
+        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
+        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
+        circuit.tap()
+        tap("showQR")
+        XCTAssertTrue(app.descendants(matching: .any)["qrImage"].waitForExistence(timeout: 5))
+        tap("closeQR")
+        // Training «QR Test»: 2 × (30 s Plank, 10 s Pause)
+        app.open(URL(string: "fitmitjodit://training?d=q1bKU7JSCgxSCEktLlHSUSpTsjLUUcpUsoquVkoqBlOpQAUBOYl52UDpbCC7PL8IxARKGhvU6lSDxYoguoFihga1sTpKRUpWRrWxtQA")!)
+        let confirm = app.alerts.buttons[language == "de" ? "Übernehmen" : "Add"]
+        XCTAssertTrue(confirm.waitForExistence(timeout: 10))
+        confirm.tap()
+        if app.navigationBars.buttons.firstMatch.exists, !app.buttons["newWorkout"].isHittable {
+            app.navigationBars.buttons.firstMatch.tap()
+        }
+        XCTAssertTrue(app.descendants(matching: .any)["workout-QR Test"].waitForExistence(timeout: 10))
+    }
+
     func testSignalsOnOff() {
         tap("settings")
         let tones = app.switches["toggleTones"]

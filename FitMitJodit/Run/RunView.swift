@@ -283,6 +283,7 @@ private struct UnlockBadge: View {
 private struct FinishedView: View {
     @Environment(AppModel.self) private var app
     let session: RunSession
+    @State private var showQR = false
 
     var body: some View {
         ScrollView {
@@ -303,6 +304,12 @@ private struct FinishedView: View {
                 }
                 .font(.title3.bold())
                 .tint(.white)
+                // Training an die Teilnehmenden weitergeben (z. B. am Ende der Stunde).
+                Button { showQR = true } label: { Label("Training teilen", systemImage: "qrcode") }
+                    .buttonStyle(.bordered)
+                    .tint(.white)
+                    .font(.headline)
+                    .accessibilityIdentifier("finishedQR")
                 // Werbung für Jodits Trainings mit direktem Link zur Website.
                 JoditPromoCard()
                     .frame(maxWidth: 520)
@@ -312,6 +319,7 @@ private struct FinishedView: View {
             .padding(.top, 40)
             .frame(maxWidth: .infinity)
         }
+        .sheet(isPresented: $showQR) { WorkoutQRView(workout: session.workout) }
     }
 }
 

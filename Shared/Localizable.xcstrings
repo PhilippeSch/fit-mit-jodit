@@ -1612,7 +1612,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apply"
+            "value" : "Add"
           }
         }
       }
@@ -2244,6 +2244,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start ${workout}"
+          }
+        }
+      }
+    },
+    "QR-Code zum Teilen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Code for Sharing"
+          }
+        }
+      }
+    },
+    "Training teilen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Workout"
+          }
+        }
+      }
+    },
+    "QR-Code für «%@»" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR code for “%@”"
+          }
+        }
+      }
+    },
+    "Mit der iPhone-Kamera scannen. Das Training erscheint danach in Fit mit Jodit, die App muss installiert sein." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan with the iPhone camera. The workout then appears in Fit mit Jodit (the app must be installed)."
+          }
+        }
+      }
+    },
+    "Der QR-Code konnte nicht erstellt werden." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The QR code could not be created."
+          }
+        }
+      }
+    },
+    "Training übernehmen?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Workout?"
+          }
+        }
+      }
+    },
+    "«%@», %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%1$@”, %2$@"
+          }
+        }
+      }
+    },
+    "Der QR-Code enthält kein gültiges Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The QR code does not contain a valid workout."
           }
         }
       }
