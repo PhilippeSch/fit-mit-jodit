@@ -165,6 +165,9 @@ struct AppSettings: Codable, Equatable, Sendable {
 @Observable
 final class WorkoutStore {
     private(set) var workouts: [Workout] = [] { didSet { scheduleShortcutUpdate() } }
+    /// Trainingsverlauf, neueste zuerst. Jeder Eintrag ist ein eigener Wert (`history.<id>`), damit zwei Geräte
+    /// sich über iCloud nicht gegenseitig überschreiben.
+    private(set) var history: [HistoryEntry] = []
     @ObservationIgnored private var shortcutTask: Task<Void, Never>?
 
     /// Siri-Sätze mit Trainingsnamen («Starte Tabata mit Fit mit Jodit») nachführen, gebündelt nach Änderungen.
@@ -241,6 +244,37 @@ final class WorkoutStore {
         let n = loadValue([String].self, key: Keys.names) ?? []
         if n != customExerciseNames { customExerciseNames = n }
         if let s = loadValue(AppSettings.self, key: Keys.settings), s != settings { settings = s }
+        let h = loadHistory()
+        if h != history { history = h }
+    }
+
+    // MARK: Verlauf
+
+    private static let historyPrefix = "history."
+
+    private func loadHistory() -> [HistoryEntry] {
+        let prefix = Self.historyPrefix
+        let found = (try? context.fetch(FetchDescriptor<StoredValue>(predicate: #Predicate { $0.key.starts(with: prefix) }))) ?? []
+        var byID: [UUID: HistoryEntry] = [:]
+        for v in found {
+            if let e = try? JSONDecoder.fmj.decode(HistoryEntry.self, from: v.payload) { byID[e.id] = e }
+        }
+        return byID.values.sorted { $0.startedAt > $1.startedAt }
+    }
+
+    func addHistory(_ e: HistoryEntry) {
+        guard let data = try? JSONEncoder.fmj.encode(e) else { return }
+        context.insert(StoredValue(key: Self.historyPrefix + e.id.uuidString, payload: data))
+        try? context.save()
+        history.insert(e, at: history.firstIndex { $0.startedAt < e.startedAt } ?? history.count)
+    }
+
+    func deleteHistory(_ e: HistoryEntry) {
+        let key = Self.historyPrefix + e.id.uuidString
+        let found = (try? context.fetch(FetchDescriptor<StoredValue>(predicate: #Predicate { $0.key == key }))) ?? []
+        found.forEach { context.delete($0) }
+        try? context.save()
+        history.removeAll { $0.id == e.id }
     }
 
     /// Jede Vorlage genau einmal anlegen (auch neue Vorlagen nach einem Update), nie eine gelöschte zurückholen.

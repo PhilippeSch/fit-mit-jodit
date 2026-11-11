@@ -96,6 +96,8 @@ final class AppModel {
     }
 
     func stop() {
+        // Abgebrochen nach mindestens einer Minute: trotzdem im Verlauf festhalten.
+        if let s = session, !s.isFinished { record(s, completed: false) }
         ticker?.invalidate()
         ticker = nil
         session = nil
@@ -104,10 +106,24 @@ final class AppModel {
     }
 
     private func finished() {
+        if let s = session { record(s, completed: true) }
         ticker?.invalidate()
         ticker = nil
         UIApplication.shared.isIdleTimerDisabled = false
         notifySession()
+    }
+
+    /// Mindestdauer für abgebrochene Trainings im Verlauf.
+    static let minimumRecordedSeconds = 60
+
+    private func record(_ s: RunSession, completed: Bool) {
+        let now = clock.now
+        let elapsed = s.engine.elapsed(at: now)
+        let leadIn = s.steps.first.map { $0.kind == .prep ? TimeInterval($0.seconds) : 0 } ?? 0
+        let trained = Int(max(elapsed - leadIn, 0).rounded())
+        guard completed || trained >= Self.minimumRecordedSeconds else { return }
+        store.addHistory(HistoryEntry(workoutID: s.workout.id, name: s.workout.name,
+                                      startedAt: now.addingTimeInterval(-elapsed), seconds: trained, completed: completed))
     }
 
     private func startTicker() {

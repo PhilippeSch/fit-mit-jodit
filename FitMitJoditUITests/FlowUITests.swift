@@ -225,6 +225,37 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["workout-QR Test"].waitForExistence(timeout: 10))
     }
 
+    /// Ein abgeschlossenes Training erscheint im Verlauf mit Wochenübersicht.
+    func testHistoryShowsFinishedWorkout() {
+        tap("history")
+        XCTAssertTrue(app.descendants(matching: .any)["weekSummary"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["historyRow"].exists)
+        tap("closeHistory")
+        let tabata = app.descendants(matching: .any)["workout-Tabata"].firstMatch
+        XCTAssertTrue(tabata.waitForExistence(timeout: 10))
+        tabata.tap()
+        tap("start")
+        let countdown = app.descendants(matching: .any)["countdown"].firstMatch
+        XCTAssertTrue(countdown.waitForExistence(timeout: 10))
+        countdown.tap()
+        tap("pauseResume") // pausiert: Knöpfe bleiben stehen
+        let finished = app.descendants(matching: .any)["finishedTitle"].firstMatch
+        let skip = app.descendants(matching: .any)["skipForward"].firstMatch
+        var n = 0
+        while !finished.exists && n < 25 {
+            if skip.exists { skip.tap() }
+            n += 1
+        }
+        XCTAssertTrue(finished.waitForExistence(timeout: 5))
+        tap("done")
+        if !app.buttons["history"].isHittable, app.navigationBars.buttons.firstMatch.exists {
+            app.navigationBars.buttons.firstMatch.tap()
+        }
+        tap("history")
+        XCTAssertTrue(app.descendants(matching: .any)["historyRow"].waitForExistence(timeout: 5))
+        tap("closeHistory")
+    }
+
     func testSignalsOnOff() {
         tap("settings")
         let tones = app.switches["toggleTones"]

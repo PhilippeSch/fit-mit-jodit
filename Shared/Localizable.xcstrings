@@ -2327,6 +2327,76 @@
           }
         }
       }
+    },
+    "Verlauf" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        }
+      }
+    },
+    "Noch keine Trainings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Workouts Yet"
+          }
+        }
+      }
+    },
+    "Abgeschlossene Trainings erscheinen hier, abgebrochene ab einer Minute." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finished workouts appear here, stopped ones after one minute."
+          }
+        }
+      }
+    },
+    "Diese Woche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Week"
+          }
+        }
+      }
+    },
+    "Minuten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
+          }
+        }
+      }
+    },
+    "Minuten pro Tag" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes per day"
+          }
+        }
+      }
+    },
+    "· abgebrochen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "· stopped"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
