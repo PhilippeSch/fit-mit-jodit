@@ -35,6 +35,10 @@ class FlowUITests: XCTestCase {
             app.descendants(matching: .any)["palette"].firstMatch.swipeLeft()
             tries += 1
         }
+        while !e.isHittable && tries < 12 {
+            app.descendants(matching: .any)["palette"].firstMatch.swipeRight()
+            tries += 1
+        }
         e.tap()
     }
 
@@ -52,7 +56,7 @@ class FlowUITests: XCTestCase {
         let started = Date()
         openNewWorkout()
         for id in ["palette-work-45", "palette-rest-15", "palette-work-45", "palette-rest-15", "palette-work-45", "palette-rest-60"] {
-            tap(id)
+            tapInPalette(id)
         }
         XCTAssertEqual(tiles("tile-work-45").count, 3)
         // Alle Blöcke markieren und «mal 4»
