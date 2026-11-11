@@ -1,0 +1,582 @@
+{
+ "language": "en",
+ "version": 1,
+ "phrases": [
+  {
+   "nr": 1,
+   "section": "A",
+   "key": "fixed.go",
+   "text": "Go!"
+  },
+  {
+   "nr": 2,
+   "section": "A",
+   "key": "fixed.rest",
+   "text": "Rest"
+  },
+  {
+   "nr": 3,
+   "section": "A",
+   "key": "fixed.work",
+   "text": "Work"
+  },
+  {
+   "nr": 4,
+   "section": "A",
+   "key": "fixed.get_ready",
+   "text": "Get ready"
+  },
+  {
+   "nr": 5,
+   "section": "A",
+   "key": "fixed.next",
+   "text": "Next:"
+  },
+  {
+   "nr": 6,
+   "section": "A",
+   "key": "fixed.last_round",
+   "text": "Last round"
+  },
+  {
+   "nr": 7,
+   "section": "A",
+   "key": "fixed.ten_left",
+   "text": "10 seconds left"
+  },
+  {
+   "nr": 8,
+   "section": "A",
+   "key": "fixed.halftime",
+   "text": "Halfway"
+  },
+  {
+   "nr": 9,
+   "section": "A",
+   "key": "fixed.finished",
+   "text": "Done!"
+  },
+  {
+   "nr": 10,
+   "section": "A",
+   "key": "fixed.well_done",
+   "text": "Well done!"
+  },
+  {
+   "nr": 11,
+   "section": "B",
+   "key": "dur.5",
+   "text": "5 seconds"
+  },
+  {
+   "nr": 12,
+   "section": "B",
+   "key": "dur.10",
+   "text": "10 seconds"
+  },
+  {
+   "nr": 13,
+   "section": "B",
+   "key": "dur.15",
+   "text": "15 seconds"
+  },
+  {
+   "nr": 14,
+   "section": "B",
+   "key": "dur.20",
+   "text": "20 seconds"
+  },
+  {
+   "nr": 15,
+   "section": "B",
+   "key": "dur.25",
+   "text": "25 seconds"
+  },
+  {
+   "nr": 16,
+   "section": "B",
+   "key": "dur.30",
+   "text": "30 seconds"
+  },
+  {
+   "nr": 17,
+   "section": "B",
+   "key": "dur.35",
+   "text": "35 seconds"
+  },
+  {
+   "nr": 18,
+   "section": "B",
+   "key": "dur.40",
+   "text": "40 seconds"
+  },
+  {
+   "nr": 19,
+   "section": "B",
+   "key": "dur.45",
+   "text": "45 seconds"
+  },
+  {
+   "nr": 20,
+   "section": "B",
+   "key": "dur.50",
+   "text": "50 seconds"
+  },
+  {
+   "nr": 21,
+   "section": "B",
+   "key": "dur.55",
+   "text": "55 seconds"
+  },
+  {
+   "nr": 22,
+   "section": "B",
+   "key": "dur.60",
+   "text": "1 minute"
+  },
+  {
+   "nr": 23,
+   "section": "B",
+   "key": "dur.75",
+   "text": "1 minute 15"
+  },
+  {
+   "nr": 24,
+   "section": "B",
+   "key": "dur.90",
+   "text": "1 minute 30"
+  },
+  {
+   "nr": 25,
+   "section": "B",
+   "key": "dur.105",
+   "text": "1 minute 45"
+  },
+  {
+   "nr": 26,
+   "section": "B",
+   "key": "dur.120",
+   "text": "2 minutes"
+  },
+  {
+   "nr": 27,
+   "section": "B",
+   "key": "dur.150",
+   "text": "2 minutes 30"
+  },
+  {
+   "nr": 28,
+   "section": "B",
+   "key": "dur.180",
+   "text": "3 minutes"
+  },
+  {
+   "nr": 29,
+   "section": "B",
+   "key": "dur.210",
+   "text": "3 minutes 30"
+  },
+  {
+   "nr": 30,
+   "section": "B",
+   "key": "dur.240",
+   "text": "4 minutes"
+  },
+  {
+   "nr": 31,
+   "section": "B",
+   "key": "dur.300",
+   "text": "5 minutes"
+  },
+  {
+   "nr": 32,
+   "section": "B",
+   "key": "dur.360",
+   "text": "6 minutes"
+  },
+  {
+   "nr": 33,
+   "section": "B",
+   "key": "dur.420",
+   "text": "7 minutes"
+  },
+  {
+   "nr": 34,
+   "section": "B",
+   "key": "dur.480",
+   "text": "8 minutes"
+  },
+  {
+   "nr": 35,
+   "section": "B",
+   "key": "dur.540",
+   "text": "9 minutes"
+  },
+  {
+   "nr": 36,
+   "section": "B",
+   "key": "dur.600",
+   "text": "10 minutes"
+  },
+  {
+   "nr": 37,
+   "section": "C",
+   "key": "ex.butt_kicks",
+   "text": "Butt Kicks"
+  },
+  {
+   "nr": 38,
+   "section": "C",
+   "key": "ex.arm_circles",
+   "text": "Arm Circles"
+  },
+  {
+   "nr": 39,
+   "section": "C",
+   "key": "ex.twisting_lunges",
+   "text": "Twisting Lunges"
+  },
+  {
+   "nr": 40,
+   "section": "C",
+   "key": "ex.reverse_lunges",
+   "text": "Reverse Lunges"
+  },
+  {
+   "nr": 41,
+   "section": "C",
+   "key": "ex.forward_lunges",
+   "text": "Forward Lunges"
+  },
+  {
+   "nr": 42,
+   "section": "C",
+   "key": "ex.bear_crawl",
+   "text": "Bear Crawl"
+  },
+  {
+   "nr": 43,
+   "section": "C",
+   "key": "ex.lying_leg_raises",
+   "text": "Lying Leg Raises"
+  },
+  {
+   "nr": 44,
+   "section": "C",
+   "key": "ex.flutter_kicks",
+   "text": "Flutter Kicks"
+  },
+  {
+   "nr": 45,
+   "section": "C",
+   "key": "ex.mountain_climbers",
+   "text": "Mountain Climbers"
+  },
+  {
+   "nr": 46,
+   "section": "C",
+   "key": "ex.bicycle_crunches",
+   "text": "Bicycle Crunches"
+  },
+  {
+   "nr": 47,
+   "section": "C",
+   "key": "ex.bird_dog",
+   "text": "Bird Dog"
+  },
+  {
+   "nr": 48,
+   "section": "C",
+   "key": "ex.biceps_curls",
+   "text": "Biceps Curls"
+  },
+  {
+   "nr": 49,
+   "section": "C",
+   "key": "ex.burpees",
+   "text": "Burpees"
+  },
+  {
+   "nr": 50,
+   "section": "C",
+   "key": "ex.crunches",
+   "text": "Crunches"
+  },
+  {
+   "nr": 51,
+   "section": "C",
+   "key": "ex.dead_bug",
+   "text": "Dead Bug"
+  },
+  {
+   "nr": 52,
+   "section": "C",
+   "key": "ex.diamond_push_ups",
+   "text": "Diamond Push-ups"
+  },
+  {
+   "nr": 53,
+   "section": "C",
+   "key": "ex.chair_dips",
+   "text": "Chair Dips"
+  },
+  {
+   "nr": 54,
+   "section": "C",
+   "key": "ex.donkey_kicks",
+   "text": "Donkey Kicks"
+  },
+  {
+   "nr": 55,
+   "section": "C",
+   "key": "ex.single_leg_glute_bridge",
+   "text": "Single-Leg Glute Bridge"
+  },
+  {
+   "nr": 56,
+   "section": "C",
+   "key": "ex.fire_hydrants",
+   "text": "Fire Hydrants"
+  },
+  {
+   "nr": 57,
+   "section": "C",
+   "key": "ex.glute_bridge",
+   "text": "Glute Bridge"
+  },
+  {
+   "nr": 58,
+   "section": "C",
+   "key": "ex.good_mornings",
+   "text": "Good Mornings"
+  },
+  {
+   "nr": 59,
+   "section": "C",
+   "key": "ex.hammer_curls",
+   "text": "Hammer Curls"
+  },
+  {
+   "nr": 60,
+   "section": "C",
+   "key": "ex.jumping_jacks",
+   "text": "Jumping Jacks"
+  },
+  {
+   "nr": 61,
+   "section": "C",
+   "key": "ex.hip_thrusts",
+   "text": "Hip Thrusts"
+  },
+  {
+   "nr": 62,
+   "section": "C",
+   "key": "ex.high_knees",
+   "text": "High Knees"
+  },
+  {
+   "nr": 63,
+   "section": "C",
+   "key": "ex.hollow_hold",
+   "text": "Hollow Hold"
+  },
+  {
+   "nr": 64,
+   "section": "C",
+   "key": "ex.inchworm",
+   "text": "Inchworm"
+  },
+  {
+   "nr": 65,
+   "section": "C",
+   "key": "ex.squats",
+   "text": "Squats"
+  },
+  {
+   "nr": 66,
+   "section": "C",
+   "key": "ex.jump_squats",
+   "text": "Jump Squats"
+  },
+  {
+   "nr": 67,
+   "section": "C",
+   "key": "ex.cossack_squats",
+   "text": "Cossack Squats"
+  },
+  {
+   "nr": 68,
+   "section": "C",
+   "key": "ex.dumbbell_deadlift",
+   "text": "Dumbbell Deadlift"
+  },
+  {
+   "nr": 69,
+   "section": "C",
+   "key": "ex.dumbbell_row",
+   "text": "Dumbbell Row"
+  },
+  {
+   "nr": 70,
+   "section": "C",
+   "key": "ex.push_ups",
+   "text": "Push-ups"
+  },
+  {
+   "nr": 71,
+   "section": "C",
+   "key": "ex.knee_push_ups",
+   "text": "Knee Push-ups"
+  },
+  {
+   "nr": 72,
+   "section": "C",
+   "key": "ex.pike_push_ups",
+   "text": "Pike Push-ups"
+  },
+  {
+   "nr": 73,
+   "section": "C",
+   "key": "ex.plank",
+   "text": "Plank"
+  },
+  {
+   "nr": 74,
+   "section": "C",
+   "key": "ex.plank_jacks",
+   "text": "Plank Jacks"
+  },
+  {
+   "nr": 75,
+   "section": "C",
+   "key": "ex.plank_shoulder_taps",
+   "text": "Plank Shoulder Taps"
+  },
+  {
+   "nr": 76,
+   "section": "C",
+   "key": "ex.russian_twists",
+   "text": "Russian Twists"
+  },
+  {
+   "nr": 77,
+   "section": "C",
+   "key": "ex.shoulder_press",
+   "text": "Shoulder Press"
+  },
+  {
+   "nr": 78,
+   "section": "C",
+   "key": "ex.swimmer",
+   "text": "Swimmer"
+  },
+  {
+   "nr": 79,
+   "section": "C",
+   "key": "ex.jump_rope_no_rope",
+   "text": "Jump Rope (No Rope)"
+  },
+  {
+   "nr": 80,
+   "section": "C",
+   "key": "ex.lateral_raises",
+   "text": "Lateral Raises"
+  },
+  {
+   "nr": 81,
+   "section": "C",
+   "key": "ex.side_lunges",
+   "text": "Side Lunges"
+  },
+  {
+   "nr": 82,
+   "section": "C",
+   "key": "ex.side_leg_raises",
+   "text": "Side Leg Raises"
+  },
+  {
+   "nr": 83,
+   "section": "C",
+   "key": "ex.side_plank",
+   "text": "Side Plank"
+  },
+  {
+   "nr": 84,
+   "section": "C",
+   "key": "ex.sit_ups",
+   "text": "Sit-ups"
+  },
+  {
+   "nr": 85,
+   "section": "C",
+   "key": "ex.skater_hops",
+   "text": "Skater Hops"
+  },
+  {
+   "nr": 86,
+   "section": "C",
+   "key": "ex.spiderman_push_ups",
+   "text": "Spiderman Push-ups"
+  },
+  {
+   "nr": 87,
+   "section": "C",
+   "key": "ex.jump_lunges",
+   "text": "Jump Lunges"
+  },
+  {
+   "nr": 88,
+   "section": "C",
+   "key": "ex.sumo_squats",
+   "text": "Sumo Squats"
+  },
+  {
+   "nr": 89,
+   "section": "C",
+   "key": "ex.superman",
+   "text": "Superman"
+  },
+  {
+   "nr": 90,
+   "section": "C",
+   "key": "ex.thrusters",
+   "text": "Thrusters"
+  },
+  {
+   "nr": 91,
+   "section": "C",
+   "key": "ex.toe_touches",
+   "text": "Toe Touches"
+  },
+  {
+   "nr": 92,
+   "section": "C",
+   "key": "ex.overhead_triceps_extension",
+   "text": "Overhead Triceps Extension"
+  },
+  {
+   "nr": 93,
+   "section": "C",
+   "key": "ex.tuck_jumps",
+   "text": "Tuck Jumps"
+  },
+  {
+   "nr": 94,
+   "section": "C",
+   "key": "ex.v_ups",
+   "text": "V-Ups"
+  },
+  {
+   "nr": 95,
+   "section": "C",
+   "key": "ex.calf_raises",
+   "text": "Calf Raises"
+  },
+  {
+   "nr": 96,
+   "section": "C",
+   "key": "ex.wall_sit",
+   "text": "Wall Sit"
+  }
+ ]
+}
