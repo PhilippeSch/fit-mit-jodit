@@ -93,6 +93,13 @@
 			);
 			target = 56A20B07B8D5146A0C5234E0;
 		};
+		E0DDBF75900B64F8D115CA6B = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 76DED3A96A6E23F6F9446183;
+		};
 		7F833640483695A54FCA77AA = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -118,6 +125,9 @@
 		};
 		36844D8767BC8C5ED3C9F098 /* FitMitJoditWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E0DDBF75900B64F8D115CA6B,
+			);
 			path = FitMitJoditWatch;
 			sourceTree = "<group>";
 		};
@@ -688,6 +698,7 @@
 				CODE_SIGN_ENTITLEMENTS = FitMitJoditWatch/FitMitJoditWatch.entitlements;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FitMitJoditWatch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(APP_BUNDLE_ID)";
@@ -715,6 +726,7 @@
 				CODE_SIGN_STYLE = Manual;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FitMitJoditWatch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fit mit Jodit";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "$(APP_BUNDLE_ID)";

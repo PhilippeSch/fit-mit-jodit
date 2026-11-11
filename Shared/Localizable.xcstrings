@@ -2007,6 +2007,56 @@
           }
         }
       }
+    },
+    "Beine & Po 15" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legs & Glutes 15"
+          }
+        }
+      }
+    },
+    "Cardio 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cardio 12"
+          }
+        }
+      }
+    },
+    "Oberkörper 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upper Body 12"
+          }
+        }
+      }
+    },
+    "Pyramide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pyramid"
+          }
+        }
+      }
+    },
+    "EMOM 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EMOM 12"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

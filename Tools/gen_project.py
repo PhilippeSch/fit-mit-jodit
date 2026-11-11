@@ -64,6 +64,7 @@ TARGETS = [
              "PRODUCT_BUNDLE_IDENTIFIER": "$(APP_BUNDLE_ID).watchkitapp",
              "PRODUCT_NAME": "FitMitJoditWatch",
              "PRODUCT_MODULE_NAME": "FitMitJoditWatch",
+             "INFOPLIST_FILE": "FitMitJoditWatch/Info.plist",
              "GENERATE_INFOPLIST_FILE": "YES",
              "INFOPLIST_KEY_CFBundleDisplayName": "\"Fit mit Jodit\"",
              "INFOPLIST_KEY_WKCompanionAppBundleIdentifier": "$(APP_BUNDLE_ID)",

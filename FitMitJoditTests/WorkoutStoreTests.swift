@@ -8,10 +8,12 @@ final class WorkoutStoreTests: XCTestCase {
         return WorkoutStore(container: PersistenceFactory.makeContainer(inMemory: true), defaults: defaults)
     }
 
-    func testFirstStartSeedsSixTemplatesWithoutICloud() {
+    static let newKeys: Set<String> = ["fullbody20", "core10", "legs15", "cardio12", "upper12", "pyramid", "emom12"]
+
+    func testFirstStartSeedsAllTemplatesWithoutICloud() {
         let store = makeStore()
-        XCTAssertEqual(store.workouts.count, 6)
-        XCTAssertEqual(Set(store.workouts.compactMap(\.templateKey)), ["circuit4515", "tabata", "strength", "warmup", "fullbody20", "core10"])
+        XCTAssertEqual(store.workouts.count, 11)
+        XCTAssertEqual(Set(store.workouts.compactMap(\.templateKey)), Self.newKeys.union(["circuit4515", "tabata", "strength", "warmup"]))
     }
 
     func testUpdateAddsNewTemplatesButNotDeletedOnes() {
@@ -19,7 +21,7 @@ final class WorkoutStoreTests: XCTestCase {
         defaults.set(true, forKey: "fmj.templatesSeeded.v1") // Installation der ersten Fassung, Tabata gelöscht
         let store = WorkoutStore(container: PersistenceFactory.makeContainer(inMemory: true), defaults: defaults)
         let keys = Set(store.workouts.compactMap(\.templateKey))
-        XCTAssertEqual(keys, ["fullbody20", "core10"])
+        XCTAssertEqual(keys, Self.newKeys)
     }
 
     func testParticipantTemplatesHaveNamesAndSpeak() {
@@ -32,17 +34,33 @@ final class WorkoutStoreTests: XCTestCase {
         XCTAssertEqual(Templates.core.totalSeconds, 10 * 60 - 15)
     }
 
+    func testAdditionalTemplates() {
+        for w in [Templates.legsGlutes, Templates.cardio, Templates.upperBody, Templates.emom] {
+            let steps = StepSequence.expand(w)
+            XCTAssertTrue(steps.filter { $0.kind == .work }.allSatisfy(\.hasName), w.name)
+            XCTAssertTrue(SignalSettings().speaks(steps), w.name)
+        }
+        XCTAssertEqual(Templates.legsGlutes.totalSeconds, 15 * 60 - 15)
+        XCTAssertEqual(Templates.cardio.totalSeconds, 12 * 60 - 10)
+        XCTAssertEqual(Templates.upperBody.totalSeconds, 12 * 60 - 20)
+        XCTAssertEqual(Templates.emom.totalSeconds, 12 * 60)
+        XCTAssertEqual(Templates.pyramid.totalSeconds, 340 + 8 * 15)
+        // Feste IDs pro Vorlage, keine doppelten
+        let ids = Templates.all().map(\.id)
+        XCTAssertEqual(Set(ids).count, ids.count)
+    }
+
     func testCreateRenameDuplicateDelete() {
         let store = makeStore()
         let w = store.create(name: "Montag")
-        XCTAssertEqual(store.workouts.count, 7)
+        XCTAssertEqual(store.workouts.count, Templates.all().count + 1)
         store.rename(w, to: "Dienstag")
         XCTAssertEqual(store.workout(id: w.id)?.name, "Dienstag")
         let copy = store.duplicate(store.workout(id: w.id)!)
         XCTAssertNotEqual(copy.id, w.id)
-        XCTAssertEqual(store.workouts.count, 8)
+        XCTAssertEqual(store.workouts.count, Templates.all().count + 2)
         store.delete(copy)
-        XCTAssertEqual(store.workouts.count, 7)
+        XCTAssertEqual(store.workouts.count, Templates.all().count + 1)
         XCTAssertNil(store.workout(id: copy.id))
     }
 
@@ -59,7 +77,7 @@ final class WorkoutStoreTests: XCTestCase {
     func testSearch() {
         let store = makeStore()
         XCTAssertEqual(store.search("taba").map(\.templateKey), ["tabata"])
-        XCTAssertEqual(store.search("").count, 6)
+        XCTAssertEqual(store.search("").count, 11)
     }
 
     func testPersistsAcrossReload() {
@@ -75,7 +93,7 @@ final class WorkoutStoreTests: XCTestCase {
         XCTAssertEqual(again.workout(id: w.id)?.items, w.items)
         XCTAssertEqual(again.palette.count, PaletteItem.defaults.count + 1)
         XCTAssertEqual(again.settings.leadInSeconds, 5)
-        XCTAssertEqual(again.workouts.count, 7) // keine erneuten Vorlagen
+        XCTAssertEqual(again.workouts.count, Templates.all().count + 1) // keine erneuten Vorlagen
     }
 
     func testCustomExerciseNamesAreRemembered() {

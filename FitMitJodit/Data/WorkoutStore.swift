@@ -7,7 +7,7 @@ import SwiftData
 enum Templates {
     /// Vorlagen mit fester ID je Schlüssel: Auf zwei Geräten angelegt, werden sie über iCloud zu einem Eintrag.
     static func all() -> [Workout] {
-        [circuit, tabata, strength, warmup, fullBody, core].map { w in
+        [circuit, tabata, strength, warmup, fullBody, core, legsGlutes, cardio, upperBody, pyramid, emom].map { w in
             var w = w
             if let key = w.templateKey { w.id = id(for: key) }
             return w
@@ -39,6 +39,48 @@ enum Templates {
         }
         return Workout(name: String(localized: "Ganzkörper 20"),
                        items: [.round(Round(repeats: 2, blocks: blocks))], templateKey: "fullbody20")
+    }
+
+    /// Übungen mit fester Arbeits- und Pausenzeit als eine Runde.
+    private static func station(_ ids: [String], work: Int, rest: Int) -> [Block] {
+        ids.flatMap { [Block(kind: .work, seconds: work, exerciseName: ex($0)), Block(kind: .rest, seconds: rest)] }
+    }
+
+    /// Beine und Po: 5 Übungen à 45 s, 15 s Pause, 3 Runden (15 Minuten).
+    static var legsGlutes: Workout {
+        let ids = ["squats", "forward_lunges", "glute_bridge", "sumo_squats", "donkey_kicks"]
+        return Workout(name: String(localized: "Beine & Po 15"),
+                       items: [.round(Round(repeats: 3, blocks: station(ids, work: 45, rest: 15)))], templateKey: "legs15")
+    }
+
+    /// Cardio: 6 Übungen à 30 s, 10 s Pause, 3 Runden (12 Minuten).
+    static var cardio: Workout {
+        let ids = ["jumping_jacks", "high_knees", "skater_hops", "mountain_climbers", "jump_squats", "burpees"]
+        return Workout(name: String(localized: "Cardio 12"),
+                       items: [.round(Round(repeats: 3, blocks: station(ids, work: 30, rest: 10)))], templateKey: "cardio12")
+    }
+
+    /// Oberkörper ohne Geräte: 6 Übungen à 40 s, 20 s Pause, 2 Runden (12 Minuten).
+    static var upperBody: Workout {
+        let ids = ["push_ups", "chair_dips", "plank_shoulder_taps", "pike_push_ups", "superman", "knee_push_ups"]
+        return Workout(name: String(localized: "Oberkörper 12"),
+                       items: [.round(Round(repeats: 2, blocks: station(ids, work: 40, rest: 20)))], templateKey: "upper12")
+    }
+
+    /// Pyramide: Arbeit 20 → 60 → 20 Sekunden, je 15 s Pause.
+    static var pyramid: Workout {
+        let works = [20, 30, 40, 50, 60, 50, 40, 30, 20]
+        let items: [TimelineItem] = works.flatMap { [TimelineItem.block(Block(kind: .work, seconds: $0)),
+                                                     .block(Block(kind: .rest, seconds: 15))] }
+        return Workout(name: String(localized: "Pyramide"), items: items, templateKey: "pyramid")
+    }
+
+    /// EMOM: jede Minute eine neue Aufgabe, abwechselnd zwei Übungen, 12 Minuten.
+    static var emom: Workout {
+        let blocks = [Block(kind: .work, seconds: 60, exerciseName: ex("squats")),
+                      Block(kind: .work, seconds: 60, exerciseName: ex("push_ups"))]
+        return Workout(name: String(localized: "EMOM 12"),
+                       items: [.round(Round(repeats: 6, blocks: blocks))], templateKey: "emom12")
     }
 
     /// Bauch und Rumpf: 5 Übungen à 45 s, 15 s Pause, 2 Runden (10 Minuten).

@@ -7,7 +7,7 @@ Intervall-Timer für Gruppen- und Heimtraining, entwickelt für die Kurse von [f
 - **Laufansicht:** Grosser Countdown, aus mehreren Metern lesbar. Arbeit grün, Pause orange, Vorbereitung blau, jeweils mit Text. Bedienung mit einem Tipp: Pause, Block vor/zurück, Stopp.
 - **Signale:** Töne in den letzten 3 Sekunden und zur Halbzeit, drei Ton-Sets (synthetisch erzeugt). Musik anderer Apps wird während der Töne kurz leiser.
 - **Ansagen:** «Automatisch» sagt Trainings mit Übungsnamen an, mit Dauer, «Bereit machen» und «Noch 10 Sekunden». Trainings ohne Namen bleiben bei den Tönen.
-- **Vorlagen:** Zirkel 45/15, Tabata, Kraft, Warm-up, Ganzkörper 20, Bauch & Rumpf 10.
+- **Vorlagen:** Zirkel 45/15, Tabata, Kraft, Warm-up, Pyramide sowie mit Übungsnamen Ganzkörper 20, Bauch & Rumpf 10, Beine & Po 15, Cardio 12, Oberkörper 12 und EMOM 12.
 - **Apple Watch:** Fernbedienung für das Training auf dem iPhone oder, über das iPhone, auf dem iPad. Vibriert beim Blockwechsel, steuert die Musik des iPhone.
 - **Live Activity:** Countdown und Blockname auf Sperrbildschirm und Dynamic Island.
 - **Spotify:** Pro Training ein Link, der die Playlist in Spotify öffnet. Auf dem iPad passt Spotify im geteilten Bildschirm daneben.

@@ -73,7 +73,13 @@ final class WatchLink: NSObject {
         switch m {
         case .snapshot(let s):
             snapshot = s
-            if s == nil { stopHaptics() } else { startHaptics() }
+            if let s {
+                startHaptics()
+                if !s.state(at: Date()).isFinished { WatchRuntime.shared.begin() }
+            } else {
+                stopHaptics()
+                WatchRuntime.shared.end()
+            }
         case .workouts(let list):
             workouts = list
         case .target(let name, _):
@@ -93,7 +99,7 @@ final class WatchLink: NSObject {
                 guard let self, let snap = self.snapshot else { break }
                 let st = snap.state(at: Date())
                 for h in self.haptics.next(state: st) { WKInterfaceDevice.current().play(h.wk) }
-                if st.isFinished { break }
+                if st.isFinished { WatchRuntime.shared.end(); break }
                 try? await Task.sleep(for: .milliseconds(200))
             }
             // Nur zurücksetzen, wenn inzwischen kein neuer Task gestartet wurde.
