@@ -19,7 +19,10 @@ class FlowUITests: XCTestCase {
 
     private func tap(_ id: String, file: StaticString = #filePath, line: UInt = #line) {
         let e = app.descendants(matching: .any)[id].firstMatch
-        XCTAssertTrue(e.waitForExistence(timeout: 10), "\(id) fehlt", file: file, line: line)
+        if !e.waitForExistence(timeout: 10) {
+            XCTFail("\(id) fehlt\n\(app.debugDescription)", file: file, line: line)
+            return
+        }
         // Warten, bis Übergänge (Navigation, Blätter) abgeschlossen sind.
         let hittable = expectation(for: NSPredicate(format: "isHittable == true"), evaluatedWith: e)
         wait(for: [hittable], timeout: 5)
@@ -40,6 +43,49 @@ class FlowUITests: XCTestCase {
             tries += 1
         }
         e.tap()
+    }
+
+    /// Vorlage in der Bibliothek suchen und sichtbar machen (die Liste lädt Zeilen erst beim Scrollen).
+    private func libraryRow(_ de: String, _ en: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
+        let row = app.descendants(matching: .any)["workout-\(language == "de" ? de : en)"].firstMatch
+        let list = app.collectionViews.firstMatch
+        // Frei antippbar: sichtbar und nicht vom schwebenden Suchfeld unten verdeckt.
+        func clear() -> Bool {
+            guard row.exists && row.isHittable else { return false }
+            let search = app.searchFields.firstMatch
+            return !search.exists || row.frame.maxY <= search.frame.minY || row.frame.minY >= search.frame.maxY
+        }
+        var n = 0
+        while !clear() && n < 8 {
+            if n < 4 { list.swipeUp(velocity: .slow) } else { list.swipeDown(velocity: .slow) }
+            n += 1
+        }
+        // Nachrollen abwarten, sonst stoppt der nächste Tipp nur die Bewegung.
+        if n > 0 { sleep(1) }
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Vorlage \(de) fehlt", file: file, line: line)
+        return row
+    }
+
+    /// Zurück zur Bibliothek, egal ob Stapel (iPhone) oder geteilte Ansicht (iPad, Duo).
+    private func showLibrary() {
+        let history = app.buttons["history"]
+        for _ in 0..<4 {
+            if history.waitForExistence(timeout: 1) && history.isHittable { return }
+            // Zurück-Knopf: auf dem Duo liegt er in der seitlichen Leiste, nicht in der Navigationsleiste.
+            let back = app.buttons["BackButton"]
+            if back.exists && back.isHittable { back.tap(); continue }
+            let toggle = app.buttons["ToggleSidebar"]
+            if toggle.exists && toggle.isHittable { toggle.tap(); continue }
+            let first = app.navigationBars.buttons.element(boundBy: 0)
+            if first.exists && first.isHittable { first.tap() }
+        }
+    }
+
+    /// Im Formular scrollen, bis das Element antippbar ist (Formulare laden Zeilen erst beim Scrollen).
+    private func scroll(_ container: XCUIElement, to e: XCUIElement) {
+        var n = 0
+        while !(e.exists && e.isHittable) && n < 6 { container.swipeUp(velocity: .slow); n += 1 }
+        if n > 0 { sleep(1) }
     }
 
     private func openNewWorkout() {
@@ -126,15 +172,11 @@ class FlowUITests: XCTestCase {
         tiles("tile-work-60").firstMatch.tap()
         let last = tiles("tile-rest-90").firstMatch
         XCTAssertTrue(last.waitForExistence(timeout: 5))
-        // Sichtbar = vollständig über der Auswahl-Leiste und Palette (unteres Drittel frei lassen).
-        let visibleBottom = app.windows.firstMatch.frame.height * 0.6
-        var tries = 0
-        while (last.frame.maxY > visibleBottom || last.frame.minY < 100) && tries < 8 {
-            app.scrollViews["editorScroll"].firstMatch.swipeUp(velocity: .slow)
-            tries += 1
-        }
-        XCTAssertLessThanOrEqual(last.frame.maxY, visibleBottom, "Letzter Block nicht erreichbar")
+        sleep(1) // Auswahl-Leiste gleitet herein
+        // Antippen scrollt den Block ins Bild (wie von Hand). Liegt er unter Leiste oder Palette,
+        // trifft der Tipp nicht den Block und er wird nicht markiert.
         last.tap()
+        XCTAssertTrue(last.isSelected, "Letzter Block nicht erreichbar oder nicht markierbar")
         tap("pickDuration")
         XCTAssertTrue(app.buttons["applyDuration"].waitForExistence(timeout: 5))
         tap("applyDuration")
@@ -150,19 +192,18 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(app.images.matching(NSPredicate(format: "label CONTAINS[c] %@", language == "de" ? "Favorit" : "Favorite")).firstMatch.waitForExistence(timeout: 5))
         // Löschen mit Rückfrage
         let rows = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-'"))
-        let count = rows.count
-        rows.element(boundBy: count - 1).press(forDuration: 1.2)
+        let victim = rows.element(boundBy: rows.count - 1)
+        let victimID = victim.identifier
+        victim.press(forDuration: 1.2)
         let del = app.buttons.matching(NSPredicate(format: "label == %@", language == "de" ? "Löschen" : "Delete")).firstMatch
         XCTAssertTrue(del.waitForExistence(timeout: 5))
         del.tap()
         tap("confirmDelete")
-        XCTAssertEqual(rows.count, count - 1)
+        XCTAssertTrue(app.descendants(matching: .any)[victimID].waitForNonExistence(timeout: 5), "\(victimID) nicht gelöscht")
     }
 
     func testRunPauseSkipStop() {
-        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
-        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
-        circuit.tap()
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
         XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
         tap("start")
         XCTAssertTrue(app.descendants(matching: .any)["countdown"].waitForExistence(timeout: 10))
@@ -182,22 +223,100 @@ class FlowUITests: XCTestCase {
         XCTAssertFalse(app.descendants(matching: .any)["countdown"].exists)
     }
 
+    /// Sperre: Tippen zeigt keine Knöpfe mehr, Entsperren nur mit langem Drücken.
+    func testLockRunScreen() {
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
+        XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
+        tap("start")
+        let countdown = app.descendants(matching: .any)["countdown"].firstMatch
+        XCTAssertTrue(countdown.waitForExistence(timeout: 10))
+        countdown.tap()
+        tap("lock")
+        let pause = app.descendants(matching: .any)["pauseResume"].firstMatch
+        XCTAssertTrue(pause.waitForNonExistence(timeout: 5))
+        countdown.tap()
+        let unlock = app.descendants(matching: .any)["unlock"].firstMatch
+        XCTAssertTrue(unlock.waitForExistence(timeout: 5))
+        XCTAssertFalse(pause.exists, "Knöpfe trotz Sperre sichtbar")
+        // Kurzes Tippen entsperrt nicht
+        unlock.tap()
+        XCTAssertFalse(pause.exists)
+        unlock.press(forDuration: 1.5)
+        XCTAssertTrue(pause.waitForExistence(timeout: 5))
+        pause.tap() // pausiert: Knöpfe bleiben sichtbar
+        XCTAssertTrue(app.descendants(matching: .any)["pausedBadge"].waitForExistence(timeout: 5))
+        tap("stop")
+        tap("confirmStop")
+    }
+
+    /// QR-Code im Training zeigen; ein gescannter Link (wie von der Kamera) übernimmt das Training nach Bestätigung.
+    func testShareByQRCodeAndImport() {
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
+        tap("showQR")
+        XCTAssertTrue(app.descendants(matching: .any)["qrImage"].waitForExistence(timeout: 5))
+        tap("closeQR")
+        // Training «QR Test»: 2 × (30 s Plank, 10 s Pause)
+        app.open(URL(string: "fitmitjodit://training?d=q1bKU7JSCgxSCEktLlHSUSpTsjLUUcpUsoquVkoqBlOpQAUBOYl52UDpbCC7PL8IxARKGhvU6lSDxYoguoFihga1sTpKRUpWRrWxtQA")!)
+        let confirm = app.alerts.buttons[language == "de" ? "Übernehmen" : "Add"]
+        XCTAssertTrue(confirm.waitForExistence(timeout: 10))
+        confirm.tap()
+        showLibrary()
+        XCTAssertTrue(libraryRow("QR Test", "QR Test").exists)
+    }
+
+    /// Ein abgeschlossenes Training erscheint im Verlauf mit Wochenübersicht.
+    func testHistoryShowsFinishedWorkout() {
+        tap("history")
+        XCTAssertTrue(app.descendants(matching: .any)["weekSummary"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.descendants(matching: .any)["historyRow"].exists)
+        tap("closeHistory")
+        libraryRow("Tabata", "Tabata").tap()
+        tap("start")
+        let countdown = app.descendants(matching: .any)["countdown"].firstMatch
+        XCTAssertTrue(countdown.waitForExistence(timeout: 10))
+        countdown.tap()
+        tap("pauseResume") // pausiert: Knöpfe bleiben stehen
+        let finished = app.descendants(matching: .any)["finishedTitle"].firstMatch
+        let skip = app.descendants(matching: .any)["skipForward"].firstMatch
+        var n = 0
+        while !finished.exists && n < 25 {
+            if skip.exists { skip.tap() }
+            n += 1
+        }
+        XCTAssertTrue(finished.waitForExistence(timeout: 5))
+        tap("done")
+        showLibrary()
+        tap("history")
+        XCTAssertTrue(app.descendants(matching: .any)["historyRow"].waitForExistence(timeout: 5))
+        tap("closeHistory")
+    }
+
     func testSignalsOnOff() {
         tap("settings")
+        let form = app.descendants(matching: .any)["settingsForm"].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
         let tones = app.switches["toggleTones"]
         XCTAssertTrue(tones.waitForExistence(timeout: 5))
         XCTAssertEqual(tones.value as? String, "1")
-        // Ansagen standardmässig «Automatisch» (nur Trainings mit Übungsnamen)
-        let auto = app.buttons[language == "de" ? "Automatisch" : "Automatic"]
-        XCTAssertTrue(auto.waitForExistence(timeout: 5))
-        XCTAssertTrue(auto.isSelected, "Ansagen standardmässig «Automatisch»")
+        // Zuerst umschalten: nach dem Scrollen ist die Zeile evtl. nicht mehr geladen.
         tones.switches.firstMatch.tap()
         XCTAssertEqual(tones.value as? String, "0")
+        // Ansagen standardmässig «Automatisch» (nur Trainings mit Übungsnamen)
+        let auto = app.buttons[language == "de" ? "Automatisch" : "Automatic"]
+        scroll(form, to: auto)
+        XCTAssertTrue(auto.exists)
+        XCTAssertTrue(auto.isSelected, "Ansagen standardmässig «Automatisch»")
         app.buttons[language == "de" ? "Aus" : "Off"].tap()
         XCTAssertTrue(app.buttons[language == "de" ? "Aus" : "Off"].isSelected)
         XCTAssertFalse(app.switches["toggleVoiceDetailed"].exists)
         app.buttons[language == "de" ? "Immer" : "Always"].tap()
-        XCTAssertTrue(app.switches["toggleVoiceDetailed"].waitForExistence(timeout: 3))
+        let detailed = app.switches["toggleVoiceDetailed"]
+        scroll(form, to: detailed)
+        XCTAssertTrue(detailed.exists)
+        // Auf dem Duo blendet iOS die Symbolleiste beim Scrollen aus; nach oben scrollen bringt «Fertig» zurück.
+        let close = app.buttons["closeSettings"]
+        var up = 0
+        while !close.waitForExistence(timeout: 1) && up < 4 { form.swipeDown(velocity: .slow); up += 1 }
         tap("closeSettings")
     }
 

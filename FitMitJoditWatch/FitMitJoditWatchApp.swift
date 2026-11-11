@@ -4,12 +4,16 @@ import WatchKit
 @main
 struct FitMitJoditWatchApp: App {
     @State private var link = WatchLink.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             WatchRootView()
                 .environment(link)
                 .onAppear { link.activate() }
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .active { WatchRuntime.shared.resumeIfNeeded() }
+                }
         }
     }
 }

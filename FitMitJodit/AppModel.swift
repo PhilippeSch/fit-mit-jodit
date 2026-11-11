@@ -13,10 +13,16 @@ final class AppModel {
     /// Beobachter für Live Activity, Watch und iPad-Weiterleitung.
     @ObservationIgnored private var sessionObservers: [(RunSession?) -> Void] = []
     @ObservationIgnored private var ticker: Timer?
+    @ObservationIgnored var runPersistence: RunPersistence
+    @ObservationIgnored var clock: AppClock = SystemClock.shared
 
-    init(store: WorkoutStore) {
+    init(store: WorkoutStore, defaults: UserDefaults = .standard) {
         self.store = store
+        self.runPersistence = RunPersistence(defaults: defaults)
     }
+
+    /// Eine Instanz für Oberfläche, Siri und Kurzbefehle.
+    static let shared = makeDefault()
 
     static func makeDefault() -> AppModel {
         let args = ProcessInfo.processInfo.arguments
@@ -50,35 +56,48 @@ final class AppModel {
 
     func observeSession(_ f: @escaping (RunSession?) -> Void) { sessionObservers.append(f) }
 
-    private func notifySession() { sessionObservers.forEach { $0(session) } }
+    private func notifySession() {
+        persistRun()
+        sessionObservers.forEach { $0(session) }
+    }
+
+    /// Laufendes Training sichern (bei Start, Blockwechsel und Bedienung), beendetes vergessen.
+    private func persistRun() {
+        if let s = session, !s.isFinished {
+            runPersistence.save(SavedRun(workout: s.workout, engine: s.engine, savedAt: clock.now))
+        } else {
+            runPersistence.clear()
+        }
+    }
+
+    /// Beim Start der App: ein Training, das iOS im Hintergrund beendet hat, an der richtigen Stelle fortsetzen.
+    @discardableResult
+    func restoreRunIfNeeded() -> Bool {
+        guard session == nil, let saved = runPersistence.load(now: clock.now) else { return false }
+        let s = start(saved.workout, markUsed: false)
+        s.adopt(saved.engine)
+        notifySession()
+        return true
+    }
 
     @discardableResult
-    func start(_ workout: Workout) -> RunSession {
+    func start(_ workout: Workout, markUsed: Bool = true) -> RunSession {
         stop()
-        let s = RunSession(workout: workout, settings: store.settings)
+        let s = RunSession(workout: workout, settings: store.settings, clock: clock)
         s.sink = signalPlayer
         s.onControlChange = { [weak self] in self?.notifySession() }
         s.onFinish = { [weak self] in self?.finished() }
         session = s
-        store.markUsed(workout)
+        if markUsed { store.markUsed(workout) }
         UIApplication.shared.isIdleTimerDisabled = true
         startTicker()
         notifySession()
         return s
     }
 
-    /// Übernimmt ein Training, das auf einem anderen Gerät läuft (Weiterleitung), ohne es neu zu starten.
-    func adoptRemote(workout: Workout, engine: TimerEngine) {
-        if session?.workout.id != workout.id {
-            let s = RunSession(workout: workout, settings: store.settings)
-            s.sink = signalPlayer
-            s.onControlChange = { [weak self] in self?.notifySession() }
-            session = s
-        }
-        session?.adopt(engine)
-    }
-
     func stop() {
+        // Abgebrochen nach mindestens einer Minute: trotzdem im Verlauf festhalten.
+        if let s = session, !s.isFinished { record(s, completed: false) }
         ticker?.invalidate()
         ticker = nil
         session = nil
@@ -87,10 +106,24 @@ final class AppModel {
     }
 
     private func finished() {
+        if let s = session { record(s, completed: true) }
         ticker?.invalidate()
         ticker = nil
         UIApplication.shared.isIdleTimerDisabled = false
         notifySession()
+    }
+
+    /// Mindestdauer für abgebrochene Trainings im Verlauf.
+    static let minimumRecordedSeconds = 60
+
+    private func record(_ s: RunSession, completed: Bool) {
+        let now = clock.now
+        let elapsed = s.engine.elapsed(at: now)
+        let leadIn = s.steps.first.map { $0.kind == .prep ? TimeInterval($0.seconds) : 0 } ?? 0
+        let trained = Int(max(elapsed - leadIn, 0).rounded())
+        guard completed || trained >= Self.minimumRecordedSeconds else { return }
+        store.addHistory(HistoryEntry(workoutID: s.workout.id, name: s.workout.name,
+                                      startedAt: now.addingTimeInterval(-elapsed), seconds: trained, completed: completed))
     }
 
     private func startTicker() {
@@ -105,6 +138,8 @@ final class AppModel {
     /// Nach Rückkehr aus dem Hintergrund sofort neu rechnen.
     func refresh() {
         session?.tick()
+        // Live Activity, Uhr usw. neu abgleichen (z. B. Live Activity, die im Hintergrund nicht starten durfte).
+        if session != nil { notifySession() }
         if let s = session, !s.isFinished, ticker == nil { startTicker() }
     }
 }

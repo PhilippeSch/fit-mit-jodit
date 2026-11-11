@@ -19,7 +19,8 @@ struct WelcomeView: View {
                     Image("PhotoWelcome")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: geo.size.width, height: min(geo.size.height * 0.42, 420))
+                        // Oben ausrichten: bei breiten Fenstern (Querformat) wird unten beschnitten, der Kopf bleibt sichtbar.
+                        .frame(width: geo.size.width, height: min(geo.size.height * 0.42, 420), alignment: .top)
                         .clipped()
                         .overlay(alignment: .bottom) {
                             LinearGradient(colors: [.clear, .black.opacity(0.55)], startPoint: .top, endPoint: .bottom)
@@ -48,6 +49,8 @@ struct WelcomeView: View {
                         if hSize == .regular {
                             feature("rectangle.split.2x1", .gray, String(localized: "Auf dem iPad passt Spotify daneben, der Timer bleibt lesbar."))
                         }
+                        VoiceStatusCard()
+                            .padding(.top, 4)
                         Button(action: onDone) {
                             Text("Los geht's")
                                 .font(.title3.bold())

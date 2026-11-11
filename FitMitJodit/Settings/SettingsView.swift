@@ -10,8 +10,8 @@ struct SettingsView: View {
             Form {
                 Section {
                     HStack(spacing: 16) {
-                        Image("LogoFMJ").resizable().scaledToFit().frame(height: 64)
-                        Image("LogoJodit").resizable().scaledToFit().frame(height: 64)
+                        Image("LogoFMJ").resizable().scaledToFit().frame(height: 120)
+                        Image("LogoJodit").resizable().scaledToFit().frame(height: 120)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
@@ -49,10 +49,24 @@ struct SettingsView: View {
                     Text(voiceModeHint(store.settings.signals.voiceMode))
                         .font(.footnote).foregroundStyle(.secondary)
                     if store.settings.signals.voiceMode != .off {
-                        Toggle(String(localized: "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)"),
-                               isOn: $store.settings.signals.voiceDetailed)
-                            .accessibilityIdentifier("toggleVoiceDetailed")
+                        Toggle(isOn: $store.settings.signals.voiceDetailed) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Ausführliche Ansagen")
+                                Text("Mit Dauer, «Bereit machen» und «Noch 10 Sekunden»")
+                                    .font(.footnote).foregroundStyle(.secondary)
+                            }
+                        }
+                        .accessibilityIdentifier("toggleVoiceDetailed")
                         volume($store.settings.signals.voiceVolume, String(localized: "Lautstärke Ansagen"))
+                        Picker(String(localized: "Stimme"), selection: $store.settings.signals.voiceIdentifier) {
+                            Text("Automatisch (beste installierte)").tag(String?.none)
+                            ForEach(VoiceCatalog.voices(), id: \.identifier) { v in
+                                Text("\(v.name) · \(VoiceCatalog.qualityLabel(v.quality))").tag(Optional(v.identifier))
+                            }
+                        }
+                        .accessibilityIdentifier("voicePicker")
+                        VoiceStatusCard()
+                            .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
                     }
                     Picker(String(localized: "Ton-Set"), selection: $store.settings.signals.toneSet) {
                         ForEach(ToneSet.allCases) { t in Text(t.label).tag(t) }
@@ -85,6 +99,8 @@ struct SettingsView: View {
                     LabeledContent(String(localized: "Version"), value: Bundle.main.versionString)
                 }
             }
+            .tint(Theme.work) // Schalter «ein» eindeutig grün
+            .accessibilityIdentifier("settingsForm")
             .navigationTitle(Text("Einstellungen"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

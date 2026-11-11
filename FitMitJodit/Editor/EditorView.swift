@@ -7,6 +7,8 @@ struct EditorView: View {
     @State private var model: EditorModel
     @State private var sheet: EditorSheet?
     @State private var placedCount = 0
+    @State private var nameDraft = ""
+    @FocusState private var nameFocused: Bool
 
     init(workout: Workout) {
         _model = State(initialValue: EditorModel(workout: workout))
@@ -41,7 +43,12 @@ struct EditorView: View {
             }
         }
         .sensoryFeedback(.impact(weight: .light), trigger: placedCount)
-        .onAppear { model.onChange = { app.store.upsert($0) } }
+        .onAppear {
+            model.onChange = { old, new in app.store.applyEdit(from: old, to: new) }
+            nameDraft = model.workout.name
+        }
+        .onDisappear(perform: commitName)
+        .onChange(of: model.workout.name) { _, n in if !nameFocused { nameDraft = n } }
         .toolbar {
             ToolbarItemGroup(placement: .secondaryAction) {
                 Button { model.undo() } label: { Label("Rückgängig", systemImage: "arrow.uturn.backward") }
@@ -64,12 +71,21 @@ struct EditorView: View {
         }
     }
 
+    private func commitName() {
+        let n = nameDraft.trimmingCharacters(in: .whitespaces)
+        if !n.isEmpty, n != model.workout.name { model.setName(n) } else if n.isEmpty { nameDraft = model.workout.name }
+    }
+
     /// Die ganze Spalte scrollt (Name, Kopf, Start, Zeitleiste), damit auch lange Trainings auf kleinen
     /// Bildschirmen bearbeitbar bleiben. Die Auswahl-Leiste liegt fest am unteren Rand der Spalte.
     private var timelineColumn: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                TextField(String(localized: "Name des Trainings"), text: Binding(get: { model.workout.name }, set: { model.setName($0) }))
+                // Name als Entwurf: erst beim Abschluss übernehmen (ein Rückgängig-Schritt, ein Speichervorgang).
+                TextField(String(localized: "Name des Trainings"), text: $nameDraft)
+                    .focused($nameFocused)
+                    .onSubmit(commitName)
+                    .onChange(of: nameFocused) { _, focused in if !focused { commitName() } }
                     .font(Theme.title(.title2))
                     .textFieldStyle(.plain)
                     .submitLabel(.done)
@@ -210,8 +226,7 @@ struct BlockTile: View {
         .draggable(block.id.uuidString)
         .dropDestination(for: String.self) { ids, _ in
             guard let s = ids.first, let id = UUID(uuidString: s) else { return false }
-            model.moveBlock(id, before: block.id)
-            return true
+            return model.moveBlock(id, before: block.id)
         }
         .accessibilityLabel(Text("\(block.kind.label), \(DurationFormat.short(block.seconds))\(block.hasName ? ", " + (block.exerciseName ?? "") : "")"))
         .accessibilityAddTraits(selected ? .isSelected : [])
@@ -297,6 +312,9 @@ struct RoundView: View {
 struct SelectionBar: View {
     @Bindable var model: EditorModel
     @Binding var sheet: EditorSheet?
+    /// Auf schmaler Breite nur Symbole (Beschriftung bleibt für VoiceOver), damit die Leiste kompakt bleibt.
+    @Environment(\.horizontalSizeClass) private var hSize
+    private var compact: Bool { hSize == .compact }
 
     var body: some View {
         // Bricht in Zeilen um, damit auf schmalen Breiten alle Aktionen sichtbar sind.
@@ -310,9 +328,9 @@ struct SelectionBar: View {
                 }
                 bar(String(localized: "Duplizieren"), "plus.square.on.square", id: "duplicate") { model.duplicateSelection() }
                 bar(String(localized: "Löschen"), "trash", id: "deleteBlocks", role: .destructive) { model.deleteSelection() }
-                bar(String(localized: "mal N"), "repeat", id: "makeRound") { sheet = .repeats }
+                bar(String(localized: "mal N"), "repeat", id: "makeRound", keepTitle: true) { sheet = .repeats }
                     .disabled(!model.canMakeRound)
-                bar(String(localized: "Fertig"), "checkmark", id: "deselect") { model.clearSelection() }
+                bar(String(localized: "Fertig"), "checkmark", id: "deselect", keepTitle: true) { model.clearSelection() }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -322,13 +340,22 @@ struct SelectionBar: View {
         .accessibilityLabel(Text("\(model.selection.count) markiert"))
     }
 
-    private func bar(_ title: String, _ icon: String, id: String, role: ButtonRole? = nil, action: @escaping () -> Void) -> some View {
+    @ViewBuilder
+    private func bar(_ title: String, _ icon: String, id: String, role: ButtonRole? = nil, keepTitle: Bool = false,
+                     action: @escaping () -> Void) -> some View {
         Button(role: role, action: action) {
-            Label(title, systemImage: icon)
-                .labelStyle(.titleAndIcon)
-                .font(.subheadline.weight(.semibold))
+            if compact && !keepTitle {
+                Image(systemName: icon)
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 28, minHeight: 28)
+            } else {
+                Label(title, systemImage: icon)
+                    .labelStyle(.titleAndIcon)
+                    .font(.subheadline.weight(.semibold))
+            }
         }
         .buttonStyle(.bordered)
+        .accessibilityLabel(Text(title))
         .accessibilityIdentifier(id)
     }
 }

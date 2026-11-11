@@ -48,8 +48,8 @@ final class PhoneConnectivity: NSObject {
     func pushWorkouts() {
         guard let app, let session, session.activationState == .activated, session.isWatchAppInstalled else { return }
         let list = app.store.sorted.map { WorkoutSummary(id: $0.id, name: $0.name, totalSeconds: $0.totalSeconds, isFavorite: $0.isFavorite) }
-        let data = RemoteMessage.workouts(list).encoded()
-        try? session.updateApplicationContext([RemoteMessage.key: data])
+        lastWorkouts = RemoteMessage.workouts(list).encoded()
+        writeContext()
     }
 
     private func send(_ m: RemoteMessage) {
@@ -58,8 +58,21 @@ final class PhoneConnectivity: NSObject {
         if session.isReachable {
             session.sendMessage(payload, replyHandler: nil, errorHandler: nil)
         } else if case .snapshot = m {
-            try? session.updateApplicationContext(payload)
+            lastSnapshot = m.encoded()
+            writeContext()
         }
+    }
+
+    /// Letzter Stand für den Application Context (immer beide Teile schreiben, der Kontext ersetzt sich als Ganzes).
+    private var lastWorkouts: Data?
+    private var lastSnapshot: Data?
+
+    private func writeContext() {
+        guard let session, session.activationState == .activated else { return }
+        var ctx: [String: Any] = [:]
+        if let w = lastWorkouts { ctx[RemoteMessage.contextWorkoutsKey] = w }
+        if let s = lastSnapshot { ctx[RemoteMessage.contextSnapshotKey] = s }
+        try? session.updateApplicationContext(ctx)
     }
 
     private func handle(_ m: RemoteMessage) {
@@ -71,7 +84,12 @@ final class PhoneConnectivity: NSObject {
             return
         }
         if forwardsToPad {
-            RemoteLink.shared.sendCommand(c, workoutID: id)
+            // «Start» mit vollständigem Training schicken: die Vorlagen-/Trainings-ID kennt das iPad evtl. nicht.
+            if c == .start, let id, let w = app.store.workout(id: id) {
+                RemoteLink.shared.sendStart(w)
+            } else {
+                RemoteLink.shared.sendCommand(c, workoutID: id)
+            }
         } else {
             RemoteCommandHandler.apply(c, workoutID: id, to: app)
         }

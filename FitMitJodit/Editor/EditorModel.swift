@@ -10,7 +10,8 @@ final class EditorModel {
     var selection: Set<UUID> = []
     private var undoStack: [Workout] = []
     private var redoStack: [Workout] = []
-    @ObservationIgnored var onChange: ((Workout) -> Void)?
+    /// Meldet (vorher, nachher), damit der Speicher nur die geänderten Felder übernimmt.
+    @ObservationIgnored var onChange: ((Workout, Workout) -> Void)?
 
     static let minSeconds = 5
     static let maxSeconds = 600
@@ -32,22 +33,30 @@ final class EditorModel {
         if undoStack.count > 200 { undoStack.removeFirst() }
         redoStack.removeAll()
         workout = w
-        onChange?(w)
+        onChange?(before, w)
     }
 
     func undo() {
         guard let prev = undoStack.popLast() else { return }
-        redoStack.append(workout)
+        let current = workout
+        redoStack.append(current)
         workout = prev
-        selection = selection.filter { id in prev.items.contains { $0.id == id || $0.blocks.contains { $0.id == id } } }
-        onChange?(workout)
+        pruneSelection()
+        onChange?(current, prev)
+    }
+
+    /// Auswahl auf Blöcke beschränken, die es noch gibt.
+    private func pruneSelection() {
+        selection = selection.filter { id in workout.items.contains { $0.id == id || $0.blocks.contains { $0.id == id } } }
     }
 
     func redo() {
         guard let next = redoStack.popLast() else { return }
-        undoStack.append(workout)
+        let current = workout
+        undoStack.append(current)
         workout = next
-        onChange?(workout)
+        pruneSelection()
+        onChange?(current, next)
     }
 
     // MARK: Abfragen
@@ -281,31 +290,52 @@ final class EditorModel {
         }
     }
 
-    /// Verschiebt den Block mit `id` vor den Block/Eintrag `targetID` (Ziehen und Ablegen).
-    func moveBlock(_ id: UUID, before targetID: UUID) {
-        guard id != targetID, let src = location(of: id) else { return }
-        if src.inner == nil, let targetItem = workout.items.firstIndex(where: { $0.id == targetID || $0.blocks.contains { $0.id == targetID } }) {
-            if let tLoc = location(of: targetID), let tInner = tLoc.inner {
-                // Block in eine Runde hineinziehen
-                mutate { w in
-                    guard let from = w.items.firstIndex(where: { $0.id == id }), case .block(let b) = w.items[from] else { return }
-                    w.items.remove(at: from)
-                    let ri = from < tLoc.item ? tLoc.item - 1 : tLoc.item
-                    guard case .round(var r) = w.items[ri] else { return }
-                    r.blocks.insert(b, at: tInner)
-                    w.items[ri] = .round(r)
-                }
-            } else {
-                let from = workout.items.firstIndex(where: { $0.id == id })!
-                moveItem(id, to: from < targetItem ? targetItem - 1 : targetItem)
-            }
-        } else if let inner = src.inner, let tLoc = location(of: targetID), tLoc.item == src.item, let tInner = tLoc.inner {
-            mutate { w in
-                guard case .round(var r) = w.items[src.item] else { return }
-                let b = r.blocks.remove(at: inner)
-                r.blocks.insert(b, at: inner < tInner ? tInner - 1 : tInner)
-                w.items[src.item] = .round(r)
-            }
+    /// Verschiebt einen Block (oder eine ganze Runde) vor den Block bzw. Eintrag `targetID` (Ziehen und Ablegen).
+    /// Funktioniert auch aus einer Runde heraus, in eine Runde hinein und zwischen Runden. Gibt zurück, ob sich etwas änderte.
+    @discardableResult
+    func moveBlock(_ id: UUID, before targetID: UUID) -> Bool {
+        guard id != targetID else { return false }
+        // Eine ganze Runde (oder ein Block der obersten Ebene) vor einen anderen Eintrag der obersten Ebene.
+        if let from = workout.items.firstIndex(where: { $0.id == id }), case .round = workout.items[from] {
+            guard let to = workout.items.firstIndex(where: { $0.id == targetID || $0.blocks.contains { $0.id == targetID } }) else { return false }
+            moveItem(id, to: from < to ? to - 1 : to)
+            return true
         }
+        guard location(of: id) != nil else { return false }
+        let before = workout
+        mutate { w in
+            // 1. Block entfernen (leere Runde ebenfalls)
+            var moved: Block?
+            for i in w.items.indices {
+                switch w.items[i] {
+                case .block(let b) where b.id == id:
+                    moved = b
+                    w.items.remove(at: i)
+                case .round(var r):
+                    if let j = r.blocks.firstIndex(where: { $0.id == id }) {
+                        moved = r.blocks.remove(at: j)
+                        if r.blocks.isEmpty { w.items.remove(at: i) } else { w.items[i] = .round(r) }
+                    }
+                default: continue
+                }
+                if moved != nil { break }
+            }
+            guard let b = moved else { return }
+            // 2. Vor dem Ziel einfügen: Eintrag der obersten Ebene oder Block in einer Runde
+            if let t = w.items.firstIndex(where: { $0.id == targetID }) {
+                w.items.insert(.block(b), at: t)
+                return
+            }
+            for i in w.items.indices {
+                if case .round(var r) = w.items[i], let j = r.blocks.firstIndex(where: { $0.id == targetID }) {
+                    r.blocks.insert(b, at: j)
+                    w.items[i] = .round(r)
+                    return
+                }
+            }
+            // Ziel nicht gefunden: Ausgangslage behalten
+            w = before
+        }
+        return workout != before
     }
 }

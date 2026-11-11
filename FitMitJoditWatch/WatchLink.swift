@@ -17,6 +17,7 @@ final class WatchLink: NSObject {
     var lastError: String?
 
     @ObservationIgnored private var hapticTask: Task<Void, Never>?
+    @ObservationIgnored private var hapticToken: UUID?
     @ObservationIgnored let haptics = HapticPlanner()
 
     func activate() {
@@ -61,16 +62,29 @@ final class WatchLink: NSObject {
         }
     }
 
+    /// Application Context: Liste und Zustand unter getrennten Schlüsseln (ältere Fassung: ein Schlüssel).
+    private func applyContext(_ ctx: [String: Any]) {
+        for key in [RemoteMessage.contextWorkoutsKey, RemoteMessage.contextSnapshotKey, RemoteMessage.key] {
+            if let data = ctx[key] as? Data, let m = RemoteMessage.decode(data) { apply(m) }
+        }
+    }
+
     private func apply(_ m: RemoteMessage) {
         switch m {
         case .snapshot(let s):
             snapshot = s
-            if s == nil { stopHaptics() } else { startHaptics() }
+            if let s {
+                startHaptics()
+                if !s.state(at: Date()).isFinished { WatchRuntime.shared.begin() }
+            } else {
+                stopHaptics()
+                WatchRuntime.shared.end()
+            }
         case .workouts(let list):
             workouts = list
         case .target(let name, _):
             targetName = name
-        case .command:
+        case .command, .startWorkout:
             break
         }
     }
@@ -78,21 +92,25 @@ final class WatchLink: NSObject {
     /// Prüft fünfmal pro Sekunde, ob ein Blockwechsel oder die letzten Sekunden anstehen.
     private func startHaptics() {
         guard hapticTask == nil else { return }
+        let token = UUID()
+        hapticToken = token
         hapticTask = Task { @MainActor [weak self] in
             while !Task.isCancelled {
                 guard let self, let snap = self.snapshot else { break }
                 let st = snap.state(at: Date())
                 for h in self.haptics.next(state: st) { WKInterfaceDevice.current().play(h.wk) }
-                if st.isFinished { break }
+                if st.isFinished { WatchRuntime.shared.end(); break }
                 try? await Task.sleep(for: .milliseconds(200))
             }
-            self?.hapticTask = nil
+            // Nur zurücksetzen, wenn inzwischen kein neuer Task gestartet wurde.
+            if self?.hapticToken == token { self?.hapticTask = nil }
         }
     }
 
     private func stopHaptics() {
         hapticTask?.cancel()
         hapticTask = nil
+        hapticToken = nil
         haptics.reset()
     }
 }
@@ -102,7 +120,7 @@ extension WatchLink: WCSessionDelegate {
         let ctx = session.receivedApplicationContext
         Task { @MainActor in
             self.reachable = session.isReachable
-            if let data = ctx[RemoteMessage.key] as? Data, let m = RemoteMessage.decode(data) { self.apply(m) }
+            self.applyContext(ctx)
             self.send(.requestState)
         }
     }
@@ -113,8 +131,7 @@ extension WatchLink: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
-        guard let data = applicationContext[RemoteMessage.key] as? Data, let m = RemoteMessage.decode(data) else { return }
-        Task { @MainActor in self.apply(m) }
+        Task { @MainActor in self.applyContext(applicationContext) }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {

@@ -1,0 +1,642 @@
+{
+  "language": "de",
+  "version": 2,
+  "phrases": [
+    {
+      "nr": 1,
+      "section": "A",
+      "key": "fixed.go",
+      "text": "Los!"
+    },
+    {
+      "nr": 2,
+      "section": "A",
+      "key": "fixed.rest",
+      "text": "Pause"
+    },
+    {
+      "nr": 3,
+      "section": "A",
+      "key": "fixed.work",
+      "text": "Arbeit"
+    },
+    {
+      "nr": 4,
+      "section": "A",
+      "key": "fixed.get_ready",
+      "text": "Bereit machen"
+    },
+    {
+      "nr": 5,
+      "section": "A",
+      "key": "fixed.next",
+      "text": "Gleich:"
+    },
+    {
+      "nr": 6,
+      "section": "A",
+      "key": "fixed.last_round",
+      "text": "Letzte Runde"
+    },
+    {
+      "nr": 7,
+      "section": "A",
+      "key": "fixed.ten_left",
+      "text": "Noch 10 Sekunden"
+    },
+    {
+      "nr": 8,
+      "section": "A",
+      "key": "fixed.halftime",
+      "text": "Halbzeit"
+    },
+    {
+      "nr": 9,
+      "section": "A",
+      "key": "fixed.finished",
+      "text": "Geschafft!"
+    },
+    {
+      "nr": 10,
+      "section": "A",
+      "key": "fixed.well_done",
+      "text": "Super gemacht!"
+    },
+    {
+      "nr": 11,
+      "section": "B",
+      "key": "dur.5",
+      "text": "5 Sekunden"
+    },
+    {
+      "nr": 12,
+      "section": "B",
+      "key": "dur.10",
+      "text": "10 Sekunden"
+    },
+    {
+      "nr": 13,
+      "section": "B",
+      "key": "dur.15",
+      "text": "15 Sekunden"
+    },
+    {
+      "nr": 14,
+      "section": "B",
+      "key": "dur.20",
+      "text": "20 Sekunden"
+    },
+    {
+      "nr": 15,
+      "section": "B",
+      "key": "dur.25",
+      "text": "25 Sekunden"
+    },
+    {
+      "nr": 16,
+      "section": "B",
+      "key": "dur.30",
+      "text": "30 Sekunden"
+    },
+    {
+      "nr": 17,
+      "section": "B",
+      "key": "dur.35",
+      "text": "35 Sekunden"
+    },
+    {
+      "nr": 18,
+      "section": "B",
+      "key": "dur.40",
+      "text": "40 Sekunden"
+    },
+    {
+      "nr": 19,
+      "section": "B",
+      "key": "dur.45",
+      "text": "45 Sekunden"
+    },
+    {
+      "nr": 20,
+      "section": "B",
+      "key": "dur.50",
+      "text": "50 Sekunden"
+    },
+    {
+      "nr": 21,
+      "section": "B",
+      "key": "dur.55",
+      "text": "55 Sekunden"
+    },
+    {
+      "nr": 22,
+      "section": "B",
+      "key": "dur.60",
+      "text": "1 Minute"
+    },
+    {
+      "nr": 23,
+      "section": "B",
+      "key": "dur.75",
+      "text": "1 Minute 15"
+    },
+    {
+      "nr": 24,
+      "section": "B",
+      "key": "dur.90",
+      "text": "1 Minute 30"
+    },
+    {
+      "nr": 25,
+      "section": "B",
+      "key": "dur.105",
+      "text": "1 Minute 45"
+    },
+    {
+      "nr": 26,
+      "section": "B",
+      "key": "dur.120",
+      "text": "2 Minuten"
+    },
+    {
+      "nr": 27,
+      "section": "B",
+      "key": "dur.150",
+      "text": "2 Minuten 30"
+    },
+    {
+      "nr": 28,
+      "section": "B",
+      "key": "dur.180",
+      "text": "3 Minuten"
+    },
+    {
+      "nr": 29,
+      "section": "B",
+      "key": "dur.210",
+      "text": "3 Minuten 30"
+    },
+    {
+      "nr": 30,
+      "section": "B",
+      "key": "dur.240",
+      "text": "4 Minuten"
+    },
+    {
+      "nr": 31,
+      "section": "B",
+      "key": "dur.300",
+      "text": "5 Minuten"
+    },
+    {
+      "nr": 32,
+      "section": "B",
+      "key": "dur.360",
+      "text": "6 Minuten"
+    },
+    {
+      "nr": 33,
+      "section": "B",
+      "key": "dur.420",
+      "text": "7 Minuten"
+    },
+    {
+      "nr": 34,
+      "section": "B",
+      "key": "dur.480",
+      "text": "8 Minuten"
+    },
+    {
+      "nr": 35,
+      "section": "B",
+      "key": "dur.540",
+      "text": "9 Minuten"
+    },
+    {
+      "nr": 36,
+      "section": "B",
+      "key": "dur.600",
+      "text": "10 Minuten"
+    },
+    {
+      "nr": 37,
+      "section": "C",
+      "key": "ex.butt_kicks",
+      "text": "Anfersen"
+    },
+    {
+      "nr": 38,
+      "section": "C",
+      "key": "ex.arm_circles",
+      "text": "Armkreisen"
+    },
+    {
+      "nr": 39,
+      "section": "C",
+      "key": "ex.twisting_lunges",
+      "text": "Ausfallschritte mit Drehung"
+    },
+    {
+      "nr": 40,
+      "section": "C",
+      "key": "ex.reverse_lunges",
+      "text": "Ausfallschritte rückwärts"
+    },
+    {
+      "nr": 41,
+      "section": "C",
+      "key": "ex.forward_lunges",
+      "text": "Ausfallschritte vorwärts"
+    },
+    {
+      "nr": 42,
+      "section": "C",
+      "key": "ex.bear_crawl",
+      "text": "Bärengang"
+    },
+    {
+      "nr": 43,
+      "section": "C",
+      "key": "ex.lying_leg_raises",
+      "text": "Beinheben liegend"
+    },
+    {
+      "nr": 44,
+      "section": "C",
+      "key": "ex.flutter_kicks",
+      "text": "Beinschere"
+    },
+    {
+      "nr": 45,
+      "section": "C",
+      "key": "ex.mountain_climbers",
+      "text": "Bergsteiger"
+    },
+    {
+      "nr": 46,
+      "section": "C",
+      "key": "ex.bicycle_crunches",
+      "text": "Bicycle Crunches"
+    },
+    {
+      "nr": 47,
+      "section": "C",
+      "key": "ex.bird_dog",
+      "text": "Bird Dog"
+    },
+    {
+      "nr": 48,
+      "section": "C",
+      "key": "ex.biceps_curls",
+      "text": "Bizepscurls"
+    },
+    {
+      "nr": 49,
+      "section": "C",
+      "key": "ex.burpees",
+      "text": "Burpees"
+    },
+    {
+      "nr": 50,
+      "section": "C",
+      "key": "ex.crunches",
+      "text": "Crunches"
+    },
+    {
+      "nr": 51,
+      "section": "C",
+      "key": "ex.dead_bug",
+      "text": "Dead Bug"
+    },
+    {
+      "nr": 52,
+      "section": "C",
+      "key": "ex.diamond_push_ups",
+      "text": "Diamant-Liegestütze"
+    },
+    {
+      "nr": 53,
+      "section": "C",
+      "key": "ex.chair_dips",
+      "text": "Dips am Stuhl"
+    },
+    {
+      "nr": 54,
+      "section": "C",
+      "key": "ex.donkey_kicks",
+      "text": "Donkey Kicks"
+    },
+    {
+      "nr": 55,
+      "section": "C",
+      "key": "ex.single_leg_glute_bridge",
+      "text": "Einbeinige Glute Bridge"
+    },
+    {
+      "nr": 56,
+      "section": "C",
+      "key": "ex.fire_hydrants",
+      "text": "Fire Hydrants"
+    },
+    {
+      "nr": 57,
+      "section": "C",
+      "key": "ex.glute_bridge",
+      "text": "Glute Bridge"
+    },
+    {
+      "nr": 58,
+      "section": "C",
+      "key": "ex.good_mornings",
+      "text": "Good Mornings"
+    },
+    {
+      "nr": 59,
+      "section": "C",
+      "key": "ex.hammer_curls",
+      "text": "Hammer Curls"
+    },
+    {
+      "nr": 60,
+      "section": "C",
+      "key": "ex.jumping_jacks",
+      "text": "Hampelmann"
+    },
+    {
+      "nr": 61,
+      "section": "C",
+      "key": "ex.hip_thrusts",
+      "text": "Hip Thrusts"
+    },
+    {
+      "nr": 62,
+      "section": "C",
+      "key": "ex.high_knees",
+      "text": "Hohe Knie"
+    },
+    {
+      "nr": 63,
+      "section": "C",
+      "key": "ex.hollow_hold",
+      "text": "Hollow Hold"
+    },
+    {
+      "nr": 64,
+      "section": "C",
+      "key": "ex.inchworm",
+      "text": "Inchworm"
+    },
+    {
+      "nr": 65,
+      "section": "C",
+      "key": "ex.squats",
+      "text": "Kniebeugen"
+    },
+    {
+      "nr": 66,
+      "section": "C",
+      "key": "ex.jump_squats",
+      "text": "Kniebeugen mit Sprung"
+    },
+    {
+      "nr": 67,
+      "section": "C",
+      "key": "ex.cossack_squats",
+      "text": "Kosaken-Kniebeugen"
+    },
+    {
+      "nr": 68,
+      "section": "C",
+      "key": "ex.dumbbell_deadlift",
+      "text": "Kreuzheben mit Kurzhanteln"
+    },
+    {
+      "nr": 69,
+      "section": "C",
+      "key": "ex.dumbbell_row",
+      "text": "Kurzhantel-Rudern"
+    },
+    {
+      "nr": 70,
+      "section": "C",
+      "key": "ex.push_ups",
+      "text": "Liegestütze"
+    },
+    {
+      "nr": 71,
+      "section": "C",
+      "key": "ex.knee_push_ups",
+      "text": "Liegestütze auf den Knien"
+    },
+    {
+      "nr": 72,
+      "section": "C",
+      "key": "ex.pike_push_ups",
+      "text": "Pike Push-ups"
+    },
+    {
+      "nr": 73,
+      "section": "C",
+      "key": "ex.plank",
+      "text": "Plank"
+    },
+    {
+      "nr": 74,
+      "section": "C",
+      "key": "ex.plank_jacks",
+      "text": "Plank Jacks"
+    },
+    {
+      "nr": 75,
+      "section": "C",
+      "key": "ex.plank_shoulder_taps",
+      "text": "Plank mit Schulterberührung"
+    },
+    {
+      "nr": 76,
+      "section": "C",
+      "key": "ex.russian_twists",
+      "text": "Russian Twists"
+    },
+    {
+      "nr": 77,
+      "section": "C",
+      "key": "ex.shoulder_press",
+      "text": "Schulterdrücken"
+    },
+    {
+      "nr": 78,
+      "section": "C",
+      "key": "ex.swimmer",
+      "text": "Schwimmer"
+    },
+    {
+      "nr": 79,
+      "section": "C",
+      "key": "ex.jump_rope_no_rope",
+      "text": "Seilspringen ohne Seil"
+    },
+    {
+      "nr": 80,
+      "section": "C",
+      "key": "ex.lateral_raises",
+      "text": "Seitheben"
+    },
+    {
+      "nr": 81,
+      "section": "C",
+      "key": "ex.side_lunges",
+      "text": "Seitliche Ausfallschritte"
+    },
+    {
+      "nr": 82,
+      "section": "C",
+      "key": "ex.side_leg_raises",
+      "text": "Seitliches Beinheben"
+    },
+    {
+      "nr": 83,
+      "section": "C",
+      "key": "ex.side_plank",
+      "text": "Seitstütz"
+    },
+    {
+      "nr": 84,
+      "section": "C",
+      "key": "ex.sit_ups",
+      "text": "Sit-ups"
+    },
+    {
+      "nr": 85,
+      "section": "C",
+      "key": "ex.skater_hops",
+      "text": "Skater"
+    },
+    {
+      "nr": 86,
+      "section": "C",
+      "key": "ex.spiderman_push_ups",
+      "text": "Spiderman-Liegestütze"
+    },
+    {
+      "nr": 87,
+      "section": "C",
+      "key": "ex.jump_lunges",
+      "text": "Sprungausfallschritte"
+    },
+    {
+      "nr": 88,
+      "section": "C",
+      "key": "ex.sumo_squats",
+      "text": "Sumo-Kniebeugen"
+    },
+    {
+      "nr": 89,
+      "section": "C",
+      "key": "ex.superman",
+      "text": "Superman"
+    },
+    {
+      "nr": 90,
+      "section": "C",
+      "key": "ex.thrusters",
+      "text": "Thrusters"
+    },
+    {
+      "nr": 91,
+      "section": "C",
+      "key": "ex.toe_touches",
+      "text": "Toe Touches"
+    },
+    {
+      "nr": 92,
+      "section": "C",
+      "key": "ex.overhead_triceps_extension",
+      "text": "Trizepsstrecken über Kopf"
+    },
+    {
+      "nr": 93,
+      "section": "C",
+      "key": "ex.tuck_jumps",
+      "text": "Tuck Jumps"
+    },
+    {
+      "nr": 94,
+      "section": "C",
+      "key": "ex.v_ups",
+      "text": "V-Ups"
+    },
+    {
+      "nr": 95,
+      "section": "C",
+      "key": "ex.calf_raises",
+      "text": "Wadenheben"
+    },
+    {
+      "nr": 96,
+      "section": "C",
+      "key": "ex.wall_sit",
+      "text": "Wandsitzen"
+    },
+    {
+      "nr": 97,
+      "section": "G",
+      "key": "ex.quad_stretch",
+      "text": "Oberschenkel vorne dehnen"
+    },
+    {
+      "nr": 98,
+      "section": "G",
+      "key": "ex.hamstring_stretch",
+      "text": "Oberschenkel hinten dehnen"
+    },
+    {
+      "nr": 99,
+      "section": "G",
+      "key": "ex.hip_flexor_stretch",
+      "text": "Hüftbeuger dehnen"
+    },
+    {
+      "nr": 100,
+      "section": "G",
+      "key": "ex.figure_four_stretch",
+      "text": "Gesäss dehnen"
+    },
+    {
+      "nr": 101,
+      "section": "G",
+      "key": "ex.calf_stretch",
+      "text": "Waden dehnen"
+    },
+    {
+      "nr": 102,
+      "section": "G",
+      "key": "ex.chest_stretch",
+      "text": "Brust dehnen"
+    },
+    {
+      "nr": 103,
+      "section": "G",
+      "key": "ex.shoulder_stretch",
+      "text": "Schulter dehnen"
+    },
+    {
+      "nr": 104,
+      "section": "G",
+      "key": "ex.triceps_stretch",
+      "text": "Trizeps dehnen"
+    },
+    {
+      "nr": 105,
+      "section": "G",
+      "key": "ex.cat_cow",
+      "text": "Katze-Kuh"
+    },
+    {
+      "nr": 106,
+      "section": "G",
+      "key": "ex.childs_pose",
+      "text": "Kindhaltung"
+    }
+  ]
+}

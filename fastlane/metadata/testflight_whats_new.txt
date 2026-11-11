@@ -1,5 +1,0 @@
-Neu:
-1. Baukasten: Runden brechen auf dem iPhone um, die ganze Ansicht scrollt (lange Trainings bearbeitbar).
-2. Willkommensbildschirm und Karte «Trainiere mit Jodit» mit Link zur Website.
-3. Ansagen «Automatisch»: Trainings mit Übungsnamen werden angesagt, mit Dauer und «Bereit machen».
-4. Neue Vorlagen «Ganzkörper 20» und «Bauch & Rumpf 10» für zu Hause.

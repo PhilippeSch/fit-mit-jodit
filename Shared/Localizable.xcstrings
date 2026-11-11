@@ -383,16 +383,6 @@
         }
       }
     },
-    "Ausführliche Ansagen (Dauer, «Bereit machen», «Noch 10 Sekunden»)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detailed cues (duration, “Get ready”, “10 seconds left”)"
-          }
-        }
-      }
-    },
     "Automatisch" : {
       "localizations" : {
         "en" : {
@@ -429,17 +419,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tap blocks, select them and use “× N” for rounds."
-          }
-        }
-      }
-    },
-    "Bedienelemente zeigen" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show controls"
           }
         }
       }
@@ -1378,17 +1357,6 @@
         }
       }
     },
-    "Runde, %lld mal" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Round, × %lld"
-          }
-        }
-      }
-    },
     "Runde, %lld mal, %@ pro Runde" : {
       "localizations" : {
         "en" : {
@@ -1644,7 +1612,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apply"
+            "value" : "Add"
           }
         }
       }
@@ -1866,6 +1834,576 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ready-made workouts with voice cues: you hear which exercise comes next and for how long."
+          }
+        }
+      }
+    },
+    "Stimme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voice"
+          }
+        }
+      }
+    },
+    "Automatisch (beste installierte)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Automatic (best installed)"
+          }
+        }
+      }
+    },
+    "Stimme probehören" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview voice"
+          }
+        }
+      }
+    },
+    "Premium" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premium"
+          }
+        }
+      }
+    },
+    "Erweitert" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enhanced"
+          }
+        }
+      }
+    },
+    "Standard" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        }
+      }
+    },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "Für natürliche Ansagen eine Premium-Stimme laden" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download a Premium voice for natural cues"
+          }
+        }
+      }
+    },
+    "Auf diesem Gerät ist nur die einfache Stimme installiert, sie klingt robotisch. So lädst du eine bessere (einmalig, gratis):" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only the basic voice is installed on this device and it sounds robotic. Here's how to get a better one (once, free):"
+          }
+        }
+      }
+    },
+    "Ansagen mit «%@»" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cues spoken by “%@”"
+          }
+        }
+      }
+    },
+    "Die beste installierte Stimme (%@) wird automatisch verwendet. Wechseln kannst du sie in den Einstellungen unter «Stimme»." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The best installed voice (%@) is used automatically. You can change it in Settings under “Voice”."
+          }
+        }
+      }
+    },
+    "«Deutsch» wählen und eine Stimme mit «Premium» laden, z. B. «Anna (Premium)»." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose “German” and download a “Premium” voice, e.g. “Anna (Premium)”."
+          }
+        }
+      }
+    },
+    "«English» wählen und eine Stimme mit «Premium» laden, z. B. «Ava (Premium)»." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose “English” and download a “Premium” voice, e.g. “Ava (Premium)”."
+          }
+        }
+      }
+    },
+    "Zurück in die App: Die neue Stimme wird automatisch verwendet." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Come back to the app: the new voice is used automatically."
+          }
+        }
+      }
+    },
+    "iOS-Einstellungen › Bedienungshilfen › Lesen & Sprechen › Stimmen." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS Settings › Accessibility › Read & Speak › Voices."
+          }
+        }
+      }
+    },
+    "Ausführliche Ansagen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailed cues"
+          }
+        }
+      }
+    },
+    "Mit Dauer, «Bereit machen» und «Noch 10 Sekunden»" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With duration, “Get ready” and “10 seconds left”"
+          }
+        }
+      }
+    },
+    "Beine & Po 15" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legs & Glutes 15"
+          }
+        }
+      }
+    },
+    "Cardio 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cardio 12"
+          }
+        }
+      }
+    },
+    "Oberkörper 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upper Body 12"
+          }
+        }
+      }
+    },
+    "Pyramide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pyramid"
+          }
+        }
+      }
+    },
+    "EMOM 12" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EMOM 12"
+          }
+        }
+      }
+    },
+    "Sperren" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock"
+          }
+        }
+      }
+    },
+    "Verhindert versehentliches Tippen. Die Uhr steuert weiter." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prevents accidental taps. The watch keeps working."
+          }
+        }
+      }
+    },
+    "Zum Entsperren gedrückt halten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Press and hold to unlock"
+          }
+        }
+      }
+    },
+    "Entsperren" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout"
+          }
+        }
+      }
+    },
+    "Dieses Training gibt es nicht mehr." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This workout no longer exists."
+          }
+        }
+      }
+    },
+    "Es läuft kein Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No workout is running."
+          }
+        }
+      }
+    },
+    "Training starten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Workout"
+          }
+        }
+      }
+    },
+    "Startet ein Training in Fit mit Jodit." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts a workout in Fit mit Jodit."
+          }
+        }
+      }
+    },
+    "Training pausieren oder fortsetzen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause or Resume Workout"
+          }
+        }
+      }
+    },
+    "Pausiert das laufende Training oder setzt es fort." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pauses or resumes the running workout."
+          }
+        }
+      }
+    },
+    "Pausiert." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused."
+          }
+        }
+      }
+    },
+    "Weiter geht's." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let's go."
+          }
+        }
+      }
+    },
+    "Nächster Block" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next Block"
+          }
+        }
+      }
+    },
+    "Springt im laufenden Training zum nächsten Block." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skips to the next block in the running workout."
+          }
+        }
+      }
+    },
+    "Training beenden" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Workout"
+          }
+        }
+      }
+    },
+    "Beendet das laufende Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stops the running workout."
+          }
+        }
+      }
+    },
+    "Pause / Weiter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause / Resume"
+          }
+        }
+      }
+    },
+    "${workout} starten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start ${workout}"
+          }
+        }
+      }
+    },
+    "QR-Code zum Teilen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR Code for Sharing"
+          }
+        }
+      }
+    },
+    "Training teilen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Workout"
+          }
+        }
+      }
+    },
+    "QR-Code für «%@»" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR code for “%@”"
+          }
+        }
+      }
+    },
+    "Mit der iPhone-Kamera scannen. Das Training erscheint danach in Fit mit Jodit, die App muss installiert sein." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan with the iPhone camera. The workout then appears in Fit mit Jodit (the app must be installed)."
+          }
+        }
+      }
+    },
+    "Der QR-Code konnte nicht erstellt werden." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The QR code could not be created."
+          }
+        }
+      }
+    },
+    "Training übernehmen?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Workout?"
+          }
+        }
+      }
+    },
+    "«%@», %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "“%1$@”, %2$@"
+          }
+        }
+      }
+    },
+    "Der QR-Code enthält kein gültiges Training." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The QR code does not contain a valid workout."
+          }
+        }
+      }
+    },
+    "Verlauf" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History"
+          }
+        }
+      }
+    },
+    "Noch keine Trainings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Workouts Yet"
+          }
+        }
+      }
+    },
+    "Abgeschlossene Trainings erscheinen hier, abgebrochene ab einer Minute." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finished workouts appear here, stopped ones after one minute."
+          }
+        }
+      }
+    },
+    "Diese Woche" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Week"
+          }
+        }
+      }
+    },
+    "Minuten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
+          }
+        }
+      }
+    },
+    "Minuten pro Tag" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes per day"
+          }
+        }
+      }
+    },
+    "· abgebrochen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "· stopped"
+          }
+        }
+      }
+    },
+    "Dehnen 10" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stretch 10"
           }
         }
       }

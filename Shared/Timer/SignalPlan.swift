@@ -37,6 +37,8 @@ struct SignalSettings: Codable, Equatable, Sendable {
     var toneSet: ToneSet = .beeps
     /// Ausführliche Ansagen: Dauer, «Bereit machen» vor der nächsten Übung, «Noch 10 Sekunden».
     var voiceDetailed = true
+    /// Gewählte Stimme (AVSpeechSynthesisVoice.identifier); nil = beste installierte automatisch.
+    var voiceIdentifier: String?
 
     /// Ansagen grundsätzlich möglich (nicht «Aus»). Setzen schaltet zwischen «Immer» und «Aus».
     var voiceEnabled: Bool {
@@ -56,7 +58,7 @@ struct SignalSettings: Codable, Equatable, Sendable {
     init() {}
 
     private enum CodingKeys: String, CodingKey {
-        case tonesEnabled, tonesVolume, halftimeEnabled, halftimeVolume, voiceMode, voiceVolume, toneSet, voiceDetailed
+        case tonesEnabled, tonesVolume, halftimeEnabled, halftimeVolume, voiceMode, voiceVolume, toneSet, voiceDetailed, voiceIdentifier
         case voiceEnabled // ältere Fassung
     }
 
@@ -77,6 +79,7 @@ struct SignalSettings: Codable, Equatable, Sendable {
         voiceVolume = try c.decodeIfPresent(Double.self, forKey: .voiceVolume) ?? d.voiceVolume
         toneSet = try c.decodeIfPresent(ToneSet.self, forKey: .toneSet) ?? d.toneSet
         voiceDetailed = try c.decodeIfPresent(Bool.self, forKey: .voiceDetailed) ?? d.voiceDetailed
+        voiceIdentifier = try c.decodeIfPresent(String.self, forKey: .voiceIdentifier)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -89,6 +92,7 @@ struct SignalSettings: Codable, Equatable, Sendable {
         try c.encode(voiceVolume, forKey: .voiceVolume)
         try c.encode(toneSet, forKey: .toneSet)
         try c.encode(voiceDetailed, forKey: .voiceDetailed)
+        try c.encodeIfPresent(voiceIdentifier, forKey: .voiceIdentifier)
     }
 }
 

@@ -13,6 +13,17 @@
 		<string>audio</string>
 		<string>remote-notification</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>ch.fitmitjodit.timer.training</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fitmitjodit</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>spotify</string>

@@ -49,6 +49,7 @@ struct LibraryView: View {
     @State private var deleting: Workout?
     @State private var showSettings = false
     @State private var showRemote = false
+    @State private var showHistory = false
 
     var body: some View {
         let items = app.store.search(query)
@@ -99,6 +100,10 @@ struct LibraryView: View {
                 Button { showSettings = true } label: { Label("Einstellungen", systemImage: "gearshape") }
                     .accessibilityIdentifier("settings")
             }
+            ToolbarItem(placement: .topBarLeading) {
+                Button { showHistory = true } label: { Label("Verlauf", systemImage: "clock.arrow.circlepath") }
+                    .accessibilityIdentifier("history")
+            }
             if RemoteLink.shared.isConnected && !RemoteLink.shared.isPad {
                 ToolbarItem(placement: .topBarLeading) {
                     Button { showRemote = true } label: { Label("iPad steuern", systemImage: "ipad.and.iphone") }
@@ -107,6 +112,7 @@ struct LibraryView: View {
         }
         .sheet(isPresented: $showSettings) { SettingsView() }
         .sheet(isPresented: $showRemote) { RemotePadView() }
+        .sheet(isPresented: $showHistory) { HistoryView() }
         .alert("Umbenennen", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
             TextField("Name", text: $newName)
             Button("Sichern") { if let w = renaming { app.store.rename(w, to: newName) }; renaming = nil }
