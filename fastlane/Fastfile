@@ -72,7 +72,7 @@ platform :ios do
     asc_key
     bump unless opts[:keep_build_number]
     archive
-    changelog = File.read(File.expand_path("metadata/testflight/whats_new-de-DE.txt", __dir__))
+    changelog = File.read(File.expand_path("testflight/whats_new-de-DE.txt", __dir__))
     upload_to_testflight(
       ipa: "build/FitMitJodit.ipa",
       app_identifier: APP_ID,
