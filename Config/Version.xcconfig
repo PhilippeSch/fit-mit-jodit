@@ -1,3 +1,3 @@
 // Version und Build-Nummer. Die Build-Nummer setzt fastlane vor jedem Upload.
 APP_MARKETING_VERSION = 1.0
-APP_BUILD_NUMBER = 202611111837
+APP_BUILD_NUMBER = 202611112006
