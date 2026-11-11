@@ -1,1 +1,8 @@
-Zwischenstand nach Teil 5/6: Bibliothek mit Vorlagen, Baukasten, Laufansicht, Töne und Ansagen, Live Activity, Spotify-Link, Export. Noch ohne Watch-App-Funktionen und ohne Übersetzung.
+Bitte testen:
+1. Baukasten: 3 × 45 s Arbeit mit 15 s Pause, 1 min Pause, «mal 4» zusammenklicken und starten.
+2. Laufansicht: Vorlauf blau, Arbeit grün, Pause orange; Pause, Block vor/zurück, Stopp.
+3. Töne und Ducking mit Spotify im Hintergrund; Ansagen in den Einstellungen einschalten.
+4. Live Activity auf dem Sperrbildschirm.
+5. Apple Watch: Training vom iPhone steuern, Haptik beim Blockwechsel, Musikseite.
+6. iPad: Spotify daneben legen; Fernbedienung iPhone → iPad im selben WLAN.
+7. iCloud-Sync zwischen zwei Geräten (siehe Morgen-Checkliste: Schema muss einmal nach Production).

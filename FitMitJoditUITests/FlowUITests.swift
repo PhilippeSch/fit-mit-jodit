@@ -95,13 +95,15 @@ class FlowUITests: XCTestCase {
         // Sortieren ohne Ziehen (Bedienungshilfe-Aktion)
         let work = tiles("tile-work-45").firstMatch
         let before = work.frame.minX
+        // Sortieren ohne Ziehen: Block markieren, «Nach rechts»
         work.tap()
+        tap("selMoveRight")
         tap("deselect")
-        work.press(forDuration: 1.0)
-        let right = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", language == "de" ? "rechts" : "right")).firstMatch
-        XCTAssertTrue(right.waitForExistence(timeout: 5))
-        right.tap()
-        XCTAssertGreaterThan(tiles("tile-work-45").firstMatch.frame.minX, before)
+        sleep(1)
+        // Nach dem Verschieben steht die Arbeit hinter der Pause (gleiche Zeile: weiter rechts, sonst tiefer).
+        let w = tiles("tile-work-45").firstMatch.frame, r = tiles("tile-rest-15").firstMatch.frame
+        XCTAssertTrue(w.minX > r.minX || w.minY > r.minY, "Reihenfolge unverändert: Arbeit \(w), Pause \(r)")
+        _ = before
         // Eigener Baustein
         tap("addPaletteItem")
         tap("addCustomBlock")

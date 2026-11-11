@@ -74,7 +74,8 @@ struct EditorView: View {
             HStack(spacing: 16) {
                 Label(DurationFormat.clock(model.workout.totalSeconds), systemImage: "clock")
                     .accessibilityIdentifier("totalDuration")
-                Label(String(localized: "\(model.workout.roundCount) Runden"), systemImage: "repeat")
+                Label(model.workout.roundCount == 1 ? String(localized: "1 Runde") : String(localized: "\(model.workout.roundCount) Runden"),
+                      systemImage: "repeat")
                 Spacer()
             }
             .font(.subheadline.monospacedDigit())
@@ -184,12 +185,13 @@ struct BlockTile: View {
                     .font(.headline.monospacedDigit())
                 Text(block.displayName)
                     .font(.caption)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .lineLimit(2)
             }
             .foregroundStyle(.white)
             .padding(.horizontal, 8)
-            .frame(width: Self.width(for: block.seconds), height: 56, alignment: .leading)
+            .padding(.vertical, 6)
+            .frame(minWidth: Self.width(for: block.seconds), minHeight: 56, alignment: .leading)
+            .fixedSize()
             .background(Theme.color(for: block.kind), in: RoundedRectangle(cornerRadius: 10))
             .overlay {
                 RoundedRectangle(cornerRadius: 10)
@@ -213,7 +215,9 @@ struct BlockTile: View {
         .accessibilityIdentifier("tile-\(block.kind.rawValue)-\(block.seconds)")
         .contextMenu {
             Button { model.moveBlock(block.id, by: -1) } label: { Label("Nach links", systemImage: "arrow.left") }
+                .accessibilityIdentifier("moveLeft")
             Button { model.moveBlock(block.id, by: 1) } label: { Label("Nach rechts", systemImage: "arrow.right") }
+                .accessibilityIdentifier("moveRight")
         }
     }
 }
@@ -233,13 +237,16 @@ struct RoundView: View {
                         .font(.subheadline.bold().monospacedDigit())
                         .padding(.horizontal, 10).padding(.vertical, 4)
                         .background(Theme.brand.opacity(0.15), in: Capsule())
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
                 }
-                .accessibilityLabel(Text("Runde, \(round.repeats) mal"))
+                .accessibilityLabel(Text("Runde, \(round.repeats) mal, \(DurationFormat.clock(round.secondsPerPass)) pro Runde"))
                 .accessibilityHint(Text("Antippen ändert die Anzahl Durchgänge."))
                 .accessibilityIdentifier("roundCounter")
                 Text(String(localized: "\(DurationFormat.clock(round.secondsPerPass)) pro Runde"))
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
                 Spacer(minLength: 0)
                 Menu {
                     Button { model.dissolveRound(round.id) } label: { Label("Runde auflösen", systemImage: "rectangle.split.3x1") }
@@ -247,6 +254,9 @@ struct RoundView: View {
                     Button { model.moveItem(round.id, by: 1) } label: { Label("Nach rechts", systemImage: "arrow.right") }
                 } label: {
                     Image(systemName: "ellipsis.circle")
+                        .font(.title3)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .accessibilityLabel(Text("Runde bearbeiten"))
                 .accessibilityIdentifier("roundMenu")
@@ -288,6 +298,10 @@ struct SelectionBar: View {
             Group {
                 bar(String(localized: "Übung"), "figure.strengthtraining.traditional", id: "pickExercise") { sheet = .exercise }
                 bar(String(localized: "Dauer"), "timer", id: "pickDuration") { sheet = .duration }
+                if model.selection.count == 1, let id = model.selection.first {
+                    bar(String(localized: "Nach links"), "arrow.left", id: "selMoveLeft") { model.moveBlock(id, by: -1) }
+                    bar(String(localized: "Nach rechts"), "arrow.right", id: "selMoveRight") { model.moveBlock(id, by: 1) }
+                }
                 bar(String(localized: "Duplizieren"), "plus.square.on.square", id: "duplicate") { model.duplicateSelection() }
                 bar(String(localized: "Löschen"), "trash", id: "deleteBlocks", role: .destructive) { model.deleteSelection() }
                 bar(String(localized: "mal N"), "repeat", id: "makeRound") { sheet = .repeats }
@@ -319,24 +333,26 @@ struct FlowLayout: Layout {
     var spacing: CGFloat = 8
     var lineSpacing: CGFloat = 8
 
+    /// Volle angebotene Breite nutzen; Umbruch erst, wenn ein Element wirklich nicht mehr passt (mit Toleranz gegen Rundungsfehler).
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let maxW = proposal.width ?? .infinity
         var x: CGFloat = 0, y: CGFloat = 0, lineH: CGFloat = 0, widest: CGFloat = 0
         for v in subviews {
-            let s = v.sizeThatFits(.init(width: maxW, height: nil))
-            if x > 0, x + s.width > maxW { y += lineH + lineSpacing; x = 0; lineH = 0 }
+            let s = v.sizeThatFits(.unspecified)
+            if x > 0, x + s.width > maxW + 0.5 { y += lineH + lineSpacing; x = 0; lineH = 0 }
             x += s.width + spacing
             lineH = max(lineH, s.height)
             widest = max(widest, x - spacing)
         }
-        return CGSize(width: min(widest, maxW), height: y + lineH)
+        let w = maxW.isFinite ? maxW : widest
+        return CGSize(width: w, height: y + lineH)
     }
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         var x = bounds.minX, y = bounds.minY, lineH: CGFloat = 0
         for v in subviews {
-            let s = v.sizeThatFits(.init(width: bounds.width, height: nil))
-            if x > bounds.minX, x + s.width > bounds.maxX { y += lineH + lineSpacing; x = bounds.minX; lineH = 0 }
+            let s = v.sizeThatFits(.unspecified)
+            if x > bounds.minX, x + s.width > bounds.maxX + 0.5 { y += lineH + lineSpacing; x = bounds.minX; lineH = 0 }
             v.place(at: CGPoint(x: x, y: y), proposal: .init(s))
             x += s.width + spacing
             lineH = max(lineH, s.height)

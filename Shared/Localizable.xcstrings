@@ -1548,6 +1548,26 @@
           }
         }
       }
+    },
+    "Runde, %lld mal, %@ pro Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Round, %lld times, %@ per round"
+          }
+        }
+      }
+    },
+    "1 Runde" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 round"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

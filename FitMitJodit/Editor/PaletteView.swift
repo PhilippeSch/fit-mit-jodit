@@ -67,10 +67,12 @@ struct PaletteTile: View {
         VStack(spacing: 2) {
             Image(systemName: item.kind.symbolName).font(.footnote)
             Text(DurationFormat.short(item.seconds)).font(.headline.monospacedDigit())
-            Text(item.kind.label).font(.caption2).lineLimit(1).minimumScaleFactor(0.7)
+            Text(item.kind.label).font(.caption2).lineLimit(2).multilineTextAlignment(.center)
         }
         .foregroundStyle(.white)
-        .frame(width: 84, height: 64)
+        .padding(6)
+        .frame(minWidth: 84, minHeight: 64)
+        .fixedSize()
         .background(Theme.color(for: item.kind), in: RoundedRectangle(cornerRadius: 12))
         .contentShape(RoundedRectangle(cornerRadius: 12))
         .onTapGesture(perform: onTap)
