@@ -17,5 +17,6 @@ Please try everything once:
 14. History: clock icon at the top left of the workout list – finished workouts and weekly overview.
 15. Siri: "Start Tabata with Fit mit Jodit", "Pause Fit mit Jodit", "Next block in Fit mit Jodit".
 16. Resume: start a workout, swipe the app away in the app switcher, open it again – the workout continues at the right point.
+17. Tones (new in this build): the 3-2-1 countdown is softer and no longer distorts. Does it sound clean on your device, also with Spotify in the background?
 
 Feedback: take a screenshot in TestFlight › "Send Feedback", or email fitmitjodit@scheuber.me.

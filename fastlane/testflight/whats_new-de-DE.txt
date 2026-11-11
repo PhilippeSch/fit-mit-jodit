@@ -17,5 +17,6 @@ Bitte einmal alles ausprobieren:
 14. Verlauf: In der Trainingsliste oben links die Uhr – absolvierte Trainings und Wochenübersicht.
 15. Siri: «Starte Tabata mit Fit mit Jodit», «Pause in Fit mit Jodit», «Nächster Block in Fit mit Jodit».
 16. Weiterlaufen: Training starten, App im App-Umschalter wegwischen, wieder öffnen – das Training läuft an der richtigen Stelle weiter.
+17. Töne (neu in diesem Build): Der Countdown 3-2-1 ist weicher und übersteuert nicht mehr. Klingt er auf deinem Gerät sauber, auch mit Spotify im Hintergrund?
 
 Rückmeldungen: in TestFlight Screenshot machen › «Feedback senden», oder an fitmitjodit@scheuber.me.
