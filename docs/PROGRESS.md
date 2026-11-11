@@ -34,12 +34,16 @@ KETTENTEST: grün (10.11.2026, 22:55), mit einer Einschränkung beim iCloud-Cont
 - Tests: 44 Unit-Tests grün; UI-Tests auf iPhone (de/en) grün
 
 ## Offen
-- iCloud-Container `iCloud.ch.fitmitjodit.timer` anlegen und der App-ID zuweisen
-- UI-Tests auf iPad und iPhone Duo, Laufansicht bei 1/3, 1/2 und voller Breite
-- Screenshots, Upload Store-Texte/Screenshots, finaler Build, CI auf Pull Request, Berichte
+- iPad: Bedienungshilfen-Audit meldet «Dynamic Type teilweise nicht unterstützt» für eine Blockkachel (3 Reparaturversuche, offen)
+- iCloud-Schema nach Production übertragen (braucht Debug-Lauf auf Gerät mit iCloud-Konto, siehe Morgen-Checkliste)
+- App-Datenschutz «Veröffentlichen» bestätigen
+- Gerätetests (Ducking, Hintergrund, Live Activity, Watch, Weiterleitung iPad, Spotify, Sync, AirDrop, Duo auf/zu)
 
 ## Nächster Schritt
-Teil 11: UI-Tests auf iPad/Duo/Watch, Breitentests, Screenshots
+Morgen-Checkliste abarbeiten; bei «weiter»: Dynamic-Type-Befund auf dem iPad, danach Rückmeldungen aus dem Gerätetest.
+
+## Stand 11.11.2026, 01:45
+- Teile 0–15 umgesetzt, finaler Build 1.0 (202611110111) in TestFlight grün, Store-Texte und Screenshots hochgeladen, CI auf PR #1 grün, Berichte geschrieben.
 
 ## Annahmen
 - Interne Testgruppe mit Zugriff auf alle Builds, darum keine Zuweisung pro Build nötig.
