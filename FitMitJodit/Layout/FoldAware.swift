@@ -23,6 +23,8 @@ struct FoldInfo: Equatable {
 extension GeometryProxy {
     /// Aktiver Falz, der diese Ansicht schneidet, sonst nil.
     var fold: FoldInfo? {
+        // Das SDK von iOS 27.1 (Xcode 27.1+) kennt reservierte Regionen; ältere SDKs (z. B. die CI) überspringen den Block.
+        #if compiler(>=6.4)
         if #available(iOS 27.1, *) {
             let bounds = CGRect(origin: .zero, size: size)
             for r in reservedRegions(kind: .division) where r.isActive {
@@ -34,6 +36,7 @@ extension GeometryProxy {
                 if !vertical, f.minY > 40, f.maxY < size.height - 40 { return FoldInfo(rect: f, isVertical: false) }
             }
         }
+        #endif
         return nil
     }
 }

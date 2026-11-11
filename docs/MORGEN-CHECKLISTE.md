@@ -42,11 +42,14 @@ Erst jetzt in App Store Connect «Zur Prüfung hinzufügen» und einreichen. Die
 ## 5. Konkret offen aus der Nacht (10./11.11.2026)
 Ausführlich in `docs/BERICHT.md`.
 
+0. **TestFlight-Build wählen:** In TestFlight den neuesten Build nehmen (Build-Nummer als Zeitstempel, z. B. 202611110111). Build 1 ist das leere Gerüst, Build 2 ein Zwischenstand.
+
 1. **App-Datenschutz veröffentlichen** (1 Klick): App Store Connect → Fit mit Jodit → App-Datenschutz. «Keine Daten erfasst» ist eingetragen und gesichert; der Knopf «Veröffentlichen» verlangt eine Bestätigung, dass die Angaben stimmen. Das habe ich bewusst nicht für dich bestätigt.
-2. **iCloud-Container anlegen**, sonst gibt es keinen Sync zwischen Geräten (die App läuft bis dahin mit lokalem Speicher):
-   - developer.apple.com → Identifiers → oben rechts auf «iCloud Containers» umstellen → «+» → `iCloud.ch.fitmitjodit.timer`.
-   - Dann die App-ID `ch.fitmitjodit.timer` öffnen → iCloud → «Configure» → den Container anhaken → Save.
-   - Danach Claude Code sagen: «iCloud-Container ist angelegt». Dann: `Config/Base.xcconfig` umstellen (Kommentar dort), `fastlane ios signing` (neue Profile), neuer Build.
+2. **iCloud-Schema nach Production bringen** (einmalig, etwa 5 Minuten). Container `iCloud.ch.fitmitjodit.timer` ist in der Nacht angelegt und der App zugewiesen, Push ist aktiv, der finale Build enthält iCloud. TestFlight- und App-Store-Builds nutzen aber die **Production**-Umgebung von CloudKit, und dort gibt es das Datenschema erst, wenn es aus «Development» übertragen wurde:
+   - In Xcode das Projekt öffnen, Schema «FitMitJodit», dein iPhone als Ziel, ▶︎ Run (Debug). Auf dem iPhone mit iCloud angemeldet sein. Ein Training anlegen oder ändern, 1–2 Minuten warten.
+   - icloud.developer.apple.com → CloudKit Console → Container `iCloud.ch.fitmitjodit.timer` → Schema: Die Typen `CD_StoredWorkout` und `CD_StoredValue` sind nun in Development sichtbar.
+   - «Deploy Schema Changes…» → nach Production übertragen.
+   - Erst danach synchronisieren TestFlight-Builds über iCloud. Bis dahin speichert die App lokal, es geht nichts verloren.
 3. **Watch mit echtem iPhone**: Watch-App öffnen, Training auf dem iPhone starten. Zeigt die Uhr Block und Countdown, vibriert sie beim Wechsel, wirken Pause/Vor/Zurück/Stopp?
 4. **Weiterleitung zum iPad**: iPhone und iPad im selben WLAN, App auf beiden offen. Auf dem iPad die Anfrage «Fernbedienung erlauben?» bestätigen. Training auf dem iPad starten, auf dem iPhone «iPad steuern» öffnen, mit der Uhr Pause/Vor drücken. Test auch mit gesperrtem iPhone (erwartet: Verbindung reisst ab, Restrisiko im Bericht).
 5. **Musik auf der Uhr**: Spotify auf dem iPhone, auf der Uhr ganz nach unten wischen (Musikseite). Play/Pause, nächster Titel, Lautstärke.
