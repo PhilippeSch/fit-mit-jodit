@@ -20,6 +20,8 @@ final class WelcomeAndPromoUITests: XCTestCase {
         app.launchArguments = ["-uiTesting", "-showWelcome"]
         app.launch()
         XCTAssertTrue(app.staticTexts["welcomeTitle"].waitForExistence(timeout: 10))
+        // Hinweis zur Stimme mit Probehören (Simulator: nur einfache Stimmen → Anleitung zum Laden)
+        XCTAssertTrue(app.buttons["welcomeVoiceSample"].waitForExistence(timeout: 5))
         let start = app.buttons["welcomeStart"]
         var tries = 0
         while !start.isHittable && tries < 4 { app.swipeUp(); tries += 1 }

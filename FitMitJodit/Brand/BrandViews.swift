@@ -49,6 +49,8 @@ struct WelcomeView: View {
                         if hSize == .regular {
                             feature("rectangle.split.2x1", .gray, String(localized: "Auf dem iPad passt Spotify daneben, der Timer bleibt lesbar."))
                         }
+                        VoiceStatusCard()
+                            .padding(.top, 4)
                         Button(action: onDone) {
                             Text("Los geht's")
                                 .font(.title3.bold())

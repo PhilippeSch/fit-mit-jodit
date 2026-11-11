@@ -68,11 +68,8 @@ struct SettingsView: View {
                             app.signalPlayer?.play(.announcement(sample), settings: s)
                         }
                         .accessibilityIdentifier("voiceSample")
-                        if VoiceCatalog.onlyBasicVoices {
-                            Text("Natürlicher klingt eine «Premium»- oder «Erweitert»-Stimme. In den iOS-Einstellungen unter Bedienungshilfen › Gesprochene Inhalte › Stimmen › Deutsch (bzw. English) z. B. «Anna (Premium)» laden. Danach wählt die App sie automatisch.")
-                                .font(.footnote).foregroundStyle(.secondary)
-                                .accessibilityIdentifier("voiceHint")
-                        }
+                        VoiceStatusCard()
+                            .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
                     }
                     Picker(String(localized: "Ton-Set"), selection: $store.settings.signals.toneSet) {
                         ForEach(ToneSet.allCases) { t in Text(t.label).tag(t) }

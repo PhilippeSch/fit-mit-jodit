@@ -24,6 +24,7 @@ struct FitMitJoditApp: App {
                         app.store.settings.hasSeenSplitViewHint = true
                         showWelcome = false
                     }
+                    .environment(app)
                 }
         }
     }
