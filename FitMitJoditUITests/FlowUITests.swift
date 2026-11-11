@@ -19,7 +19,10 @@ class FlowUITests: XCTestCase {
 
     private func tap(_ id: String, file: StaticString = #filePath, line: UInt = #line) {
         let e = app.descendants(matching: .any)[id].firstMatch
-        XCTAssertTrue(e.waitForExistence(timeout: 10), "\(id) fehlt", file: file, line: line)
+        if !e.waitForExistence(timeout: 10) {
+            XCTFail("\(id) fehlt\n\(app.debugDescription)", file: file, line: line)
+            return
+        }
         // Warten, bis Übergänge (Navigation, Blätter) abgeschlossen sind.
         let hittable = expectation(for: NSPredicate(format: "isHittable == true"), evaluatedWith: e)
         wait(for: [hittable], timeout: 5)
@@ -40,6 +43,49 @@ class FlowUITests: XCTestCase {
             tries += 1
         }
         e.tap()
+    }
+
+    /// Vorlage in der Bibliothek suchen und sichtbar machen (die Liste lädt Zeilen erst beim Scrollen).
+    private func libraryRow(_ de: String, _ en: String, file: StaticString = #filePath, line: UInt = #line) -> XCUIElement {
+        let row = app.descendants(matching: .any)["workout-\(language == "de" ? de : en)"].firstMatch
+        let list = app.collectionViews.firstMatch
+        // Frei antippbar: sichtbar und nicht vom schwebenden Suchfeld unten verdeckt.
+        func clear() -> Bool {
+            guard row.exists && row.isHittable else { return false }
+            let search = app.searchFields.firstMatch
+            return !search.exists || row.frame.maxY <= search.frame.minY || row.frame.minY >= search.frame.maxY
+        }
+        var n = 0
+        while !clear() && n < 8 {
+            if n < 4 { list.swipeUp(velocity: .slow) } else { list.swipeDown(velocity: .slow) }
+            n += 1
+        }
+        // Nachrollen abwarten, sonst stoppt der nächste Tipp nur die Bewegung.
+        if n > 0 { sleep(1) }
+        XCTAssertTrue(row.waitForExistence(timeout: 5), "Vorlage \(de) fehlt", file: file, line: line)
+        return row
+    }
+
+    /// Zurück zur Bibliothek, egal ob Stapel (iPhone) oder geteilte Ansicht (iPad, Duo).
+    private func showLibrary() {
+        let history = app.buttons["history"]
+        for _ in 0..<4 {
+            if history.waitForExistence(timeout: 1) && history.isHittable { return }
+            // Zurück-Knopf: auf dem Duo liegt er in der seitlichen Leiste, nicht in der Navigationsleiste.
+            let back = app.buttons["BackButton"]
+            if back.exists && back.isHittable { back.tap(); continue }
+            let toggle = app.buttons["ToggleSidebar"]
+            if toggle.exists && toggle.isHittable { toggle.tap(); continue }
+            let first = app.navigationBars.buttons.element(boundBy: 0)
+            if first.exists && first.isHittable { first.tap() }
+        }
+    }
+
+    /// Im Formular scrollen, bis das Element antippbar ist (Formulare laden Zeilen erst beim Scrollen).
+    private func scroll(_ container: XCUIElement, to e: XCUIElement) {
+        var n = 0
+        while !(e.exists && e.isHittable) && n < 6 { container.swipeUp(velocity: .slow); n += 1 }
+        if n > 0 { sleep(1) }
     }
 
     private func openNewWorkout() {
@@ -146,19 +192,18 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(app.images.matching(NSPredicate(format: "label CONTAINS[c] %@", language == "de" ? "Favorit" : "Favorite")).firstMatch.waitForExistence(timeout: 5))
         // Löschen mit Rückfrage
         let rows = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-'"))
-        let count = rows.count
-        rows.element(boundBy: count - 1).press(forDuration: 1.2)
+        let victim = rows.element(boundBy: rows.count - 1)
+        let victimID = victim.identifier
+        victim.press(forDuration: 1.2)
         let del = app.buttons.matching(NSPredicate(format: "label == %@", language == "de" ? "Löschen" : "Delete")).firstMatch
         XCTAssertTrue(del.waitForExistence(timeout: 5))
         del.tap()
         tap("confirmDelete")
-        XCTAssertEqual(rows.count, count - 1)
+        XCTAssertTrue(app.descendants(matching: .any)[victimID].waitForNonExistence(timeout: 5), "\(victimID) nicht gelöscht")
     }
 
     func testRunPauseSkipStop() {
-        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
-        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
-        circuit.tap()
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
         XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
         tap("start")
         XCTAssertTrue(app.descendants(matching: .any)["countdown"].waitForExistence(timeout: 10))
@@ -180,9 +225,7 @@ class FlowUITests: XCTestCase {
 
     /// Sperre: Tippen zeigt keine Knöpfe mehr, Entsperren nur mit langem Drücken.
     func testLockRunScreen() {
-        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
-        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
-        circuit.tap()
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
         XCTAssertTrue(app.textFields["workoutName"].waitForExistence(timeout: 10))
         tap("start")
         let countdown = app.descendants(matching: .any)["countdown"].firstMatch
@@ -208,9 +251,7 @@ class FlowUITests: XCTestCase {
 
     /// QR-Code im Training zeigen; ein gescannter Link (wie von der Kamera) übernimmt das Training nach Bestätigung.
     func testShareByQRCodeAndImport() {
-        let circuit = app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'workout-Zirkel' OR identifier BEGINSWITH 'workout-Circuit'")).firstMatch
-        XCTAssertTrue(circuit.waitForExistence(timeout: 10))
-        circuit.tap()
+        libraryRow("Zirkel 45/15", "Circuit 45/15").tap()
         tap("showQR")
         XCTAssertTrue(app.descendants(matching: .any)["qrImage"].waitForExistence(timeout: 5))
         tap("closeQR")
@@ -219,10 +260,8 @@ class FlowUITests: XCTestCase {
         let confirm = app.alerts.buttons[language == "de" ? "Übernehmen" : "Add"]
         XCTAssertTrue(confirm.waitForExistence(timeout: 10))
         confirm.tap()
-        if app.navigationBars.buttons.firstMatch.exists, !app.buttons["newWorkout"].isHittable {
-            app.navigationBars.buttons.firstMatch.tap()
-        }
-        XCTAssertTrue(app.descendants(matching: .any)["workout-QR Test"].waitForExistence(timeout: 10))
+        showLibrary()
+        XCTAssertTrue(libraryRow("QR Test", "QR Test").exists)
     }
 
     /// Ein abgeschlossenes Training erscheint im Verlauf mit Wochenübersicht.
@@ -231,9 +270,7 @@ class FlowUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["weekSummary"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.descendants(matching: .any)["historyRow"].exists)
         tap("closeHistory")
-        let tabata = app.descendants(matching: .any)["workout-Tabata"].firstMatch
-        XCTAssertTrue(tabata.waitForExistence(timeout: 10))
-        tabata.tap()
+        libraryRow("Tabata", "Tabata").tap()
         tap("start")
         let countdown = app.descendants(matching: .any)["countdown"].firstMatch
         XCTAssertTrue(countdown.waitForExistence(timeout: 10))
@@ -248,9 +285,7 @@ class FlowUITests: XCTestCase {
         }
         XCTAssertTrue(finished.waitForExistence(timeout: 5))
         tap("done")
-        if !app.buttons["history"].isHittable, app.navigationBars.buttons.firstMatch.exists {
-            app.navigationBars.buttons.firstMatch.tap()
-        }
+        showLibrary()
         tap("history")
         XCTAssertTrue(app.descendants(matching: .any)["historyRow"].waitForExistence(timeout: 5))
         tap("closeHistory")
@@ -258,24 +293,30 @@ class FlowUITests: XCTestCase {
 
     func testSignalsOnOff() {
         tap("settings")
+        let form = app.descendants(matching: .any)["settingsForm"].firstMatch
+        XCTAssertTrue(form.waitForExistence(timeout: 5))
         let tones = app.switches["toggleTones"]
         XCTAssertTrue(tones.waitForExistence(timeout: 5))
         XCTAssertEqual(tones.value as? String, "1")
-        // Ansagen standardmässig «Automatisch» (nur Trainings mit Übungsnamen)
-        let auto = app.buttons[language == "de" ? "Automatisch" : "Automatic"]
-        XCTAssertTrue(auto.waitForExistence(timeout: 5))
-        XCTAssertTrue(auto.isSelected, "Ansagen standardmässig «Automatisch»")
+        // Zuerst umschalten: nach dem Scrollen ist die Zeile evtl. nicht mehr geladen.
         tones.switches.firstMatch.tap()
         XCTAssertEqual(tones.value as? String, "0")
+        // Ansagen standardmässig «Automatisch» (nur Trainings mit Übungsnamen)
+        let auto = app.buttons[language == "de" ? "Automatisch" : "Automatic"]
+        scroll(form, to: auto)
+        XCTAssertTrue(auto.exists)
+        XCTAssertTrue(auto.isSelected, "Ansagen standardmässig «Automatisch»")
         app.buttons[language == "de" ? "Aus" : "Off"].tap()
         XCTAssertTrue(app.buttons[language == "de" ? "Aus" : "Off"].isSelected)
         XCTAssertFalse(app.switches["toggleVoiceDetailed"].exists)
         app.buttons[language == "de" ? "Immer" : "Always"].tap()
-        // Auf kleineren Blättern (iPad) liegt der Schalter evtl. unterhalb des sichtbaren Bereichs
         let detailed = app.switches["toggleVoiceDetailed"]
-        var t = 0
-        while !detailed.waitForExistence(timeout: 1) && t < 4 { app.swipeUp(); t += 1 }
+        scroll(form, to: detailed)
         XCTAssertTrue(detailed.exists)
+        // Auf dem Duo blendet iOS die Symbolleiste beim Scrollen aus; nach oben scrollen bringt «Fertig» zurück.
+        let close = app.buttons["closeSettings"]
+        var up = 0
+        while !close.waitForExistence(timeout: 1) && up < 4 { form.swipeDown(velocity: .slow); up += 1 }
         tap("closeSettings")
     }
 

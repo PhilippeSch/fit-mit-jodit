@@ -45,6 +45,13 @@ Morgen-Checkliste abarbeiten; bei «weiter»: Dynamic-Type-Befund auf dem iPad, 
 ## Stand 11.11.2026, 01:45
 - Teile 0–15 umgesetzt, finaler Build 1.0 (202611110111) in TestFlight grün, Store-Texte und Screenshots hochgeladen, CI auf PR #1 grün, Berichte geschrieben.
 
+## Stand 11.11.2026, Vormittag
+- Fünf neue Vorlagen (Beine & Po 15, Cardio 12, Oberkörper 12, EMOM 12, Pyramide) und «Dehnen 10» mit 10 neuen Dehnübungen.
+- Uhr bleibt während des Trainings aktiv (erweiterte Laufzeit), Haptik auch bei gesenktem Arm.
+- Training läuft nach Neustart der App weiter; Laufansicht sperrbar; Siri und Kurzbefehle; Teilen per QR-Code; Trainingsverlauf mit Wochenübersicht.
+- Satzliste für Jodits Aufnahmen um Teil G/H (Nr. 97–106) ergänzt, PDF neu erzeugt.
+- Offen: Gerätetests der neuen Funktionen (siehe Morgen-Checkliste «Neu»), neuer TestFlight-Build nach Freigabe der Beta-Prüfung.
+
 ## Annahmen
 - Interne Testgruppe mit Zugriff auf alle Builds, darum keine Zuweisung pro Build nötig.
 - Release-Signierung manuell statt automatisch, weil die Schlüssel-Anmeldung von xcodebuild scheitert.

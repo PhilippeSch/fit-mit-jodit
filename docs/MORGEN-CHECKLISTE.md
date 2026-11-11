@@ -51,3 +51,11 @@ Ausführlich in `docs/BERICHT.md`.
 5. **Musik auf der Uhr**: Spotify auf dem iPhone, auf der Uhr ganz nach unten wischen (Musikseite). Play/Pause, nächster Titel, Lautstärke.
 6. **Live Activity**: Beim ersten Training fragt iOS evtl. nach Live Activities; erlauben.
 7. **Watch-Haptik bei gesenktem Handgelenk**: Die Uhr-App hält sich während eines Trainings mit einer erweiterten Laufzeit (Typ Physiotherapie, höchstens 1 Stunde) aktiv. Im Kurs prüfen, ob die Haptik bei jedem Blockwechsel auch mit gesenktem Arm kommt und ob nach 60 Minuten ein Hinweis erscheint.
+
+## Neu (11.11.2026)
+- **Fortsetzen:** Training starten, App im App-Umschalter wegwischen, wieder öffnen: läuft das Training an der richtigen Stelle weiter?
+- **Sperre:** Im Kurs sperren, mit der Uhr pausieren und weiterschalten; Entsperren mit langem Drücken.
+- **Siri:** «Starte Tabata mit Fit mit Jodit», «Pause in Fit mit Jodit», «Nächster Block in Fit mit Jodit» (Deutsch und Englisch). Erscheinen die Trainings in der Kurzbefehle-App?
+- **QR-Code:** Auf dem iPad QR-Code zeigen, mit einem zweiten iPhone (App installiert) über die Kamera scannen; aus 2–3 m Distanz versuchen.
+- **Verlauf:** Nach dem Kurs prüfen, ob das Training im Verlauf steht und auf dem zweiten Gerät über iCloud erscheint.
+

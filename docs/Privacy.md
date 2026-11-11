@@ -2,7 +2,7 @@
 
 **English** · [Deutsch](#deutsch)
 
-Date: 10 November 2026
+Date: 11 November 2026
 
 ## Summary
 
@@ -10,7 +10,7 @@ Date: 10 November 2026
 
 ## What the app stores
 
-Your workouts, your own blocks, exercise names and settings are stored on your device. If iCloud is switched on, they are also stored in your private iCloud (CloudKit private database) so they stay in sync between your devices. Only Apple provides this service and only you have access to that data. The developer has no access to it.
+Your workouts, your own blocks, exercise names, settings and workout history are stored on your device. If iCloud is switched on, they are also stored in your private iCloud (CloudKit private database) so they stay in sync between your devices. Only Apple provides this service and only you have access to that data. The developer has no access to it.
 
 ## Apple Watch
 
@@ -26,7 +26,11 @@ A workout can store a Spotify link. The app only opens this link, which hands ov
 
 ## Export
 
-Exported workout files are only created when you ask for it. You decide yourself whether and with whom you share them.
+Exported workout files are only created when you ask for it. You decide yourself whether and with whom you share them. A workout QR code contains only the workout itself (name, blocks, exercise names, Spotify link) and is created on the device; scanning it does not contact any server.
+
+## Siri and Shortcuts
+
+If you use Siri or the Shortcuts app with Fit mit Jodit, Apple processes your voice request according to Apple's privacy policy. The app only receives the command (for example "start workout") and the workout chosen.
 
 ## Children
 
@@ -44,7 +48,7 @@ Questions about privacy: fitmitjodit@scheuber.me or [GitHub Issues](https://gith
 
 [English](#privacy-policy--fit-mit-jodit) · **Deutsch**
 
-Datum: 10. November 2026
+Datum: 11. November 2026
 
 ## Kurzfassung
 
@@ -52,7 +56,7 @@ Datum: 10. November 2026
 
 ## Was die App speichert
 
-Deine Trainings, eigenen Bausteine, Übungsnamen und Einstellungen liegen auf deinem Gerät. Ist iCloud eingeschaltet, liegen sie zusätzlich in deiner privaten iCloud (private CloudKit-Datenbank), damit sie zwischen deinen Geräten abgeglichen werden. Diesen Dienst stellt allein Apple bereit, und nur du hast Zugriff auf diese Daten. Der Entwickler hat keinen Zugriff darauf.
+Deine Trainings, eigenen Bausteine, Übungsnamen, Einstellungen und dein Trainingsverlauf liegen auf deinem Gerät. Ist iCloud eingeschaltet, liegen sie zusätzlich in deiner privaten iCloud (private CloudKit-Datenbank), damit sie zwischen deinen Geräten abgeglichen werden. Diesen Dienst stellt allein Apple bereit, und nur du hast Zugriff auf diese Daten. Der Entwickler hat keinen Zugriff darauf.
 
 ## Apple Watch
 
@@ -68,7 +72,11 @@ Ein Training kann einen Spotify-Link speichern. Die App öffnet diesen Link nur,
 
 ## Export
 
-Export-Dateien entstehen nur auf deine Anweisung. Du entscheidest selbst, ob und mit wem du sie teilst.
+Export-Dateien entstehen nur auf deine Anweisung. Du entscheidest selbst, ob und mit wem du sie teilst. Ein QR-Code enthält nur das Training selbst (Name, Blöcke, Übungsnamen, Spotify-Link) und wird auf dem Gerät erzeugt; beim Scannen wird kein Server angefragt.
+
+## Siri und Kurzbefehle
+
+Nutzt du Siri oder die Kurzbefehle-App mit Fit mit Jodit, verarbeitet Apple deine Sprachanfrage nach der Datenschutzerklärung von Apple. Die App erhält nur den Befehl (z. B. «Training starten») und das gewählte Training.
 
 ## Kinder
 

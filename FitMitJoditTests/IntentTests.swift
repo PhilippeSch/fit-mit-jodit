@@ -5,21 +5,31 @@ import XCTest
 /// Siri und Kurzbefehle: über die gemeinsame App-Instanz starten, pausieren, springen, beenden.
 @MainActor
 final class IntentTests: XCTestCase {
+    /// Eigenes Testtraining, unabhängig davon, was im Simulator gespeichert ist.
+    private var testWorkout = Workout(name: "Siri-Test \(UUID().uuidString.prefix(6))",
+                                      items: [.block(Block(kind: .work, seconds: 30)), .block(Block(kind: .rest, seconds: 10)),
+                                              .block(Block(kind: .work, seconds: 30))])
+
+    override func setUp() async throws {
+        AppModel.shared.store.upsert(testWorkout)
+    }
+
     override func tearDown() async throws {
         AppModel.shared.stop()
+        AppModel.shared.store.delete(testWorkout)
     }
 
     func testQueryOffersAllWorkouts() async throws {
         let app = AppModel.shared
         let suggested = try await WorkoutEntityQuery().suggestedEntities()
         XCTAssertEqual(suggested.map(\.id), app.store.sorted.map(\.id))
-        let tabata = try await WorkoutEntityQuery().entities(matching: "taba")
-        XCTAssertTrue(tabata.contains { $0.name == "Tabata" })
+        let found = try await WorkoutEntityQuery().entities(matching: String(testWorkout.name.suffix(6)))
+        XCTAssertEqual(found.map(\.id), [testWorkout.id])
     }
 
     func testStartPauseSkipStop() async throws {
         let app = AppModel.shared
-        let w = try XCTUnwrap(app.store.workouts.first { $0.templateKey == "tabata" })
+        let w = try XCTUnwrap(app.store.workout(id: testWorkout.id))
         var start = StartWorkoutIntent()
         start.workout = WorkoutEntity(w)
         _ = try await start.perform()

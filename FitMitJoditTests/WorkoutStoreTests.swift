@@ -8,11 +8,11 @@ final class WorkoutStoreTests: XCTestCase {
         return WorkoutStore(container: PersistenceFactory.makeContainer(inMemory: true), defaults: defaults)
     }
 
-    static let newKeys: Set<String> = ["fullbody20", "core10", "legs15", "cardio12", "upper12", "pyramid", "emom12"]
+    static let newKeys: Set<String> = ["fullbody20", "core10", "legs15", "cardio12", "upper12", "pyramid", "emom12", "stretch10"]
 
     func testFirstStartSeedsAllTemplatesWithoutICloud() {
         let store = makeStore()
-        XCTAssertEqual(store.workouts.count, 11)
+        XCTAssertEqual(store.workouts.count, 12)
         XCTAssertEqual(Set(store.workouts.compactMap(\.templateKey)), Self.newKeys.union(["circuit4515", "tabata", "strength", "warmup"]))
     }
 
@@ -35,7 +35,7 @@ final class WorkoutStoreTests: XCTestCase {
     }
 
     func testAdditionalTemplates() {
-        for w in [Templates.legsGlutes, Templates.cardio, Templates.upperBody, Templates.emom] {
+        for w in [Templates.legsGlutes, Templates.cardio, Templates.upperBody, Templates.emom, Templates.stretch] {
             let steps = StepSequence.expand(w)
             XCTAssertTrue(steps.filter { $0.kind == .work }.allSatisfy(\.hasName), w.name)
             XCTAssertTrue(SignalSettings().speaks(steps), w.name)
@@ -45,6 +45,7 @@ final class WorkoutStoreTests: XCTestCase {
         XCTAssertEqual(Templates.upperBody.totalSeconds, 12 * 60 - 20)
         XCTAssertEqual(Templates.emom.totalSeconds, 12 * 60)
         XCTAssertEqual(Templates.pyramid.totalSeconds, 340 + 8 * 15)
+        XCTAssertEqual(Templates.stretch.totalSeconds, 10 * 60 - 15)
         // Feste IDs pro Vorlage, keine doppelten
         let ids = Templates.all().map(\.id)
         XCTAssertEqual(Set(ids).count, ids.count)
@@ -77,7 +78,7 @@ final class WorkoutStoreTests: XCTestCase {
     func testSearch() {
         let store = makeStore()
         XCTAssertEqual(store.search("taba").map(\.templateKey), ["tabata"])
-        XCTAssertEqual(store.search("").count, 11)
+        XCTAssertEqual(store.search("").count, 12)
     }
 
     func testPersistsAcrossReload() {

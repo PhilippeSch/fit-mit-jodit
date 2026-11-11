@@ -2397,6 +2397,16 @@
           }
         }
       }
+    },
+    "Dehnen 10" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stretch 10"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

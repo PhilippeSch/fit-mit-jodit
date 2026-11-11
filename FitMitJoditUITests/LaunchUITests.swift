@@ -1,7 +1,7 @@
 import XCTest
 
 final class LaunchUITests: XCTestCase {
-    /// Start ohne iCloud: Bibliothek mit allen elf Vorlagen erscheint (Liste lädt Zeilen erst beim Scrollen).
+    /// Start ohne iCloud: Bibliothek mit allen zwölf Vorlagen erscheint (Liste lädt Zeilen erst beim Scrollen).
     func testLaunchShowsLibraryWithTemplates() {
         let app = XCUIApplication()
         app.launchArguments = ["-uiTesting"]
@@ -13,11 +13,11 @@ final class LaunchUITests: XCTestCase {
         for _ in 0..<6 {
             let before = seen.count
             seen.formUnion(rows.allElementsBoundByIndex.map(\.identifier))
-            if seen.count == 11 { break }
+            if seen.count == 12 { break }
             rows.firstMatch.swipeUp()
             if seen.count == before && before > 0 { rows.element(boundBy: max(rows.count - 1, 0)).swipeUp() }
         }
-        XCTAssertEqual(seen.count, 11, "\(seen.sorted())")
+        XCTAssertEqual(seen.count, 12, "\(seen.sorted())")
     }
 }
 

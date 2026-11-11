@@ -82,6 +82,14 @@ Wechselt man zu Spotify, läuft der Timer weiter, Töne und Ansagen kommen weite
 ### 8. Austausch
 iCloud-Sync zwischen Geräten derselben Apple-ID (Trainings, Palette, eigene Übungsnamen, Einstellungen). Zusätzlich Export und Import einzelner Trainings als Datei (eigener Dateityp, per AirDrop oder Nachricht teilbar).
 
+### 8a. Ergänzungen nach dem ersten Test (11.11.2026)
+1. **Fortsetzen:** Das laufende Training wird bei Start, Blockwechsel und Bedienung gesichert. Beendet iOS die App, läuft es beim nächsten Öffnen an der Stelle weiter, an der es ohne Unterbruch stünde (pausiert bleibt pausiert). Beendete, gestoppte oder über 4 Stunden alte Stände werden verworfen.
+2. **Sperre:** Schloss-Knopf in der Laufansicht. Gesperrt bringt Tippen nur den Hinweis «Zum Entsperren gedrückt halten»; Uhr, Siri und Fernbedienung steuern weiter.
+3. **Siri und Kurzbefehle (App Intents):** Training starten (mit Trainingsname), Pause/Weiter, nächster Block, beenden; Sätze auf Deutsch und Englisch.
+4. **QR-Code:** Im Training und im Abschlussbild. Link `fitmitjodit://training?d=…` mit kompaktem, komprimiertem Inhalt (ohne IDs), kein Server. Die Kamera öffnet die App, die das Training nach Bestätigung als neues Training anlegt. Unplausible Daten werden abgelehnt.
+5. **Verlauf:** Abgeschlossene Trainings und nach mindestens einer Minute abgebrochene, trainierte Zeit ohne Vorlauf. Wochenübersicht (Anzahl, Minuten, Minuten pro Tag). Jeder Eintrag ist ein eigener `StoredValue` (`history.<id>`), damit das CloudKit-Schema unverändert bleibt.
+6. **Dehnen:** 10 Dehnübungen im Katalog, Vorlage «Dehnen 10» (10 × 45 s, 15 s Wechsel). Die Satzliste für Jodits Aufnahmen hat dafür den Nachtrag Teil G/H (Nr. 97–106).
+
 ### 9. Sprachen
 Deutsch und Englisch, folgt der Gerätesprache.
 

@@ -2,7 +2,7 @@ Willkommen zur ersten Testversion von Fit mit Jodit!
 
 Bitte einmal alles ausprobieren:
 1. Erster Start: Willkommensbildschirm lesen. Falls dort steht, dass nur die einfache Stimme installiert ist: wie beschrieben eine Premium-Stimme laden (z. B. «Anna (Premium)»), dann «Stimme probehören».
-2. Vorlagen: «Zirkel 45/15», «Tabata», «Kraft», «Warm-up» (für den Kurs, ohne Übungsnamen) sowie «Ganzkörper 20» und «Bauch & Rumpf 10» (für zu Hause, mit Ansage).
+2. Vorlagen: «Zirkel 45/15», «Tabata», «Kraft», «Warm-up», «Pyramide» (für den Kurs, ohne Übungsnamen) sowie «Ganzkörper 20», «Bauch & Rumpf 10», «Beine & Po 15», «Cardio 12», «Oberkörper 12», «EMOM 12» und «Dehnen 10» (für zu Hause, mit Ansage).
 3. Training starten: 10 s Vorlauf (blau), dann Arbeit (grün) und Pause (orange). Einmal auf den Bildschirm tippen: Pause, Block vor/zurück, Stopp.
 4. Ansagen: «Ganzkörper 20» starten – die Stimme sagt Übung und Dauer an, «Bereit machen» und «Noch 10 Sekunden». In den Einstellungen: Ansagen Aus/Automatisch/Immer, Stimme wählen.
 5. Eigenes Training bauen: «+» oben, unten Bausteine antippen (z. B. 3× 45 s Arbeit mit 15 s Pause, 1 min Pause), Blöcke antippen zum Markieren, «mal N» für Runden. Übung wählen, Dauer ändern, duplizieren, löschen, verschieben, rückgängig.
@@ -11,6 +11,11 @@ Bitte einmal alles ausprobieren:
 8. Sperrbildschirm: Während des Trainings sperren – Countdown sichtbar?
 9. Spotify-Link: im Training über «…» › Spotify-Link eine Playlist einfügen, dann «In Spotify öffnen».
 10. Apple Watch (falls vorhanden): App auf der Uhr öffnen, Training auf dem iPhone starten, mit der Uhr steuern.
-11. Am Ende: Abschlussbild mit Link zu fitmitjodit.ch.
+11. Am Ende: Abschlussbild mit Link zu fitmitjodit.ch und «Training teilen».
+12. Sperre: Im Training tippen › Schloss. Danach reagiert der Bildschirm nicht mehr auf Tippen, entsperren mit langem Drücken. Die Uhr steuert weiter.
+13. QR-Code: Im Training oben das QR-Symbol. Mit einem zweiten iPhone (App installiert) über die Kamera scannen – das Training wird übernommen.
+14. Verlauf: In der Trainingsliste oben links die Uhr – absolvierte Trainings und Wochenübersicht.
+15. Siri: «Starte Tabata mit Fit mit Jodit», «Pause in Fit mit Jodit», «Nächster Block in Fit mit Jodit».
+16. Weiterlaufen: Training starten, App im App-Umschalter wegwischen, wieder öffnen – das Training läuft an der richtigen Stelle weiter.
 
 Rückmeldungen: in TestFlight Screenshot machen › «Feedback senden», oder an fitmitjodit@scheuber.me.

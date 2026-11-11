@@ -100,6 +100,7 @@ struct SettingsView: View {
                 }
             }
             .tint(Theme.work) // Schalter «ein» eindeutig grün
+            .accessibilityIdentifier("settingsForm")
             .navigationTitle(Text("Einstellungen"))
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

@@ -7,7 +7,7 @@ import SwiftData
 enum Templates {
     /// Vorlagen mit fester ID je Schlüssel: Auf zwei Geräten angelegt, werden sie über iCloud zu einem Eintrag.
     static func all() -> [Workout] {
-        [circuit, tabata, strength, warmup, fullBody, core, legsGlutes, cardio, upperBody, pyramid, emom].map { w in
+        [circuit, tabata, strength, warmup, fullBody, core, legsGlutes, cardio, upperBody, pyramid, emom, stretch].map { w in
             var w = w
             if let key = w.templateKey { w.id = id(for: key) }
             return w
@@ -81,6 +81,14 @@ enum Templates {
                       Block(kind: .work, seconds: 60, exerciseName: ex("push_ups"))]
         return Workout(name: String(localized: "EMOM 12"),
                        items: [.round(Round(repeats: 6, blocks: blocks))], templateKey: "emom12")
+    }
+
+    /// Dehnen zum Abschluss: 10 Dehnübungen à 45 s, 15 s zum Wechseln (10 Minuten).
+    static var stretch: Workout {
+        let ids = ["quad_stretch", "hamstring_stretch", "hip_flexor_stretch", "figure_four_stretch", "calf_stretch",
+                   "chest_stretch", "shoulder_stretch", "triceps_stretch", "cat_cow", "childs_pose"]
+        return Workout(name: String(localized: "Dehnen 10"),
+                       items: station(ids, work: 45, rest: 15).map { .block($0) }, templateKey: "stretch10")
     }
 
     /// Bauch und Rumpf: 5 Übungen à 45 s, 15 s Pause, 2 Runden (10 Minuten).
