@@ -34,7 +34,7 @@ struct SignalSettings: Codable, Equatable, Sendable {
     var halftimeVolume: Double = 0.8
     var voiceMode: VoiceMode = .auto
     var voiceVolume: Double = 1.0
-    var toneSet: ToneSet = .beeps
+    var toneSet: ToneSet = .chime
     /// Ausführliche Ansagen: Dauer, «Bereit machen» vor der nächsten Übung, «Noch 10 Sekunden».
     var voiceDetailed = true
     /// Gewählte Stimme (AVSpeechSynthesisVoice.identifier); nil = beste installierte automatisch.
@@ -77,7 +77,8 @@ struct SignalSettings: Codable, Equatable, Sendable {
             voiceMode = (try c.decodeIfPresent(Bool.self, forKey: .voiceEnabled) ?? false) ? .always : .auto
         }
         voiceVolume = try c.decodeIfPresent(Double.self, forKey: .voiceVolume) ?? d.voiceVolume
-        toneSet = try c.decodeIfPresent(ToneSet.self, forKey: .toneSet) ?? d.toneSet
+        // Unbekanntes Ton-Set (von einer neueren Fassung über iCloud): Standard nehmen, den Rest behalten.
+        toneSet = (try? c.decodeIfPresent(ToneSet.self, forKey: .toneSet)) ?? d.toneSet
         voiceDetailed = try c.decodeIfPresent(Bool.self, forKey: .voiceDetailed) ?? d.voiceDetailed
         voiceIdentifier = try c.decodeIfPresent(String.self, forKey: .voiceIdentifier)
     }
@@ -97,7 +98,7 @@ struct SignalSettings: Codable, Equatable, Sendable {
 }
 
 enum ToneSet: String, Codable, CaseIterable, Sendable, Identifiable {
-    case beeps, boxingBell, softGong
+    case chime, beeps, boxingBell, softGong
     var id: String { rawValue }
 }
 

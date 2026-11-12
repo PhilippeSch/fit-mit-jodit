@@ -6,7 +6,7 @@ Please try everything once:
 3. Start a workout: 10 s lead-in (blue), then work (green) and rest (orange). Tap the screen once: pause, skip back/forward, stop.
 4. Voice cues: start "Full Body 20" – the voice announces exercise and duration, "Get ready" and "10 seconds left". In Settings: cues Off/Automatic/Always, choose a voice.
 5. Build your own workout: "+" at the top, tap blocks at the bottom (e.g. 3× 45 s work with 15 s rest, 1 min rest), tap blocks to select them, "× N" for rounds. Pick an exercise, change duration, duplicate, delete, move, undo.
-6. Tones: three tone sets in Settings. With Spotify in the background: does the music get quieter during the tones?
+6. Tones: four sound sets in Settings. With Spotify in the background: does the music get quieter during the tones?
 7. iPad: put Spotify next to it in Split View – is the timer still readable?
 8. Lock Screen: lock the device during a workout – is the countdown visible?
 9. Spotify link: in a workout use "…" › Spotify link to paste a playlist, then "Open in Spotify".
@@ -18,8 +18,9 @@ Please try everything once:
 15. Siri: "Start Tabata with Fit mit Jodit", "Pause Fit mit Jodit", "Next block in Fit mit Jodit".
 16. Resume: start a workout, swipe the app away in the app switcher, open it again – the workout continues at the right point.
 17. Tones: the 3-2-1 countdown is softer and no longer distorts. Does it sound clean on your device, also with Spotify in the background?
-18. Moving blocks (new in this build): touch and hold a block in the builder, then drag. You don't have to hit a target exactly, a bar shows where it will land. Into a round, out of a round, or grab a whole round by its header. On the 11-inch iPad the blocks palette now sits on the right.
-19. Dark mode (new in this build): buttons and icons are now light and no longer look inactive, "Start" is a light button with dark text.
-20. Remote control (new in this build): the "Allow remote control?" question on the iPad now also appears over the welcome screen and during a workout, without anything closing by itself.
+18. Moving blocks (new since Nov 12): touch and hold a block in the builder, then drag. You don't have to hit a target exactly, a bar shows where it will land. Into a round, out of a round, or grab a whole round by its header. On the 11-inch iPad the blocks palette now sits on the right.
+19. Dark mode (new since Nov 12): buttons and icons are now light and no longer look inactive, "Start" is a light button with dark text.
+20. Remote control (new since Nov 12): the "Allow remote control?" question on the iPad now also appears over the welcome screen and during a workout, without anything closing by itself.
+21. Bell (new in this build): new sound set "Bell" with a full sound and reverb, the final tone is higher than 3-2-1. It is the default on new installs; otherwise choose "Bell" under Settings › Sound set and tap "Preview". Does it sound full enough? Loud enough over the music?
 
 Feedback: take a screenshot in TestFlight › "Send Feedback", or email fitmitjodit@scheuber.me.

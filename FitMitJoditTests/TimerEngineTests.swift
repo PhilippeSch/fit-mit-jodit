@@ -307,4 +307,21 @@ final class DetailedAnnouncementTests: XCTestCase {
         let app = try JSONDecoder.fmj.decode(AppSettings.self, from: Data(#"{"leadInSeconds":20}"#.utf8))
         XCTAssertEqual(app.leadInSeconds, 20)
     }
+
+    /// Ein Ton-Set, das diese Fassung nicht kennt (von einer neueren über iCloud): Standard, der Rest bleibt.
+    func testUnknownToneSetKeepsOtherSettings() throws {
+        let newer = #"{"tonesEnabled":false,"tonesVolume":0.5,"toneSet":"kuhglocke","voiceMode":"always"}"#
+        let s = try JSONDecoder.fmj.decode(SignalSettings.self, from: Data(newer.utf8))
+        XCTAssertEqual(s.toneSet, SignalSettings().toneSet, "fällt auf den Standard zurück")
+        XCTAssertEqual(SignalSettings().toneSet, .chime, "Standard ist die Glocke")
+        XCTAssertFalse(s.tonesEnabled)
+        XCTAssertEqual(s.tonesVolume, 0.5)
+        XCTAssertEqual(s.voiceMode, .always)
+        for set in ToneSet.allCases {
+            var chosen = SignalSettings()
+            chosen.toneSet = set
+            let back = try JSONDecoder.fmj.decode(SignalSettings.self, from: JSONEncoder.fmj.encode(chosen))
+            XCTAssertEqual(back.toneSet, set, "gewähltes Set übersteht Sichern und Laden")
+        }
+    }
 }

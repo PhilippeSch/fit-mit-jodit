@@ -29,7 +29,12 @@ struct FitMitJoditApp: App {
         app.observeSession { [player] session in
             if let s = session {
                 // Beim Abschluss Schlusston und «Geschafft» ausklingen lassen, nicht hart abwürgen.
-                if s.isFinished { player.finishKeepAlive() } else { player.startKeepAlive() }
+                if s.isFinished {
+                    player.finishKeepAlive()
+                } else {
+                    player.startKeepAlive()
+                    player.prepare(s.settings.signals)
+                }
             } else {
                 player.stopKeepAlive()
             }
