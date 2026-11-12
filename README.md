@@ -5,7 +5,7 @@ Intervall-Timer für Gruppen- und Heimtraining, entwickelt für die Kurse von [f
 ## Funktionen
 - **Baukasten:** Trainings aus Bausteinen zusammenklicken (z. B. 45 s Arbeit, 15 s Pause, 1 min Pause). Blöcke markieren und «mal N» macht daraus eine Runde. Übungsnamen sind freiwillig, aus einer Liste mit 70 Übungen (davon 10 Dehnübungen) oder selbst eingetippt.
 - **Laufansicht:** Grosser Countdown, aus mehreren Metern lesbar. Arbeit grün, Pause orange, Vorbereitung blau, jeweils mit Text. Bedienung mit einem Tipp: Pause, Block vor/zurück, Stopp. Sperre gegen versehentliches Tippen. Beendet iOS die App im Hintergrund, läuft das Training beim Öffnen an der richtigen Stelle weiter.
-- **Signale:** Töne in den letzten 3 Sekunden und zur Halbzeit, drei Ton-Sets (synthetisch erzeugt). Musik anderer Apps wird während der Töne kurz leiser.
+- **Signale:** Töne in den letzten 3 Sekunden und zur Halbzeit, vier Ton-Sets (synthetisch erzeugt), als Standard eine Glocke mit Hall, deren Schlusston höher liegt. Musik anderer Apps wird während der Töne kurz leiser.
 - **Ansagen:** «Automatisch» sagt Trainings mit Übungsnamen an, mit Dauer, «Bereit machen» und «Noch 10 Sekunden». Trainings ohne Namen bleiben bei den Tönen.
 - **Vorlagen:** Zirkel 45/15, Tabata, Kraft, Warm-up, Pyramide sowie mit Übungsnamen Ganzkörper 20, Bauch & Rumpf 10, Beine & Po 15, Cardio 12, Oberkörper 12, EMOM 12 und Dehnen 10.
 - **Apple Watch:** Fernbedienung für das Training auf dem iPhone oder, über das iPhone, auf dem iPad. Vibriert beim Blockwechsel, auch mit gesenktem Arm, und steuert die Musik des iPhone.
@@ -36,7 +36,7 @@ Kein Konto, keine Werbung von Dritten, keine Datenerhebung. Siehe [Datenschutz](
 | `fastlane/` | Upload nach TestFlight, Store-Texte |
 | `docs/` | Vorgabe, Datenschutz, Projektnotizen |
 
-Das Xcode-Projekt wird aus `Tools/gen_project.py` erzeugt. Build- und Testbefehle stehen in `CLAUDE.md`.
+Das Xcode-Projekt wird aus `Tools/gen_project.py` erzeugt. Build- und Testbefehle stehen in `CLAUDE.md`, der Arbeitsablauf für alle, die neu einsteigen, in [docs/UEBERGABE.md](docs/UEBERGABE.md).
 
 ## Support
 Fragen und Fehler bitte als [Issue](https://github.com/PhilippeSch/fit-mit-jodit/issues) melden.

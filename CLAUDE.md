@@ -6,17 +6,25 @@ iOS-App für iPad, iPhone und iPhone Duo mit Begleit-App für die Apple Watch: I
 - `docs/SPEC.md` ist die Vorgabe. Bei Widerspruch zwischen Code und SPEC gilt die SPEC.
 - `docs/EINGABEN.md` enthält persönliche Werte. Lesen ja, committen nie.
 - `docs/PROGRESS.md` hält den Stand fest: erledigt, offen, nächster Schritt, Annahmen.
+- `docs/UEBERGABE.md` erklärt, wie man weiterarbeitet: Abläufe (Testbuild, PR, Merge), Philippes Vorlieben, lokale Voraussetzungen, Stolpersteine. Wer ohne Chat-Verlauf einsteigt, liest das zuerst.
+- Das Repository ist öffentlich.
 
 ## Regeln
 1. Nach jeder Änderung bauen, vor jedem Commit die Tests laufen lassen.
 2. Nie Schlüssel, .p8-Dateien oder `docs/EINGABEN.md` committen. Vor jedem Commit `git status` prüfen.
 3. Keine Drittpakete in der App. fastlane ist nur Werkzeug.
 4. Nie einen Test löschen, überspringen oder abschwächen, damit er grün wird.
-5. Nichts zur Prüfung einreichen, nichts veröffentlichen.
+5. Nichts zur Prüfung einreichen, nichts veröffentlichen. Testbuilds nach TestFlight nur auf Philippes Auftrag; «in beide Gruppen» schliesst die Beta-Prüfung für die externe Testgruppe ein (das ist nicht die Prüfung für den App Store).
 6. Layout nur über Size Classes und verfügbare Fläche, nie über Gerätetyp oder feste Bildschirmmasse.
 7. Texte immer in Deutsch und Englisch im String Catalog, Deutsch in Schweizer Schreibweise (ss statt ß).
 8. Nichts als erledigt melden, was nicht in einem frischen Lauf gesehen wurde.
 9. Bedienung von Hand prüfen, bevor sie als erledigt gilt: im Simulator wirklich halten, ziehen, wischen und antippen (auch ungenau, wie ein Mensch), auf iPhone und iPad 11 Zoll. UI-Tests müssen die Geste selbst ausführen (z. B. `press(forDuration:thenDragTo:)`), nicht nur einen Ersatzknopf drücken.
+10. Antworten, Commits, PRs und Doku auf Deutsch in Schweizer Schreibweise. Stehen Varianten zur Wahl, als Klickfrage mit wenigen Antworten stellen, die empfohlene zuerst. Mehrdeutige Aufträge mit Aussenwirkung (hochladen, einreichen, mergen) klären statt raten.
+11. Gearbeitet wird auf `dev`, `main` bekommt Änderungen nur über Pull Requests. Die Version bleibt 1.0 bis zum Livegang: keine Versionsnummern in Branch-, Tag- oder PR-Namen.
+12. Zu Beginn jeder Sitzung `git fetch` (Cloud-Sitzungen pushen Commits und `claude/...`-Branches). Sauberer Baum und nur im Rückstand: `git pull --ff-only`. Sonst melden und fragen, nicht selbst mergen.
+13. Commits und PRs ohne KI-Hinweise (kein «Co-Authored-By», kein «Generated with»), mit Philippes GitHub-noreply-Adresse (steht in `git log`). Nach einem Upload `Config/Version.xcconfig` als eigener, letzter Commit `update build number`, dann pushen.
+14. Wissen gehört ins Repository, nicht nur in den Chat: nach jedem Arbeitsblock `docs/PROGRESS.md` nachführen; geänderte Abläufe, neue Vorlieben und Stolpersteine in `docs/UEBERGABE.md`. Skripte, die man wieder braucht, nach `Tools/` (der Ordner `build/` ist ignoriert).
+15. Klang lässt sich im Simulator nicht prüfen: Hörproben rendern (`Tools/hoerprobe.sh`), Philippe schicken und wählen lassen.
 
 ## Subagenten
 - `swift-helfer` (Sonnet): klar abgegrenzte Umsetzungsaufgaben nach Vorgabe.
@@ -36,9 +44,15 @@ Im Kettentest (10.11.2026) geprüft. Simulatoren über die UDID ansprechen, die 
 - Archiv und Upload (fastlane): `fastlane ios beta` (setzt die Build-Nummer in `Config/Version.xcconfig`, Archiv und .ipa unter `build/`, wartet auf die Verarbeitung). Nur Archiv: `fastlane ios archive`. Zertifikat und Profile neu: `fastlane ios signing`
 - Store-Texte und Screenshots (fastlane): `fastlane ios metadata` bzw. `fastlane ios metadata screenshots:true`; Rücklesen: `ruby Tools/readback.rb`
 - API lesen/schreiben ohne fastlane: `ruby Tools/asc.rb GET /v1/...`
+- Prüflauf in einem Befehl: `Tools/pruefen.sh` (schnell: Unit-Tests iPhone und iPad 11 Zoll, Watch-Build), `Tools/pruefen.sh voll` (alle Geräte mit UI-Tests, rund 1.5 Stunden), einzelne Schritte z. B. `Tools/pruefen.sh ui:iphone ui:ipad11`. Logs unter `build/logs/pruefen-*.log`.
+- Nach dem Upload (Testtexte, Gruppe «Jodit», Beta-Prüfung): `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 ruby Tools/after_upload.rb --dry`, dann ohne `--dry`.
+- Hörproben der Ton-Sets: `Tools/hoerprobe.sh` (Varianten des Halls: `HALL="0.5 1.5" Tools/hoerprobe.sh`), Ergebnis unter `build/hoerprobe/`.
+- Pull Request und Merge: `gh pr create --base main --head dev`, dann `gh pr merge <Nummer> --merge --auto` (wartet auf die CI, mit Merge-Commit, nie Squash). Nur auf Philippes Auftrag.
 
 Hinweise:
 - Release wird manuell signiert (Apple Distribution, Profile «ch.fitmitjodit.timer AppStore» und «…watchkitapp AppStore», erzeugt per API-Schlüssel). `xcodebuild -authenticationKey…` scheitert mit «Authentication failed», darum dieser Weg.
 - fastlane braucht `LANG=en_US.UTF-8` (steht in `fastlane/.env`, die Datei ist lokal und nicht im Repository).
 - iCloud/CloudKit ist über `Config/Base.xcconfig` schaltbar (siehe Kommentar dort).
 - Meldet ein Testlauf «test runner hung before establishing connection» oder «failed to launch», ohne dass ein Test fehlschlägt: Der Kurzbefehl-Dienst des Simulators hat die App selbst gestartet und ist `xcodebuild` zuvorgekommen. App beenden (`xcrun simctl terminate <UDID> ch.fitmitjodit.timer`) und die Unit-Tests mit dem Schema `FitMitJoditUnit` wiederholen. Der Lauf zählt erst, wenn die Unit-Tests wirklich gelaufen sind.
+- Die UDIDs oben gelten für Philippes Mac. Auf einem anderen Mac mit `xcrun simctl list devices` nachsehen und hier sowie in `Tools/pruefen.sh` anpassen.
+- `main` ist geschützt: Der CI-Check `build-and-test` muss grün sein. Die CI läuft nur bei Pull Requests und baut mit Xcode 26.6.
