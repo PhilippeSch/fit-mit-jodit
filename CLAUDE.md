@@ -24,7 +24,8 @@ iOS-App für iPad, iPhone und iPhone Duo mit Begleit-App für die Apple Watch: I
 12. Zu Beginn jeder Sitzung `git fetch` (Cloud-Sitzungen pushen Commits und `claude/...`-Branches). Sauberer Baum und nur im Rückstand: `git pull --ff-only`. Sonst melden und fragen, nicht selbst mergen.
 13. Commits und PRs ohne KI-Hinweise (kein «Co-Authored-By», kein «Generated with»), mit Philippes GitHub-noreply-Adresse (steht in `git log`). Nach einem Upload `Config/Version.xcconfig` als eigener, letzter Commit `update build number`, dann pushen.
 14. Wissen gehört ins Repository, nicht nur in den Chat: nach jedem Arbeitsblock `docs/PROGRESS.md` nachführen; geänderte Abläufe, neue Vorlieben und Stolpersteine in `docs/UEBERGABE.md`. Skripte, die man wieder braucht, nach `Tools/` (der Ordner `build/` ist ignoriert).
-15. Klang lässt sich im Simulator nicht prüfen: Hörproben rendern (`Tools/hoerprobe.sh`), Philippe schicken und wählen lassen.
+15. Standard am Ende eines Arbeitsblocks, ohne Rückfrage (Philippe, 12.11.2026): Ist die Arbeit auf `dev` gepusht und lokal geprüft, einen PR nach `main` öffnen und Auto-Merge einschalten. GitHub mergt, sobald die CI grün ist. Nie an der Regel vorbei mergen (`--admin`); schlägt die CI fehl, beheben oder melden.
+16. Klang lässt sich im Simulator nicht prüfen: Hörproben rendern (`Tools/hoerprobe.sh`), Philippe schicken und wählen lassen.
 
 ## Subagenten
 - `swift-helfer` (Sonnet): klar abgegrenzte Umsetzungsaufgaben nach Vorgabe.
@@ -47,7 +48,7 @@ Im Kettentest (10.11.2026) geprüft. Simulatoren über die UDID ansprechen, die 
 - Prüflauf in einem Befehl: `Tools/pruefen.sh` (schnell: Unit-Tests iPhone und iPad 11 Zoll, Watch-Build), `Tools/pruefen.sh voll` (alle Geräte mit UI-Tests, rund 1.5 Stunden), einzelne Schritte z. B. `Tools/pruefen.sh ui:iphone ui:ipad11`. Logs unter `build/logs/pruefen-*.log`.
 - Nach dem Upload (Testtexte, Gruppe «Jodit», Beta-Prüfung): `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 ruby Tools/after_upload.rb --dry`, dann ohne `--dry`.
 - Hörproben der Ton-Sets: `Tools/hoerprobe.sh` (Varianten des Halls: `HALL="0.5 1.5" Tools/hoerprobe.sh`), Ergebnis unter `build/hoerprobe/`.
-- Pull Request und Merge: `gh pr create --base main --head dev`, dann `gh pr merge <Nummer> --merge --auto` (wartet auf die CI, mit Merge-Commit, nie Squash). Nur auf Philippes Auftrag.
+- Pull Request und Merge: `gh pr create --base main --head dev`, dann `gh pr merge <Nummer> --merge --auto` (wartet auf die CI, mit Merge-Commit, nie Squash).
 
 Hinweise:
 - Release wird manuell signiert (Apple Distribution, Profile «ch.fitmitjodit.timer AppStore» und «…watchkitapp AppStore», erzeugt per API-Schlüssel). `xcodebuild -authenticationKey…` scheitert mit «Authentication failed», darum dieser Weg.

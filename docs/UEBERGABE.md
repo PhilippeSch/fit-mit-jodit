@@ -59,7 +59,7 @@ Diese Punkte stammen aus seinen Rückmeldungen. Sie stehen als Regeln auch in `C
    ```
    Setzt die Testtexte in beiden Sprachen, weist den Build der externen Gruppe «Jodit» zu und reicht ihn zur Beta-Prüfung ein. Danach den Stand zurücklesen (das Skript noch einmal mit `--dry`).
 8. **Build-Nummer committen:** `Config/Version.xcconfig` als eigener, letzter Commit mit dem Text `update build number`, dann pushen.
-9. **PR von `dev` nach `main`,** wenn Philippe es verlangt (Abschnitt 5).
+9. **PR von `dev` nach `main` mit Auto-Merge,** standardmässig und ohne Rückfrage (Abschnitt 5).
 
 ## 5. Git und GitHub
 
@@ -74,7 +74,7 @@ Diese Punkte stammen aus seinen Rückmeldungen. Sie stehen als Regeln auch in `C
   ```
   gh pr merge <Nummer> --merge --auto
   ```
-  Nur mergen, wenn Philippe es verlangt. `gh pr merge --admin` umgeht die Regel und ist für Notfälle, nur auf seinen ausdrücklichen Wunsch.
+  Das ist der Standard, ohne Rückfrage (Philippe am 12.11.2026: «standardmässig immer auto mergen, wenn alles grün, ohne Rückfrage»): Nach einem fertigen, gepushten Arbeitsblock PR öffnen und Auto-Merge einschalten. Gemergt wird nur bei grüner CI. `gh pr merge --admin` umgeht die Regel und ist für Notfälle, nur auf seinen ausdrücklichen Wunsch.
 - **Stand der Einrichtung:** Regel und Auto-Merge sind am 12.11.2026 eingerichtet und zurückgelesen. Die PRs 1 bis 5 wurden noch ohne diese Regel gemergt. PR 6 war der erste mit Regel und Auto-Merge: Solange der Check lief, war der PR gesperrt (`gh pr view <Nummer> --json mergeStateStatus` zeigt dann `BLOCKED`).
 
 ## 6. TestFlight und App Store Connect
