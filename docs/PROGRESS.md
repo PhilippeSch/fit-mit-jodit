@@ -14,7 +14,7 @@ Wer neu einsteigt: zuerst `docs/UEBERGABE.md`. Dieser Abschnitt wird nach jedem 
 - Gerätetests durch Philippe und Jodit: Ducking, Hintergrund, Live Activity, Watch, Weiterleitung zum iPad, Spotify, Sync, AirDrop, Duo auf/zu, dazu die Punkte unter «Neu (12.11.2026)» in der Checkliste (Verschieben im Baukasten, Dunkelmodus, Fernbedienung beim ersten Start, Glocke).
 - Glocke: Philippes Urteil auf dem Gerät. Er nannte die gewählte Fassung «gut für den Anfang», weiteres Feilen ist möglich (`docs/UEBERGABE.md`, Abschnitt 9).
 - iOS 17: Ersatzweg für das Verschieben (`LegacyHoldToDrag`) ungeprüft, keine iOS-17-Laufzeit installiert.
-- Die Regel für `main` und Auto-Merge sind eingerichtet, aber noch an keinem PR erprobt.
+- PR 6 (die Übergabe-Doku) ist der erste unter der Regel für `main`. Auto-Merge ist eingeschaltet, und der PR war gesperrt, solange die CI lief (gesehen: `mergeStateStatus: BLOCKED`). Den Merge erledigt GitHub nach grüner CI von selbst. Ist PR 6 beim nächsten Einstieg noch offen, die CI ansehen.
 
 **Nächster Schritt:** Rückmeldungen abwarten und umsetzen.
 

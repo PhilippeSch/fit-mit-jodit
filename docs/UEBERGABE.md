@@ -75,7 +75,7 @@ Diese Punkte stammen aus seinen Rückmeldungen. Sie stehen als Regeln auch in `C
   gh pr merge <Nummer> --merge --auto
   ```
   Nur mergen, wenn Philippe es verlangt. `gh pr merge --admin` umgeht die Regel und ist für Notfälle, nur auf seinen ausdrücklichen Wunsch.
-- **Stand der Einrichtung:** Regel und Auto-Merge sind am 12.11.2026 eingerichtet und zurückgelesen. Die PRs 1 bis 5 wurden noch ohne diese Regel gemergt.
+- **Stand der Einrichtung:** Regel und Auto-Merge sind am 12.11.2026 eingerichtet und zurückgelesen. Die PRs 1 bis 5 wurden noch ohne diese Regel gemergt. PR 6 war der erste mit Regel und Auto-Merge: Solange der Check lief, war der PR gesperrt (`gh pr view <Nummer> --json mergeStateStatus` zeigt dann `BLOCKED`).
 
 ## 6. TestFlight und App Store Connect
 
