@@ -67,7 +67,9 @@ struct PaletteTile: View {
         VStack(spacing: 2) {
             Image(systemName: item.kind.symbolName).font(.footnote)
             Text(DurationFormat.short(item.seconds)).font(.headline.monospacedDigit())
-            Text(item.kind.label).font(.caption2).lineLimit(2).multilineTextAlignment(.center)
+            // `.caption` statt `.caption2`: caption2 wird bei kleineren Textgrössen nicht mehr kleiner, das meldet
+            // der Bedienungshilfen-Audit als «Dynamic Type teilweise nicht unterstützt».
+            Text(item.kind.label).font(.caption).lineLimit(2).multilineTextAlignment(.center)
         }
         .foregroundStyle(.white)
         .padding(6)
@@ -181,9 +183,11 @@ struct DurationSheet: View {
             }
             .pickerStyle(.wheel)
             .accessibilityIdentifier("durationWheel")
-            Button(String(localized: "Übernehmen")) { onDone(seconds) }
-                .buttonStyle(.borderedProminent)
-                .accessibilityIdentifier("applyDuration")
+            Button { onDone(seconds) } label: {
+                Text("Übernehmen").foregroundStyle(Theme.onBrand)
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("applyDuration")
         }
         .padding()
         .navigationTitle(Text("Dauer"))

@@ -54,6 +54,7 @@ struct WelcomeView: View {
                         Button(action: onDone) {
                             Text("Los geht's")
                                 .font(.title3.bold())
+                                .foregroundStyle(Theme.onBrand)
                                 .frame(maxWidth: .infinity, minHeight: 50)
                         }
                         .buttonStyle(.borderedProminent)
@@ -75,7 +76,8 @@ struct WelcomeView: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: icon)
                 .font(.title3)
-                .foregroundStyle(.white)
+                // Auf der Markenfarbe (im dunklen Modus hell) braucht das Symbol die passende Gegenfarbe.
+                .foregroundStyle(color == Theme.brand ? Theme.onBrand : .white)
                 .frame(width: 40, height: 40)
                 .background(color, in: RoundedRectangle(cornerRadius: 10))
                 .accessibilityHidden(true)
@@ -107,6 +109,7 @@ struct JoditPromoCard: View {
                 Link(destination: JoditBrand.website) {
                     Label(String(localized: "Zu fitmitjodit.ch"), systemImage: "arrow.up.right.square")
                         .font(.headline)
+                        .foregroundStyle(Theme.onBrand)
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
@@ -117,7 +120,9 @@ struct JoditPromoCard: View {
         }
         .background(.background, in: RoundedRectangle(cornerRadius: 18))
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .foregroundStyle(.primary)
+        // `Color.primary` statt `.primary`: Die Kurzform bezieht sich auf die geerbte Vordergrundfarbe, und die ist auf
+        // dem Abschlussbild weiss. Der Text der Karte war dort weiss auf weiss.
+        .foregroundStyle(Color.primary)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("promoCard")
     }

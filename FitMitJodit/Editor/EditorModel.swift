@@ -271,23 +271,92 @@ final class EditorModel {
         moveItem(id, to: t)
     }
 
-    /// Verschiebt einen Block um eine Position nach links (-1) oder rechts (+1), auch innerhalb einer Runde.
-    /// Für Bedienung ohne Ziehen (VoiceOver-Aktionen, Kontextmenü).
+    /// Verschiebt einen Block um eine Stelle nach links (-1) oder rechts (+1), so wie man die Zeitleiste liest:
+    /// Steht daneben eine Runde, wandert der Block hinein; am Rand einer Runde wandert er wieder hinaus.
+    /// Damit ist jede Stelle auch ohne Ziehen erreichbar (Auswahl-Leiste, VoiceOver-Aktionen).
     func moveBlock(_ id: UUID, by delta: Int) {
-        guard let loc = location(of: id) else { return }
+        guard delta == 1 || delta == -1, let loc = location(of: id) else { return }
         if let inner = loc.inner {
-            mutate { w in
-                guard case .round(var r) = w.items[loc.item] else { return }
-                let t = inner + delta
-                guard r.blocks.indices.contains(t) else { return }
-                r.blocks.swapAt(inner, t)
-                w.items[loc.item] = .round(r)
+            guard case .round(let r) = workout.items[loc.item] else { return }
+            if r.blocks.indices.contains(inner + delta) {
+                move(id, to: DropSlot(item: loc.item, inner: delta > 0 ? inner + 2 : inner - 1))
+            } else {
+                // Am Rand der Runde: hinaus, direkt davor bzw. dahinter.
+                move(id, to: DropSlot(item: delta > 0 ? loc.item + 1 : loc.item))
             }
         } else {
             let t = loc.item + delta
             guard workout.items.indices.contains(t) else { return }
-            moveItem(id, to: t)
+            if case .round(let r) = workout.items[t] {
+                // In die Nachbarrunde hinein: von links kommend an den Anfang, von rechts kommend ans Ende.
+                move(id, to: DropSlot(item: t, inner: delta > 0 ? 0 : r.blocks.count))
+            } else {
+                move(id, to: DropSlot(item: delta > 0 ? loc.item + 2 : loc.item - 1))
+            }
         }
+    }
+
+    // MARK: Ziehen und Ablegen
+
+    /// Legt einen Block oder eine ganze Runde an der Einfügestelle `slot` ab. Die Stelle bezieht sich auf die
+    /// Anordnung vor dem Verschieben, so wie sie auf dem Bildschirm steht. Gibt zurück, ob sich etwas änderte.
+    @discardableResult
+    func move(_ id: UUID, to slot: DropSlot) -> Bool {
+        let before = workout
+        mutate { w in w = Self.moved(w, id: id, to: slot) }
+        return workout != before
+    }
+
+    /// Ob das Ablegen an dieser Stelle etwas ändern würde (sonst braucht es keinen Einfügebalken).
+    func wouldMove(_ id: UUID, to slot: DropSlot) -> Bool {
+        Self.moved(workout, id: id, to: slot) != workout
+    }
+
+    /// Reine Umformung: das Training nach dem Verschieben. Unveränderte Rückgabe, wenn die Stelle nicht passt.
+    static func moved(_ original: Workout, id: UUID, to slot: DropSlot) -> Workout {
+        var w = original
+        var target = slot
+        // Ganze Runde: nur auf der obersten Ebene, Runden lassen sich nicht verschachteln.
+        if let from = w.items.firstIndex(where: { $0.id == id }), case .round = w.items[from] {
+            guard target.inner == nil else { return original }
+            let item = w.items.remove(at: from)
+            if target.item > from { target.item -= 1 }
+            w.items.insert(item, at: min(max(target.item, 0), w.items.count))
+            return w
+        }
+        // Block entfernen; die Einfügestelle an die neue Zählung anpassen.
+        var block: Block?
+        for i in w.items.indices {
+            switch w.items[i] {
+            case .block(let b) where b.id == id:
+                block = b
+                w.items.remove(at: i)
+                if target.item > i { target.item -= 1 }
+            case .round(var r):
+                guard let j = r.blocks.firstIndex(where: { $0.id == id }) else { continue }
+                block = r.blocks.remove(at: j)
+                if r.blocks.isEmpty {
+                    // Einziger Block der Runde: Die Runde verschwindet. In sich selbst ablegen ändert nichts.
+                    if target.item == i, target.inner != nil { return original }
+                    w.items.remove(at: i)
+                    if target.item > i { target.item -= 1 }
+                } else {
+                    w.items[i] = .round(r)
+                    if target.item == i, let inner = target.inner, inner > j { target.inner = inner - 1 }
+                }
+            default: continue
+            }
+            break
+        }
+        guard let b = block else { return original }
+        if let inner = target.inner {
+            guard w.items.indices.contains(target.item), case .round(var r) = w.items[target.item] else { return original }
+            r.blocks.insert(b, at: min(max(inner, 0), r.blocks.count))
+            w.items[target.item] = .round(r)
+        } else {
+            w.items.insert(.block(b), at: min(max(target.item, 0), w.items.count))
+        }
+        return w
     }
 
     /// Verschiebt einen Block (oder eine ganze Runde) vor den Block bzw. Eintrag `targetID` (Ziehen und Ablegen).

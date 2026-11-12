@@ -1,7 +1,24 @@
 import SwiftUI
 
 /// Wurzel: Bibliothek links (oder als Liste), Training rechts. Passt sich über Size Classes an.
+/// Was die Wurzel im Vollbild zeigt. Eine einzige Darstellung für beides, damit sich Willkommen und Laufansicht
+/// nicht gegenseitig schliessen können; ein laufendes Training hat Vorrang.
+private enum RootCover: Identifiable {
+    case welcome
+    case run(RunSession)
+
+    var id: String {
+        switch self {
+        case .welcome: return "welcome"
+        case .run(let s): return "run-\(s.id)"
+        }
+    }
+}
+
 struct RootView: View {
+    /// Willkommensbildschirm beim ersten Start (gesteuert von der App).
+    @Binding var showWelcome: Bool
+    var onWelcomeDone: () -> Void = {}
     @Environment(AppModel.self) private var app
     @State private var selection: UUID?
     @State private var columnVisibility = NavigationSplitViewVisibility.all
@@ -26,17 +43,23 @@ struct RootView: View {
             // Auf breiter Fläche gleich ein Training zeigen, damit der Baukasten sichtbar ist.
             if hSize == .regular, selection == nil { selection = app.store.sorted.first?.id }
         }
-        .fullScreenCover(item: Binding(get: { app.session }, set: { if $0 == nil { app.stop() } })) { session in
-            WidthSimulator { RunView(session: session) }
+        .fullScreenCover(item: Binding<RootCover?>(
+            get: {
+                if let s = app.session { return .run(s) }
+                return showWelcome ? .welcome : nil
+            },
+            set: { new in
+                // Vom System geschlossen: die Laufansicht beendet dabei das Training (wie bisher).
+                // Der Willkommensbildschirm bleibt, bis «Los geht's» getippt wird.
+                if new == nil, app.session != nil { app.stop() }
+            })) { cover in
+            switch cover {
+            case .run(let session): WidthSimulator { RunView(session: session) }
+            case .welcome: WelcomeView(onDone: onWelcomeDone)
+            }
         }
         .onChange(of: app.store.workouts) { PhoneConnectivity.shared.pushWorkouts() }
-        .alert(String(localized: "Fernbedienung erlauben?"),
-               isPresented: Binding(get: { RemoteLink.shared.pendingInvitation != nil }, set: { if !$0 { RemoteLink.shared.answerInvitation(false) } })) {
-            Button(String(localized: "Erlauben")) { RemoteLink.shared.answerInvitation(true) }
-            Button(String(localized: "Ablehnen"), role: .cancel) { RemoteLink.shared.answerInvitation(false) }
-        } message: {
-            Text("«\(RemoteLink.shared.pendingInvitation ?? "")» möchte Trainings auf diesem Gerät steuern (für die Apple Watch). Nur im lokalen Netz, keine Daten verlassen die Geräte.")
-        }
+        // Die Rückfrage «Fernbedienung erlauben?» zeigt `RemoteLink` über der obersten Ansicht (siehe `TopAlert`).
     }
 }
 

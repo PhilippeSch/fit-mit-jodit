@@ -19,6 +19,18 @@ final class RemoteLink: NSObject {
     var pendingInvitation: String?
     @ObservationIgnored private var pendingHandler: ((Bool, MCSession?) -> Void)?
     var onSnapshotChange: ((RemoteSnapshot?) -> Void)?
+    /// Stellt die Rückfrage dar: in der App über der obersten sichtbaren Ansicht (siehe `TopAlert`), in Tests ersetzbar.
+    @ObservationIgnored var presentInvitation: (String) -> Void = { RemoteLink.showInvitationPrompt($0) }
+
+    static func showInvitationPrompt(_ name: String) {
+        TopAlert.present(
+            title: String(localized: "Fernbedienung erlauben?"),
+            message: String(localized: "«\(name)» möchte Trainings auf diesem Gerät steuern (für die Apple Watch). Nur im lokalen Netz, keine Daten verlassen die Geräte."),
+            actions: [
+                .init(title: String(localized: "Ablehnen"), style: .cancel) { RemoteLink.shared.answerInvitation(false) },
+                .init(title: String(localized: "Erlauben")) { RemoteLink.shared.answerInvitation(true) },
+            ])
+    }
 
     @ObservationIgnored private let peerID: MCPeerID
     @ObservationIgnored private var session: MCSession!
@@ -168,6 +180,7 @@ extension RemoteLink: MCNearbyServiceAdvertiserDelegate {
             } else {
                 self.pendingHandler = invitationHandler
                 self.pendingInvitation = name
+                self.presentInvitation(name)
             }
         }
     }

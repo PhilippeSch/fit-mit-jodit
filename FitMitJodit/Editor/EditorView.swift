@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Baukasten: Namensfeld, Zeitleiste, Palette. Auf breiter Fläche Zeitleiste und Palette nebeneinander.
 struct EditorView: View {
@@ -7,8 +8,15 @@ struct EditorView: View {
     @State private var model: EditorModel
     @State private var sheet: EditorSheet?
     @State private var placedCount = 0
+    @State private var drag = EditorDrag()
+    /// Hinweis zum Verschieben, bis einmal ein Block gezogen wurde. Er verschwindet erst beim nächsten Öffnen
+    /// des Baukastens, damit die Zeitleiste direkt nach dem ersten Ziehen nicht springt.
+    @AppStorage("fmj.hint.dragMoved") private var dragHintDone = false
+    @State private var showDragHint = false
     @State private var nameDraft = ""
     @FocusState private var nameFocused: Bool
+    /// Breite der schmalen Bausteinspalte (eine Kachel breit), wächst mit der Schriftgrösse.
+    @ScaledMetric(relativeTo: .caption) private var slimPaletteWidth: CGFloat = 124
 
     init(workout: Workout) {
         _model = State(initialValue: EditorModel(workout: workout))
@@ -16,7 +24,11 @@ struct EditorView: View {
 
     var body: some View {
         GeometryReader { geo in
-            let sideBySide = hSize == .regular && geo.size.width >= 640
+            // Bausteine rechts neben der Zeitleiste, sobald die Fläche es erlaubt: nah an der Stelle, wo gebaut wird.
+            // Ab 640 pt eine breite Spalte, ab 460 pt (z. B. iPad 11 Zoll hochkant neben der Trainingsliste)
+            // eine schmale Spalte mit einer Kachel pro Zeile. Darunter liegen die Bausteine unten.
+            let sideBySide = hSize == .regular && geo.size.width >= 460
+            let paletteWidth = geo.size.width >= 640 ? min(300, geo.size.width * 0.32) : slimPaletteWidth
             Group {
                 if let fold = geo.fold, fold.isVertical {
                     // iPhone Duo aufgeklappt: Zeitleiste links, Palette rechts, der Falz liegt zwischen beiden.
@@ -31,7 +43,7 @@ struct EditorView: View {
                         timelineColumn
                         Divider()
                         PaletteView(model: model, axis: .vertical, sheet: $sheet, placedCount: $placedCount)
-                            .frame(width: min(300, geo.size.width * 0.32))
+                            .frame(width: paletteWidth)
                     }
                 } else {
                     VStack(spacing: 0) {
@@ -42,10 +54,14 @@ struct EditorView: View {
                 }
             }
         }
-        .sensoryFeedback(.impact(weight: .light), trigger: placedCount)
+        // Haptik direkt über UIKit statt `sensoryFeedback`: Dessen Anbindung stürzte auf dem iPad ab,
+        // wenn sie auslöste, während die Ansicht gerade ersetzt wurde (Wechsel des Trainings).
+        .onChange(of: placedCount) { _, _ in UIImpactFeedbackGenerator(style: .light).impactOccurred() }
+        .onChange(of: drag.dropCount) { _, _ in dragHintDone = true }
         .onAppear {
             model.onChange = { old, new in app.store.applyEdit(from: old, to: new) }
             nameDraft = model.workout.name
+            showDragHint = !dragHintDone
         }
         .onDisappear(perform: commitName)
         .onChange(of: model.workout.name) { _, n in if !nameFocused { nameDraft = n } }
@@ -106,19 +122,41 @@ struct EditorView: View {
                 } label: {
                     Label(String(localized: "Starten"), systemImage: "play.fill")
                         .font(.title3.bold())
+                        .foregroundStyle(Theme.onBrand)
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(StepSequence.expand(model.workout).isEmpty)
                 .accessibilityIdentifier("start")
 
-                TimelineStrip(model: model, sheet: $sheet)
-                    .padding(.bottom, 12)
+                TimelineStrip(model: model, drag: drag, sheet: $sheet)
+                if showDragHint, model.items.count > 1 {
+                    Label(String(localized: "Block halten und ziehen, um ihn zu verschieben – auch in eine Runde hinein oder heraus."),
+                          systemImage: "hand.draw")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("dragHint")
+                }
+                Color.clear.frame(height: 12)
             }
             .padding()
+            .onGeometryChange(for: [CGRect].self) { [$0.frame(in: .scrollView), $0.frame(in: .global)] } action: {
+                drag.contentInScrollView = $0[0]
+                drag.contentGlobal = $0[1]
+            }
         }
         .scrollDismissesKeyboard(.immediately)
         .accessibilityIdentifier("editorScroll")
+        // Sichtbarer Bereich ohne Leisten (Navigationsleiste oben, Auswahl-Leiste unten) für das Nachscrollen am Rand.
+        .onGeometryChange(for: CGRect.self) { g in
+            let f = g.frame(in: .global), i = g.safeAreaInsets
+            return CGRect(x: f.minX + i.leading, y: f.minY + i.top,
+                          width: f.width - i.leading - i.trailing, height: f.height - i.top - i.bottom)
+        } action: { drag.viewport = $0 }
+        .modifier(DragAutoScroll(drag: drag))
+        // Nur für die SwiftUI-Geste (iOS 17): Sie läuft gleichzeitig mit dem Scrollen, darum sperrt der Baukasten
+        // es, solange ein Block angehoben ist. Der UIKit-Erkenner ab iOS 18 nimmt dem Scrollen den Finger selbst weg.
+        .scrollDisabled(drag.isDragging && HoldToDrag.usesSwiftUIGesture)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if !model.selection.isEmpty {
                 SelectionBar(model: model, sheet: $sheet)
@@ -158,6 +196,7 @@ enum EditorSheet: Identifiable, Hashable {
 
 struct TimelineStrip: View {
     @Bindable var model: EditorModel
+    let drag: EditorDrag
     @Binding var sheet: EditorSheet?
 
     var body: some View {
@@ -175,14 +214,17 @@ struct TimelineStrip: View {
                 ForEach(model.items) { item in
                     switch item {
                     case .block(let b):
-                        BlockTile(block: b, model: model)
+                        BlockTile(block: b, model: model, drag: drag)
                             .transition(.scale(scale: 0.4).combined(with: .opacity))
                     case .round(let r):
-                        RoundView(round: r, model: model, sheet: $sheet)
+                        RoundView(round: r, model: model, drag: drag, sheet: $sheet)
                             .transition(.scale(scale: 0.8).combined(with: .opacity))
                     }
                 }
             }
+            .coordinateSpace(.named(EditorDrag.space))
+            .onGeometryChange(for: CGPoint.self) { $0.frame(in: .global).origin } action: { drag.setStripOrigin($0) }
+            .overlay(alignment: .topLeading) { DropIndicator(drag: drag) }
             .animation(.spring(response: 0.35, dampingFraction: 0.75), value: model.items)
         }
     }
@@ -191,6 +233,7 @@ struct TimelineStrip: View {
 struct BlockTile: View {
     let block: Block
     @Bindable var model: EditorModel
+    let drag: EditorDrag
 
     static func width(for seconds: Int) -> CGFloat {
         // Breite entspricht der Dauer: 5 s = 56 pt, 1 min = 132 pt, 10 min = 260 pt (gedeckelt).
@@ -199,56 +242,66 @@ struct BlockTile: View {
 
     var body: some View {
         let selected = model.selection.contains(block.id)
-        Button {
-            model.toggleSelection(block.id)
-        } label: {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(DurationFormat.short(block.seconds))
-                    .font(.headline.monospacedDigit())
-                Text(block.displayName)
-                    .font(.caption)
-                    .lineLimit(2)
-            }
-            .foregroundStyle(.white)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .frame(minWidth: Self.width(for: block.seconds), minHeight: 56, alignment: .leading)
-            .fixedSize()
-            .background(Theme.color(for: block.kind), in: RoundedRectangle(cornerRadius: 10))
-            .overlay {
+        let lifted = drag.isLifted(block.id)
+        VStack(alignment: .leading, spacing: 2) {
+            Text(DurationFormat.short(block.seconds))
+                .font(.headline.monospacedDigit())
+            Text(block.displayName)
+                .font(.caption)
+                .lineLimit(2)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .frame(minWidth: Self.width(for: block.seconds), minHeight: 56, alignment: .leading)
+        .fixedSize()
+        .background(Theme.color(for: block.kind), in: RoundedRectangle(cornerRadius: 10))
+        .overlay {
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(selected ? Color.primary : .clear, lineWidth: 3)
+                .padding(-3)
+        }
+        .contentShape(RoundedRectangle(cornerRadius: 10))
+        .scaleEffect(lifted ? 1.1 : (selected ? 1.04 : 1))
+        .shadow(color: .black.opacity(lifted ? 0.4 : 0), radius: lifted ? 10 : 0, y: lifted ? 6 : 0)
+        // Leicht durchscheinend, damit Einfügebalken und Ziel unter der angehobenen Kachel sichtbar bleiben.
+        .opacity(lifted ? 0.9 : 1)
+        // Antippen markiert, Halten hebt an, Ziehen verschiebt.
+        .onTapGesture { model.toggleSelection(block.id) }
+        .holdToDrag(.block(block.id), drag: drag, model: model) { model.toggleSelection(block.id) }
+        .offset(lifted ? drag.offset : .zero)
+        // Der alte Platz bleibt als gestrichelter Umriss sichtbar.
+        .background {
+            if lifted {
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(selected ? Color.primary : .clear, lineWidth: 3)
-                    .padding(-3)
+                    .strokeBorder(.secondary, style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
             }
-            .scaleEffect(selected ? 1.04 : 1)
         }
-        .buttonStyle(.plain)
-        .draggable(block.id.uuidString)
-        .dropDestination(for: String.self) { ids, _ in
-            guard let s = ids.first, let id = UUID(uuidString: s) else { return false }
-            return model.moveBlock(id, before: block.id)
-        }
+        .reportFrame(block.id, to: drag)
+        .zIndex(lifted ? 10 : 0)
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(block.kind.label), \(DurationFormat.short(block.seconds))\(block.hasName ? ", " + (block.exerciseName ?? "") : "")"))
-        .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityAddTraits(selected ? [.isButton, .isSelected] : .isButton)
         .accessibilityHint(Text("Antippen markiert den Block."))
+        .accessibilityAction { model.toggleSelection(block.id) }
         .accessibilityAction(named: Text("Nach links verschieben")) { model.moveBlock(block.id, by: -1) }
         .accessibilityAction(named: Text("Nach rechts verschieben")) { model.moveBlock(block.id, by: 1) }
         .accessibilityIdentifier("tile-\(block.kind.rawValue)-\(block.seconds)")
-        .contextMenu {
-            Button { model.moveBlock(block.id, by: -1) } label: { Label("Nach links", systemImage: "arrow.left") }
-                .accessibilityIdentifier("moveLeft")
-            Button { model.moveBlock(block.id, by: 1) } label: { Label("Nach rechts", systemImage: "arrow.right") }
-                .accessibilityIdentifier("moveRight")
-        }
     }
 }
 
 struct RoundView: View {
     let round: Round
     @Bindable var model: EditorModel
+    let drag: EditorDrag
     @Binding var sheet: EditorSheet?
 
     var body: some View {
+        let lifted = drag.isLifted(round.id)
+        // Ein angehobener Block würde in dieser Runde landen.
+        let targeted = drag.targetChanges && drag.target?.roundID == round.id
+        // Ein Block aus dieser Runde ist angehoben: Die Runde muss über ihren Nachbarn liegen.
+        let holdsLifted = round.blocks.contains { drag.isLifted($0.id) }
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
                 Button {
@@ -284,26 +337,40 @@ struct RoundView: View {
             }
             FlowLayout(spacing: 6, lineSpacing: 8) {
                 ForEach(round.blocks) { b in
-                    BlockTile(block: b, model: model)
+                    BlockTile(block: b, model: model, drag: drag)
                 }
             }
         }
         .padding(8)
-        .overlay {
-            // Klammer um die Runde
+        .background {
+            // Die Runde lässt sich an Kopf und freier Fläche anheben. Die Geste liegt auf dem Hintergrund und nicht
+            // auf dem ganzen Behälter, damit sie nicht gleichzeitig mit der Geste einer Kachel darin auslöst.
             RoundedRectangle(cornerRadius: 14)
-                .strokeBorder(Theme.brand, style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
+                .fill(targeted ? AnyShapeStyle(Theme.brand.opacity(0.18)) : (lifted ? AnyShapeStyle(.regularMaterial) : AnyShapeStyle(.clear)))
+                .contentShape(RoundedRectangle(cornerRadius: 14))
+                .holdToDrag(.round(round.id), drag: drag, model: model)
         }
-        .draggable(round.id.uuidString)
-        .dropDestination(for: String.self) { ids, _ in
-            guard let s = ids.first, let id = UUID(uuidString: s) else { return false }
-            if let to = model.items.firstIndex(where: { $0.id == round.id }), model.location(of: id)?.inner == nil || model.items.contains(where: { $0.id == id }) {
-                let from = model.items.firstIndex(where: { $0.id == id }) ?? to
-                model.moveItem(id, to: from < to ? to - 1 : to)
-                return true
+        .overlay {
+            // Klammer um die Runde; durchgezogen, wenn ein Block hineinfallen würde.
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(Theme.brand, style: StrokeStyle(lineWidth: targeted ? 3 : 2, dash: targeted ? [] : [6, 4]))
+                .allowsHitTesting(false)
+        }
+        .scaleEffect(lifted ? 1.03 : 1)
+        .shadow(color: .black.opacity(lifted ? 0.4 : 0), radius: lifted ? 12 : 0, y: lifted ? 6 : 0)
+        .opacity(lifted ? 0.9 : 1)
+        .offset(lifted ? drag.offset : .zero)
+        .background {
+            if lifted {
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(.secondary, style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
             }
-            return false
         }
+        .reportFrame(round.id, to: drag)
+        .zIndex(lifted || holdsLifted ? 10 : 0)
+        .animation(.easeOut(duration: 0.15), value: targeted)
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("round")
     }
 }
 

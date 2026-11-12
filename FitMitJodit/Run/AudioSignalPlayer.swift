@@ -118,6 +118,7 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         guard keepAliveActive else { return }
         keepAliveActive = false
         unduckTask?.cancel()
+        isDucked = false
         silence.stop()
         player.stop()
         speech.stopSpeaking(at: .immediate)
@@ -125,8 +126,17 @@ final class AudioSignalPlayer: NSObject, SignalSink {
         session(deactivateFirst: true, duck: false, active: false)
     }
 
+    /// Musik anderer Apps ist gerade leiser gestellt.
+    private var isDucked = false
+
+    /// Musik leiser stellen und `seconds` nach dem letzten Aufruf wieder freigeben.
+    /// Die Sitzung wird nur beim Wechsel umgestellt: Bei 3-2-1 hat das früher jede Sekunde
+    /// Sitzung und Engine neu gestartet – Knacksen und Lautstärkesprünge waren die Folge.
     private func duckForAWhile(_ seconds: Double) {
-        session(deactivateFirst: false, duck: true, active: true) { [weak self] in self?.resumeAudio() }
+        if !isDucked {
+            isDucked = true
+            session(deactivateFirst: false, duck: true, active: true) { [weak self] in self?.resumeAudio() }
+        }
         unduckTask?.cancel()
         unduckTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .seconds(seconds))
@@ -136,6 +146,7 @@ final class AudioSignalPlayer: NSObject, SignalSink {
     }
 
     private func unduck() {
+        isDucked = false
         if keepAliveActive {
             // Ohne duckOthers neu aktivieren: andere Musik kehrt auf volle Lautstärke zurück.
             // setActive(false) stoppt die Engine – darum erst danach wieder starten.
@@ -173,7 +184,8 @@ final class AudioSignalPlayer: NSObject, SignalSink {
     private func playTone(_ make: @autoclosure () -> AVAudioPCMBuffer?, key: String, volume: Double) {
         let buf: AVAudioPCMBuffer
         if let b = cache[key] { buf = b } else if let b = make() { cache[key] = b; buf = b } else { return }
-        duckForAWhile(Double(buf.frameLength) / format.sampleRate + 0.4)
+        // Bis über den nächsten Countdown-Ton hinaus leise lassen (Abstand 1 s), damit 3-2-1 und Startton eine Phase bilden.
+        duckForAWhile(Double(buf.frameLength) / format.sampleRate + 1.2)
         ensureEngine() // Kategorie ist seit dem Start mischbar gesetzt
         player.volume = Float(volume)
         player.scheduleBuffer(buf, at: nil, options: .interrupts)
@@ -191,7 +203,11 @@ extension AudioSignalPlayer: AVSpeechSynthesizerDelegate {
 enum ToneSynth {
     struct Partial { var freq: Double; var amp: Double; var decay: Double }
 
-    static func render(_ partials: [Partial], duration: Double, attack: Double = 0.005, format: AVAudioFormat) -> AVAudioPCMBuffer? {
+    /// Spitzenpegel aller Töne. Früher 0.9 (fast Vollaussteuerung): Ein reiner Sinus so laut bringt kleine
+    /// Lautsprecher an die Grenze, der Begrenzer von iOS greift hart ein und es klingt verzerrt und schrill.
+    static let peakLevel = 0.6
+
+    static func render(_ partials: [Partial], duration: Double, attack: Double = 0.012, format: AVAudioFormat) -> AVAudioPCMBuffer? {
         let sr = format.sampleRate
         let n = AVAudioFrameCount(duration * sr)
         guard let buf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: n), let ch = buf.floatChannelData?[0] else { return nil }
@@ -201,21 +217,25 @@ enum ToneSynth {
             let t = Double(i) / sr
             var v = 0.0
             for p in partials { v += p.amp * sin(2 * .pi * p.freq * t) * exp(-t / p.decay) }
-            let env = min(t / attack, 1) * min((duration - t) / 0.01, 1)
-            ch[i] = Float(v / max(total, 1) * env * 0.9)
+            // Weiche Ein- und Ausblendung (Sinus-Rampen) gegen Knackser am Anfang und Ende.
+            let fadeIn = t < attack ? sin(.pi / 2 * t / attack) : 1
+            let rest = duration - t
+            let fadeOut = rest < 0.02 ? sin(.pi / 2 * max(rest, 0) / 0.02) : 1
+            ch[i] = Float(v / max(total, 1) * fadeIn * fadeOut * peakLevel)
         }
         return buf
     }
 
     static func buffer(for kind: SignalKind, set: ToneSet, format: AVAudioFormat) -> AVAudioPCMBuffer? {
         switch (set, kind) {
-        case (.beeps, .countdown): return render([Partial(freq: 880, amp: 1, decay: 10)], duration: 0.15, format: format)
-        case (.beeps, .blockStart(.rest)): return render([Partial(freq: 660, amp: 1, decay: 10)], duration: 0.5, format: format)
-        case (.beeps, .blockStart): return render([Partial(freq: 1320, amp: 1, decay: 10)], duration: 0.5, format: format)
+        // Piepser klingen ab (statt flachem Dauerton) und haben eine leise Oktave dazu: voller, weniger stechend.
+        case (.beeps, .countdown): return beep(880, duration: 0.18, decay: 0.12, format: format)
+        case (.beeps, .blockStart(.rest)): return beep(660, duration: 0.5, decay: 0.3, format: format)
+        case (.beeps, .blockStart): return beep(1046, duration: 0.5, decay: 0.3, format: format)
         case (.beeps, .finished):
-            return concat([render([Partial(freq: 1320, amp: 1, decay: 10)], duration: 0.18, format: format),
+            return concat([beep(1046, duration: 0.18, decay: 0.12, format: format),
                            render([Partial(freq: 0, amp: 0, decay: 1)], duration: 0.08, format: format),
-                           render([Partial(freq: 1760, amp: 1, decay: 10)], duration: 0.6, format: format)], format: format)
+                           beep(1318, duration: 0.6, decay: 0.35, format: format)], format: format)
         case (.boxingBell, .countdown): return bell(base: 1200, duration: 0.35, format: format)
         case (.boxingBell, .finished):
             return concat([bell(base: 900, duration: 0.5, format: format), bell(base: 900, duration: 0.5, format: format),
@@ -231,12 +251,18 @@ enum ToneSynth {
     static func halftime(set: ToneSet, format: AVAudioFormat) -> AVAudioPCMBuffer? {
         switch set {
         case .beeps:
-            return concat([render([Partial(freq: 990, amp: 1, decay: 10)], duration: 0.1, format: format),
+            return concat([beep(988, duration: 0.12, decay: 0.1, format: format),
                            render([Partial(freq: 0, amp: 0, decay: 1)], duration: 0.08, format: format),
-                           render([Partial(freq: 990, amp: 1, decay: 10)], duration: 0.1, format: format)], format: format)
+                           beep(988, duration: 0.12, decay: 0.1, format: format)], format: format)
         case .boxingBell: return bell(base: 1500, duration: 0.4, format: format)
         case .softGong: return gong(base: 392, duration: 1.0, format: format)
         }
+    }
+
+    /// Piepser: Grundton mit leiser Oktave, klingt ab.
+    static func beep(_ freq: Double, duration: Double, decay: Double, format: AVAudioFormat) -> AVAudioPCMBuffer? {
+        render([Partial(freq: freq, amp: 1, decay: decay), Partial(freq: freq * 2, amp: 0.15, decay: decay * 0.6)],
+               duration: duration, format: format)
     }
 
     /// Glocke: unharmonische Teiltöne mit raschem Abklingen.

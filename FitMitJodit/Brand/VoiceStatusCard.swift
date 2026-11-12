@@ -6,10 +6,10 @@ import SwiftUI
 struct VoiceStatusCard: View {
     @Environment(AppModel.self) private var app
     @Environment(\.scenePhase) private var scenePhase
-    /// Neu prüfen, wenn man aus den iOS-Einstellungen zurückkommt.
-    @State private var refresh = 0
 
     var body: some View {
+        // Die Liste lädt im Hintergrund (siehe `VoiceLibrary`); die Karte baut sich neu auf, sobald sie da ist.
+        let loaded = VoiceLibrary.shared.isLoaded
         let best = VoiceCatalog.voices().first
         let basic = VoiceCatalog.onlyBasicVoices
         VStack(alignment: .leading, spacing: 12) {
@@ -21,7 +21,9 @@ struct VoiceStatusCard: View {
                     .background(basic ? Theme.rest : Theme.work, in: RoundedRectangle(cornerRadius: 10))
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
-                    if basic {
+                    if !loaded {
+                        Text("Stimme wird geprüft …").font(.headline)
+                    } else if basic {
                         Text("Für natürliche Ansagen eine Premium-Stimme laden").font(.headline)
                         Text("Auf diesem Gerät ist nur die einfache Stimme installiert, sie klingt robotisch. So lädst du eine bessere (einmalig, gratis):")
                             .font(.subheadline).foregroundStyle(.secondary)
@@ -55,9 +57,9 @@ struct VoiceStatusCard: View {
         }
         .padding(16)
         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 16))
-        .id(refresh)
-        .onChange(of: scenePhase) { _, p in if p == .active { refresh += 1 } }
-        .onReceive(NotificationCenter.default.publisher(for: AVSpeechSynthesizer.availableVoicesDidChangeNotification)) { _ in refresh += 1 }
+        // Neu prüfen, wenn man aus den iOS-Einstellungen zurückkommt oder iOS neue Stimmen meldet.
+        .onChange(of: scenePhase) { _, p in if p == .active { VoiceLibrary.shared.reload() } }
+        .onReceive(NotificationCenter.default.publisher(for: AVSpeechSynthesizer.availableVoicesDidChangeNotification)) { _ in VoiceLibrary.shared.reload() }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("voiceStatusCard")
     }

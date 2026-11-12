@@ -52,6 +52,14 @@ Ausführlich in `docs/BERICHT.md`.
 6. **Live Activity**: Beim ersten Training fragt iOS evtl. nach Live Activities; erlauben.
 7. **Watch-Haptik bei gesenktem Handgelenk**: Die Uhr-App hält sich während eines Trainings mit einer erweiterten Laufzeit (Typ Physiotherapie, höchstens 1 Stunde) aktiv. Im Kurs prüfen, ob die Haptik bei jedem Blockwechsel auch mit gesenktem Arm kommt und ob nach 60 Minuten ein Hinweis erscheint.
 
+## Neu (12.11.2026)
+- **Verschieben im Baukasten:** Block kurz halten, ziehen, irgendwo in der Nähe loslassen. In eine Runde hinein (auch wenn sie nur einen Block hat), aus der Runde heraus, ganze Runde am Kopf anfassen. Spürt man die Haptik beim Anheben und Ablegen? Scrollt Wischen auf einem Block weiterhin?
+- **Langes Training auf dem iPhone:** Block an den unteren Rand ziehen und halten: läuft die Zeitleiste nach?
+- **iPad 11 Zoll hochkant:** Stehen die Bausteine rechts neben der Zeitleiste?
+- **Töne:** Klingt der Countdown 3-2-1 sauber, auch mit Spotify im Hintergrund?
+- **Fernbedienung beim ersten Start:** iPad-App frisch öffnen (Willkommensbildschirm steht) und daneben die iPhone-App öffnen: Erscheint «Fernbedienung erlauben?» über dem Willkommensbildschirm, und bleibt dieser stehen? Dasselbe einmal während eines laufenden Trainings auf dem iPad: Das Training muss weiterlaufen.
+- **Dunkelmodus:** Wirken Knöpfe und Symbole in Bibliothek und Baukasten aktiv (hell), ist «Starten» gut lesbar, und hebt sich ein deaktiviertes «mal N» klar ab?
+
 ## Neu (11.11.2026)
 - **Fortsetzen:** Training starten, App im App-Umschalter wegwischen, wieder öffnen: läuft das Training an der richtigen Stelle weiter?
 - **Sperre:** Im Kurs sperren, mit der Uhr pausieren und weiterschalten; Entsperren mit langem Drücken.

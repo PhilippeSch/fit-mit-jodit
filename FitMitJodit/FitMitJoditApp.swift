@@ -4,43 +4,28 @@ import SwiftUI
 struct FitMitJoditApp: App {
     @State private var app = AppModel.shared
     @State private var player = AudioSignalPlayer()
-    @State private var importError: String?
-    /// Training aus einem gescannten QR-Code, wartet auf Bestätigung.
-    @State private var pendingImport: Workout?
     @State private var showWelcome = false
     /// Pro Gerät einmal (nicht über iCloud, darum UserDefaults statt AppSettings).
     @AppStorage("fmj.welcomeSeen.v1") private var welcomeSeen = false
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(app)
-                .onAppear(perform: setUp)
-                .onOpenURL(perform: importFile)
-                .alert(String(localized: "Import nicht möglich"), isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
-                    Button("OK", role: .cancel) {}
-                } message: { Text(importError ?? "") }
-                .alert(String(localized: "Training übernehmen?"), isPresented: Binding(get: { pendingImport != nil }, set: { if !$0 { pendingImport = nil } }), presenting: pendingImport) { w in
-                    Button(String(localized: "Übernehmen")) { app.store.upsert(w); pendingImport = nil }
-                        .accessibilityIdentifier("confirmImport")
-                    Button(String(localized: "Abbrechen"), role: .cancel) { pendingImport = nil }
-                } message: { w in
-                    Text("«\(w.name)», \(DurationFormat.clock(w.totalSeconds))")
-                }
-                .fullScreenCover(isPresented: $showWelcome) {
-                    WelcomeView {
-                        welcomeSeen = true
-                        app.store.settings.hasSeenSplitViewHint = true
-                        showWelcome = false
-                    }
-                    .environment(app)
-                }
+            RootView(showWelcome: $showWelcome) {
+                welcomeSeen = true
+                app.store.settings.hasSeenSplitViewHint = true
+                showWelcome = false
+            }
+            .environment(app)
+            .onAppear(perform: setUp)
+            .onOpenURL(perform: importFile)
         }
     }
 
     private func setUp() {
         guard app.signalPlayer == nil else { return }
         app.signalPlayer = player
+        // Stimmenliste im Hintergrund laden (blockiert sonst beim ersten Zugriff den Haupt-Thread).
+        VoiceLibrary.shared.reload()
         app.observeSession { [player] session in
             if let s = session {
                 // Beim Abschluss Schlusston und «Geschafft» ausklingen lassen, nicht hart abwürgen.
@@ -61,16 +46,31 @@ struct FitMitJoditApp: App {
         }
         // Training fortsetzen, falls iOS die App während eines Trainings beendet hat.
         if !uiTesting || args.contains("-restoreRun") { app.restoreRunIfNeeded() }
+        // Nur für UI-Tests: die Rückfrage der Fernbedienung nachstellen (sonst braucht es ein zweites Gerät im Netz).
+        if uiTesting, args.contains("-simulateInvitation") {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { RemoteLink.showInvitationPrompt("iPhone · Test") }
+        }
         // Willkommen beim ersten Start (enthält auf dem iPad den Hinweis zu Spotify daneben).
         if (!uiTesting && !welcomeSeen) || args.contains("-showWelcome") {
             showWelcome = true
         }
     }
 
+    /// Rückfragen und Meldungen zum Import über der obersten Ansicht (siehe `TopAlert`): Sie können auch kommen,
+    /// während der Willkommensbildschirm oder ein Training im Vollbild steht.
     private func importFile(_ url: URL) {
         if ShareCode.handles(url) {
-            do { pendingImport = try ShareCode.workout(from: url) } catch {
-                importError = String(localized: "Der QR-Code enthält kein gültiges Training.")
+            do {
+                let w = try ShareCode.workout(from: url)
+                TopAlert.present(
+                    title: String(localized: "Training übernehmen?"),
+                    message: String(localized: "«\(w.name)», \(DurationFormat.clock(w.totalSeconds))"),
+                    actions: [
+                        .init(title: String(localized: "Abbrechen"), style: .cancel),
+                        .init(title: String(localized: "Übernehmen")) { [app] in app.store.upsert(w) },
+                    ])
+            } catch {
+                importFailed(String(localized: "Der QR-Code enthält kein gültiges Training."))
             }
             return
         }
@@ -78,8 +78,13 @@ struct FitMitJoditApp: App {
             let w = try WorkoutFile.importWorkout(from: url)
             app.store.upsert(w)
         } catch {
-            importError = String(localized: "Die Datei ist keine gültige Trainingsdatei von Fit mit Jodit.")
+            importFailed(String(localized: "Die Datei ist keine gültige Trainingsdatei von Fit mit Jodit."))
         }
+    }
+
+    private func importFailed(_ message: String) {
+        TopAlert.present(title: String(localized: "Import nicht möglich"), message: message,
+                         actions: [.init(title: String(localized: "OK"), style: .cancel)])
     }
 }
 

@@ -17,5 +17,9 @@ Please try everything once:
 14. History: clock icon at the top left of the workout list – finished workouts and weekly overview.
 15. Siri: "Start Tabata with Fit mit Jodit", "Pause Fit mit Jodit", "Next block in Fit mit Jodit".
 16. Resume: start a workout, swipe the app away in the app switcher, open it again – the workout continues at the right point.
+17. Tones: the 3-2-1 countdown is softer and no longer distorts. Does it sound clean on your device, also with Spotify in the background?
+18. Moving blocks (new in this build): touch and hold a block in the builder, then drag. You don't have to hit a target exactly, a bar shows where it will land. Into a round, out of a round, or grab a whole round by its header. On the 11-inch iPad the blocks palette now sits on the right.
+19. Dark mode (new in this build): buttons and icons are now light and no longer look inactive, "Start" is a light button with dark text.
+20. Remote control (new in this build): the "Allow remote control?" question on the iPad now also appears over the welcome screen and during a workout, without anything closing by itself.
 
 Feedback: take a screenshot in TestFlight › "Send Feedback", or email fitmitjodit@scheuber.me.

@@ -2407,6 +2407,26 @@
           }
         }
       }
+    },
+    "Block halten und ziehen, um ihn zu verschieben – auch in eine Runde hinein oder heraus." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold a block, then drag to move it – into a round or out of one, too."
+          }
+        }
+      }
+    },
+    "Stimme wird geprüft …" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking voice …"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
