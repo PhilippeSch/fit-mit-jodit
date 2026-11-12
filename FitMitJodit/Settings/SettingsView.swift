@@ -132,6 +132,7 @@ struct SettingsView: View {
 extension ToneSet {
     var label: String {
         switch self {
+        case .chime: return String(localized: "Glocke")
         case .beeps: return String(localized: "Sportliche Piepser")
         case .boxingBell: return String(localized: "Boxglocke")
         case .softGong: return String(localized: "Sanfter Gong")

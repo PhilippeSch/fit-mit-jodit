@@ -12,7 +12,7 @@ TestFlight auf iPad und iPhone öffnen, neuesten Build laden. Falls ein iPhone D
 5. iPhone: während des Trainings zu Spotify wechseln. Kommen die Töne weiter? Stimmt die Zeit bei der Rückkehr?
 6. Gerät sperren. Zeigt der Sperrbildschirm Countdown und Blockname?
 7. Ansagen einschalten, je einen Block mit und ohne Übungsnamen testen.
-8. Die drei Ton-Sets anhören. Laut genug über Musik?
+8. Die vier Ton-Sets anhören (neu: «Glocke»). Laut genug über Musik?
 9. Training mit Spotify-Link: Öffnet der Knopf die richtige Playlist?
 10. Ein Training am iPhone anlegen. Erscheint es auf dem iPad (gleiche Apple-ID)?
 11. Training per AirDrop an ein anderes Gerät schicken und öffnen.

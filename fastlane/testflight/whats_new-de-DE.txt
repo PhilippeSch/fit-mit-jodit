@@ -6,7 +6,7 @@ Bitte einmal alles ausprobieren:
 3. Training starten: 10 s Vorlauf (blau), dann Arbeit (grün) und Pause (orange). Einmal auf den Bildschirm tippen: Pause, Block vor/zurück, Stopp.
 4. Ansagen: «Ganzkörper 20» starten – die Stimme sagt Übung und Dauer an, «Bereit machen» und «Noch 10 Sekunden». In den Einstellungen: Ansagen Aus/Automatisch/Immer, Stimme wählen.
 5. Eigenes Training bauen: «+» oben, unten Bausteine antippen (z. B. 3× 45 s Arbeit mit 15 s Pause, 1 min Pause), Blöcke antippen zum Markieren, «mal N» für Runden. Übung wählen, Dauer ändern, duplizieren, löschen, verschieben, rückgängig.
-6. Töne: drei Ton-Sets in den Einstellungen. Mit Spotify im Hintergrund: wird die Musik bei den Tönen leiser?
+6. Töne: vier Ton-Sets in den Einstellungen. Mit Spotify im Hintergrund: wird die Musik bei den Tönen leiser?
 7. iPad: Spotify im geteilten Bildschirm daneben – bleibt der Timer lesbar?
 8. Sperrbildschirm: Während des Trainings sperren – Countdown sichtbar?
 9. Spotify-Link: im Training über «…» › Spotify-Link eine Playlist einfügen, dann «In Spotify öffnen».
@@ -18,8 +18,9 @@ Bitte einmal alles ausprobieren:
 15. Siri: «Starte Tabata mit Fit mit Jodit», «Pause in Fit mit Jodit», «Nächster Block in Fit mit Jodit».
 16. Weiterlaufen: Training starten, App im App-Umschalter wegwischen, wieder öffnen – das Training läuft an der richtigen Stelle weiter.
 17. Töne: Der Countdown 3-2-1 ist weicher und übersteuert nicht mehr. Klingt er auf deinem Gerät sauber, auch mit Spotify im Hintergrund?
-18. Verschieben (neu in diesem Build): Block im Baukasten kurz halten und ziehen. Man muss kein Ziel genau treffen, ein Balken zeigt, wo er landet. In eine Runde hinein, aus einer Runde heraus, ganze Runde am Kopf anfassen. Auf dem iPad 11 Zoll stehen die Bausteine jetzt rechts.
-19. Dunkelmodus (neu in diesem Build): Knöpfe und Symbole sind jetzt hell und wirken nicht mehr inaktiv, «Starten» ist ein heller Knopf mit dunkler Schrift.
-20. Fernbedienung (neu in diesem Build): Die Frage «Fernbedienung erlauben?» auf dem iPad erscheint jetzt auch über dem Willkommensbildschirm und während eines Trainings, ohne dass sich etwas von selbst schliesst.
+18. Verschieben (neu seit 12.11.): Block im Baukasten kurz halten und ziehen. Man muss kein Ziel genau treffen, ein Balken zeigt, wo er landet. In eine Runde hinein, aus einer Runde heraus, ganze Runde am Kopf anfassen. Auf dem iPad 11 Zoll stehen die Bausteine jetzt rechts.
+19. Dunkelmodus (neu seit 12.11.): Knöpfe und Symbole sind jetzt hell und wirken nicht mehr inaktiv, «Starten» ist ein heller Knopf mit dunkler Schrift.
+20. Fernbedienung (neu seit 12.11.): Die Frage «Fernbedienung erlauben?» auf dem iPad erscheint jetzt auch über dem Willkommensbildschirm und während eines Trainings, ohne dass sich etwas von selbst schliesst.
+21. Glocke (neu in diesem Build): neues Ton-Set «Glocke» mit vollem Klang und Hall, der Schlusston liegt höher als 3-2-1. Bei neuen Installationen ist es der Standard, sonst unter Einstellungen › Ton-Set «Glocke» wählen und «Probehören» antippen. Klingt es voll genug? Laut genug über der Musik?
 
 Rückmeldungen: in TestFlight Screenshot machen › «Feedback senden», oder an fitmitjodit@scheuber.me.

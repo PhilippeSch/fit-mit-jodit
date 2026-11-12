@@ -796,6 +796,16 @@
         }
       }
     },
+    "Glocke" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bell"
+          }
+        }
+      }
+    },
     "Group Fitness mit Jodit" : {
       "localizations" : {
         "en" : {
