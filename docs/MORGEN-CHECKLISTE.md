@@ -57,6 +57,7 @@ Ausführlich in `docs/BERICHT.md`.
 - **Langes Training auf dem iPhone:** Block an den unteren Rand ziehen und halten: läuft die Zeitleiste nach?
 - **iPad 11 Zoll hochkant:** Stehen die Bausteine rechts neben der Zeitleiste?
 - **Töne:** Klingt der Countdown 3-2-1 sauber, auch mit Spotify im Hintergrund?
+- **Glocke (neues Ton-Set, Standard):** Einstellungen › Ton-Set › «Glocke» wählen (bleibt sonst beim bisherigen Set), «Probehören», dann ein Tabata mit Spotify im Hintergrund. Klingt sie voll genug? Laut genug über der Musik? Stört es, dass die Musik rund 3 Sekunden nach dem Schlusston leise bleibt?
 - **Fernbedienung beim ersten Start:** iPad-App frisch öffnen (Willkommensbildschirm steht) und daneben die iPhone-App öffnen: Erscheint «Fernbedienung erlauben?» über dem Willkommensbildschirm, und bleibt dieser stehen? Dasselbe einmal während eines laufenden Trainings auf dem iPad: Das Training muss weiterlaufen.
 - **Dunkelmodus:** Wirken Knöpfe und Symbole in Bibliothek und Baukasten aktiv (hell), ist «Starten» gut lesbar, und hebt sich ein deaktiviertes «mal N» klar ab?
 
