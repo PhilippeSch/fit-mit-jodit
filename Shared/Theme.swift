@@ -32,8 +32,19 @@ enum Theme {
     static let prep = Color(red: 0x1D / 255, green: 0x4E / 255, blue: 0xD8 / 255)
 
     /// Markenfarbe für Bibliothek, Baukasten und Knöpfe. Abgeleitet aus fitmitjodit.ch (Text #404040,
-    /// Akzent #7A7575): warmes Dunkelgrau #5E5858 (hell) bzw. #8C8484 (dunkel: auf Schwarz 5.7:1, weisse fette Schrift darauf 3.7:1), Asset «AccentColor».
+    /// Akzent #7A7575): warmes Dunkelgrau #5E5858 im hellen Modus, warmes Fast-Weiss #EFEAEA im dunklen Modus
+    /// (Asset «AccentColor»). Im dunklen Modus bewusst hell: Ein mittleres Grau (früher #8C8484) sieht auf dunklem
+    /// Grund aus wie die Systemfarbe für Nebensächliches und Deaktiviertes, Knöpfe wirkten dadurch inaktiv.
     static let brand = Color("AccentColor")
+    /// Schrift und Symbole auf einer Fläche in der Markenfarbe (Hauptknöpfe wie «Starten»): weiss auf dem
+    /// Dunkelgrau im hellen Modus, fast schwarz auf dem hellen Knopf im dunklen Modus (Kontrast je über 6:1).
+    static var onBrand: Color {
+        #if os(iOS)
+        Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0x1C / 255, green: 0x1A / 255, blue: 0x1A / 255, alpha: 1) : .white })
+        #else
+        .white
+        #endif
+    }
     /// Dunkler Grund wie im App-Icon.
     static let ink = Color(red: 0x14 / 255, green: 0x16 / 255, blue: 0x1C / 255)
 

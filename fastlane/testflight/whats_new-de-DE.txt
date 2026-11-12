@@ -17,6 +17,9 @@ Bitte einmal alles ausprobieren:
 14. Verlauf: In der Trainingsliste oben links die Uhr – absolvierte Trainings und Wochenübersicht.
 15. Siri: «Starte Tabata mit Fit mit Jodit», «Pause in Fit mit Jodit», «Nächster Block in Fit mit Jodit».
 16. Weiterlaufen: Training starten, App im App-Umschalter wegwischen, wieder öffnen – das Training läuft an der richtigen Stelle weiter.
-17. Töne (neu in diesem Build): Der Countdown 3-2-1 ist weicher und übersteuert nicht mehr. Klingt er auf deinem Gerät sauber, auch mit Spotify im Hintergrund?
+17. Töne: Der Countdown 3-2-1 ist weicher und übersteuert nicht mehr. Klingt er auf deinem Gerät sauber, auch mit Spotify im Hintergrund?
+18. Verschieben (neu in diesem Build): Block im Baukasten kurz halten und ziehen. Man muss kein Ziel genau treffen, ein Balken zeigt, wo er landet. In eine Runde hinein, aus einer Runde heraus, ganze Runde am Kopf anfassen. Auf dem iPad 11 Zoll stehen die Bausteine jetzt rechts.
+19. Dunkelmodus (neu in diesem Build): Knöpfe und Symbole sind jetzt hell und wirken nicht mehr inaktiv, «Starten» ist ein heller Knopf mit dunkler Schrift.
+20. Fernbedienung (neu in diesem Build): Die Frage «Fernbedienung erlauben?» auf dem iPad erscheint jetzt auch über dem Willkommensbildschirm und während eines Trainings, ohne dass sich etwas von selbst schliesst.
 
 Rückmeldungen: in TestFlight Screenshot machen › «Feedback senden», oder an fitmitjodit@scheuber.me.

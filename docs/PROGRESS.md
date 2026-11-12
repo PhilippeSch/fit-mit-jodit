@@ -34,13 +34,12 @@ KETTENTEST: grün (10.11.2026, 22:55), mit einer Einschränkung beim iCloud-Cont
 - Tests: 44 Unit-Tests grün; UI-Tests auf iPhone (de/en) grün
 
 ## Offen
-- iPad: Bedienungshilfen-Audit meldet «Dynamic Type teilweise nicht unterstützt» für eine Blockkachel (3 Reparaturversuche, offen)
-- iCloud-Schema nach Production übertragen (braucht Debug-Lauf auf Gerät mit iCloud-Konto, siehe Morgen-Checkliste)
-- App-Datenschutz «Veröffentlichen» bestätigen
-- Gerätetests (Ducking, Hintergrund, Live Activity, Watch, Weiterleitung iPad, Spotify, Sync, AirDrop, Duo auf/zu)
+- Gerätetests (Ducking, Hintergrund, Live Activity, Watch, Weiterleitung iPad, Spotify, Sync, AirDrop, Duo auf/zu), dazu die Punkte unter «Neu (12.11.2026)» in der Morgen-Checkliste: Verschieben im Baukasten, Dunkelmodus, Fernbedienung beim ersten Start
+- iOS 17: Das Verschieben nutzt dort den SwiftUI-Ersatzweg (`LegacyHoldToDrag`). Ungeprüft, weil keine iOS-17-Laufzeit installiert ist
+- Erledigt seit 11.11.2026: App-Datenschutz veröffentlicht, iCloud-Schema in Production. Seit 12.11.2026: Bedienungshilfen-Audit auf dem iPad (Ursache war die Typ-Beschriftung der Palette in `caption2`)
 
 ## Nächster Schritt
-Morgen-Checkliste abarbeiten; bei «weiter»: Dynamic-Type-Befund auf dem iPad, danach Rückmeldungen aus dem Gerätetest.
+Rückmeldungen aus dem Gerätetest von Philippe und Jodit abwarten und umsetzen.
 
 ## Stand 11.11.2026, 01:45
 - Teile 0–15 umgesetzt, finaler Build 1.0 (202611110111) in TestFlight grün, Store-Texte und Screenshots hochgeladen, CI auf PR #1 grün, Berichte geschrieben.
@@ -51,6 +50,16 @@ Morgen-Checkliste abarbeiten; bei «weiter»: Dynamic-Type-Befund auf dem iPad, 
 - Training läuft nach Neustart der App weiter; Laufansicht sperrbar; Siri und Kurzbefehle; Teilen per QR-Code; Trainingsverlauf mit Wochenübersicht.
 - Satzliste für Jodits Aufnahmen um Teil G/H (Nr. 97–106) ergänzt, PDF neu erzeugt.
 - Offen: Gerätetests der neuen Funktionen (siehe Morgen-Checkliste «Neu»), neuer TestFlight-Build nach Freigabe der Beta-Prüfung.
+
+## Stand 12.11.2026
+- Verschieben im Baukasten neu gebaut (SPEC 2 und 8b): Block halten und ziehen, die nächstgelegene Einfügestelle gilt, Balken zeigt sie an; in eine Runde hinein und heraus, ganze Runden verschiebbar, Nachscrollen am Rand. Pfeile gehen der Reihe nach durch Runden.
+- Palette auf dem iPad schon ab 460 pt Breite rechts neben der Zeitleiste (iPad 11 Zoll hochkant mit Trainingsliste).
+- Dunkelmodus: Markenfarbe hell (#EFEAEA), Hauptknöpfe mit dunkler Schrift (`Theme.onBrand`).
+- Rückfragen (Fernbedienung erlauben, Import) in eigenem Fenster (`TopAlert`), eine einzige Vollbild-Darstellung an der Wurzel. Behebt: Willkommensbildschirm schloss sich bei einer Anfrage des iPhone von selbst, Training lief danach ohne sichtbare Laufansicht.
+- Stimmenliste lädt im Hintergrund (`VoiceLibrary`), kein Hänger mehr beim ersten Start.
+- Countdown-Töne entschärft (11.11.2026 abends, Build 202611112006).
+- Tests: 92 Unit-Tests und 40 UI-Tests grün auf iPhone 18 Pro Max, iPad Pro 11 Zoll, iPad Pro 13 Zoll und iPhone Duo, 3 Tests auf der Uhr. Neu: `EditorDragTests` (19), `EditorDragUITests` (10, ziehen wirklich), `PromptOverCoverUITests` (2). Von Hand geprüft auf iPhone, iPad 11 Zoll und iPad 13 Zoll.
+- Bekannt, kein App-Fehler: Im Gesamtschema `FitMitJodit` startet der Unit-Test-Teil auf dem Simulator manchmal nicht («test runner hung before establishing connection» oder «failed to launch»). Der Dienst für Kurzbefehle (`linkd`) startet die App nach der Installation oder nach dem Ende eines Laufs selbst im Hintergrund; kommt er `xcodebuild` zuvor, läuft die App ohne Testanbindung (Stichprobe: Haupt-Thread untätig, keine XCTest-Bibliothek geladen). Abhilfe: App im Simulator beenden (`xcrun simctl terminate <UDID> ch.fitmitjodit.timer`) und die Unit-Tests mit dem Schema `FitMitJoditUnit` wiederholen.
 
 ## Annahmen
 - Interne Testgruppe mit Zugriff auf alle Builds, darum keine Zuweisung pro Build nötig.

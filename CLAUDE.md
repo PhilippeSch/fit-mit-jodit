@@ -16,6 +16,7 @@ iOS-App für iPad, iPhone und iPhone Duo mit Begleit-App für die Apple Watch: I
 6. Layout nur über Size Classes und verfügbare Fläche, nie über Gerätetyp oder feste Bildschirmmasse.
 7. Texte immer in Deutsch und Englisch im String Catalog, Deutsch in Schweizer Schreibweise (ss statt ß).
 8. Nichts als erledigt melden, was nicht in einem frischen Lauf gesehen wurde.
+9. Bedienung von Hand prüfen, bevor sie als erledigt gilt: im Simulator wirklich halten, ziehen, wischen und antippen (auch ungenau, wie ein Mensch), auf iPhone und iPad 11 Zoll. UI-Tests müssen die Geste selbst ausführen (z. B. `press(forDuration:thenDragTo:)`), nicht nur einen Ersatzknopf drücken.
 
 ## Subagenten
 - `swift-helfer` (Sonnet): klar abgegrenzte Umsetzungsaufgaben nach Vorgabe.
@@ -26,6 +27,7 @@ Immer nur ein Subagent gleichzeitig, keine Worktrees, keine parallelen Builds.
 Im Kettentest (10.11.2026) geprüft. Simulatoren über die UDID ansprechen, die Namen kommen mehrfach vor.
 - Projekt neu erzeugen (nach neuen Targets/Einstellungen): `python3 Tools/gen_project.py`
 - Build iPad: `xcodebuild build -project FitMitJodit.xcodeproj -scheme FitMitJodit -destination 'platform=iOS Simulator,id=C9B3BAD3-B150-4014-A87E-711D35799E4C' -derivedDataPath build/DerivedData -quiet` (iPad Pro 13-inch M5, iOS 27.2)
+- Build iPad 11 Zoll: dasselbe mit `id=9E8A5E38-0E9B-443D-B5EF-7F76E08997EB` (iPad Pro 11-inch M5, iOS 27.2). Das häufigere iPad-Format: Layout und Bedienung des Baukastens auch dort prüfen, nicht nur auf 13 Zoll.
 - Build iPhone: dasselbe mit `id=B4A2B008-6287-41D2-A41C-4D700BDFD6AC` (iPhone 18 Pro Max, iOS 27.2)
 - Build iPhone Duo: dasselbe mit `id=DFA3DA79-4E7B-43EE-BBB4-EC32549F3781` (iPhone Duo, iOS 27.2)
 - Build Apple Watch: `xcodebuild build -project FitMitJodit.xcodeproj -scheme FitMitJoditWatch -destination 'platform=watchOS Simulator,id=5379D419-6843-4225-8139-0EA0EF101E61' -derivedDataPath build/DerivedData -quiet` (Series 12 46 mm, watchOS 27.2, gepaart mit dem iPhone 18 Pro Max)
@@ -39,3 +41,4 @@ Hinweise:
 - Release wird manuell signiert (Apple Distribution, Profile «ch.fitmitjodit.timer AppStore» und «…watchkitapp AppStore», erzeugt per API-Schlüssel). `xcodebuild -authenticationKey…` scheitert mit «Authentication failed», darum dieser Weg.
 - fastlane braucht `LANG=en_US.UTF-8` (steht in `fastlane/.env`, die Datei ist lokal und nicht im Repository).
 - iCloud/CloudKit ist über `Config/Base.xcconfig` schaltbar (siehe Kommentar dort).
+- Meldet ein Testlauf «test runner hung before establishing connection» oder «failed to launch», ohne dass ein Test fehlschlägt: Der Kurzbefehl-Dienst des Simulators hat die App selbst gestartet und ist `xcodebuild` zuvorgekommen. App beenden (`xcrun simctl terminate <UDID> ch.fitmitjodit.timer`) und die Unit-Tests mit dem Schema `FitMitJoditUnit` wiederholen. Der Lauf zählt erst, wenn die Unit-Tests wirklich gelaufen sind.

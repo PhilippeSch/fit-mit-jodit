@@ -298,7 +298,7 @@ private struct FinishedView: View {
                     Button { app.start(session.workout) } label: { Label("Nochmals", systemImage: "arrow.counterclockwise") }
                         .buttonStyle(.bordered)
                         .accessibilityIdentifier("again")
-                    Button { app.stop() } label: { Label("Fertig", systemImage: "checkmark") }
+                    Button { app.stop() } label: { Label("Fertig", systemImage: "checkmark").foregroundStyle(Theme.ink) }
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("done")
                 }

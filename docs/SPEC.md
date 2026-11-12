@@ -37,13 +37,15 @@ Zusätzlich zwei Vorlagen für Teilnehmende zu Hause, mit Übungsnamen und Ansag
 **Willkommen und Werbung:** Beim ersten Start ein Willkommensbildschirm «Willkommen bei Fit mit Jodit» mit Foto von Jodit. Im Abschlussbild und in den Einstellungen eine Karte «Trainiere mit Jodit» mit Foto und Link zu fitmitjodit.ch. Fotos vorläufig von fitmitjodit.ch, als austauschbare Assets («PhotoWelcome», «PhotoGroup»); Originale folgen.
 
 ### 2. Baukasten (Editor)
-Aufbau von oben nach unten: Namensfeld, Zeitleiste, Palette.
+Aufbau von oben nach unten: Namensfeld, Zeitleiste, Palette. Sobald die Fläche es erlaubt (reguläre Breite ab 460 pt, zum Beispiel iPad 11 Zoll hochkant neben der Trainingsliste), steht die Palette rechts neben der Zeitleiste, nah an der Stelle, wo gebaut wird: ab 640 pt als breite Spalte, darunter als schmale Spalte mit einer Kachel pro Zeile.
 
 **Zeitleiste:** die Blöcke des Trainings als farbige Kacheln in Reihenfolge. Die Breite entspricht der Dauer, auf der Kachel stehen Dauer und, falls vergeben, der Übungsname. Auf schmalen Breiten bricht die Zeitleiste in Zeilen um. Auch die Blöcke innerhalb einer Runde brechen um; die ganze Spalte scrollt, damit auch lange Trainings auf dem iPhone bearbeitbar bleiben. Gesamtdauer und Anzahl Runden stehen laufend darüber.
 
 **Palette:** Bausteine zum Antippen. Start mit 45 s Arbeit, 30 s Arbeit, 15 s Pause, 1 min Pause, 10 s Vorbereitung. Antippen hängt den Baustein ans Ende der Zeitleiste, oder hinter den markierten Block. Baustein halten ändert seine Dauer (Rad in 5-Sekunden-Schritten, 5 s bis 10 min). «+» legt einen eigenen Baustein an (Typ und Dauer). Die Palette gilt für alle Trainings und bleibt gespeichert, Bausteine lassen sich daraus wieder entfernen.
 
-**Blöcke bearbeiten:** Block antippen markiert ihn, weitere antippen erweitert die Auswahl. Für die Auswahl erscheint eine Leiste mit: Übung wählen, Dauer, Duplizieren, Löschen, «mal N». Halten und ziehen verschiebt Blöcke.
+**Blöcke bearbeiten:** Block antippen markiert ihn, weitere antippen erweitert die Auswahl. Für die Auswahl erscheint eine Leiste mit: Übung wählen, Dauer, Nach links, Nach rechts, Duplizieren, Löschen, «mal N».
+
+**Verschieben:** Block kurz halten hebt ihn an, ziehen verschiebt ihn, loslassen legt ihn ab. Man muss kein Ziel genau treffen: Es zählt immer die nächstgelegene Lücke, auch auf freier Fläche oder weit daneben. Ein Balken zeigt, wo der Block landet. Über einer Runde leuchtet die Runde auf, der Block fällt hinein (auf Kopf, Kachel oder freie Fläche); ausserhalb landet er auf der obersten Ebene. Eine ganze Runde lässt sich an Kopf oder freier Fläche anfassen und verschieben. Am oberen und unteren Rand läuft die Zeitleiste nach. Wischen scrollt wie gewohnt, Antippen markiert. «Nach links» und «Nach rechts» gehen der Reihe nach durch die Zeitleiste, in eine Runde hinein und wieder hinaus, damit jede Stelle auch ohne Ziehen erreichbar ist.
 
 **Runden:** «mal N» fasst die markierten, nebeneinander liegenden Blöcke zu einer Runde zusammen, sichtbar als Klammer mit Zähler. Der Zähler ist antippbar. Runden lassen sich auflösen. Keine Runden in Runden.
 
@@ -89,6 +91,15 @@ iCloud-Sync zwischen Geräten derselben Apple-ID (Trainings, Palette, eigene Üb
 4. **QR-Code:** Im Training und im Abschlussbild. Link `fitmitjodit://training?d=…` mit kompaktem, komprimiertem Inhalt (ohne IDs), kein Server. Die Kamera öffnet die App, die das Training nach Bestätigung als neues Training anlegt. Unplausible Daten werden abgelehnt.
 5. **Verlauf:** Abgeschlossene Trainings und nach mindestens einer Minute abgebrochene, trainierte Zeit ohne Vorlauf. Wochenübersicht (Anzahl, Minuten, Minuten pro Tag). Jeder Eintrag ist ein eigener `StoredValue` (`history.<id>`), damit das CloudKit-Schema unverändert bleibt.
 6. **Dehnen:** 10 Dehnübungen im Katalog, Vorlage «Dehnen 10» (10 × 45 s, 15 s Wechsel). Die Satzliste für Jodits Aufnahmen hat dafür den Nachtrag Teil G/H (Nr. 97–106).
+
+### 8b. Ergänzungen nach dem zweiten Test (12.11.2026)
+1. **Verschieben im Baukasten neu:** eigenes Halten und Ziehen statt System-Drag-and-drop, Ablegen an der nächstgelegenen Lücke, Einfügebalken, Runden als Ziel, ganze Runden verschiebbar, Nachscrollen am Rand (siehe Abschnitt 2, «Verschieben»). Ab iOS 18 über einen UIKit-Erkenner, damit Wischen auf einem Block weiter scrollt; unter iOS 17 als SwiftUI-Geste, ohne Nachscrollen.
+2. **Palette rechts auch auf dem iPad 11 Zoll** (siehe Abschnitt 2, Aufbau).
+3. **Töne:** Spitzenpegel 60 % statt 90 %, Piepser klingen ab, die Musik wird für den ganzen Countdown nur einmal leiser gestellt.
+4. **Dunkelmodus:** Die Markenfarbe ist im dunklen Modus ein warmes Fast-Weiss (#EFEAEA) statt eines mittleren Graus, damit Knöpfe und Symbole aktiv wirken und sich von deaktivierten abheben. Hauptknöpfe wie «Starten» sind dort hell mit dunkler Schrift (Umkehrung des hellen Modus). Der helle Modus bleibt beim Dunkelgrau #5E5858 mit weisser Schrift.
+5. **Rückfragen im eigenen Fenster:** «Fernbedienung erlauben?», die Bestätigung beim Import per QR-Code und Import-Fehler erscheinen in einem eigenen Fenster über allem anderen (`TopAlert`). Willkommensbildschirm und Laufansicht teilen sich eine einzige Vollbild-Darstellung, ein laufendes Training hat Vorrang. Grund: Als Alarme an der Wurzel schlossen sie Vollbild-Ansichten (kam die Anfrage des iPhone während des Willkommensbildschirms auf dem iPad, verschwand dieser, die Anfrage ging verloren, und ein danach gestartetes Training lief ohne sichtbare Laufansicht).
+6. **Stimmenliste im Hintergrund:** Die installierten Stimmen werden beim Start und nach Änderungen im Hintergrund geladen (`VoiceLibrary`), nie auf dem Haupt-Thread. Bis sie da sind, zeigt die Stimmen-Karte «Stimme wird geprüft …», und Ansagen nutzen die Standardstimme von iOS.
+7. **Bedienungshilfen:** Die Typ-Beschriftung auf den Bausteinen der Palette nutzt die Textgrösse `caption` statt `caption2`, damit sie in beide Richtungen mit der Schriftgrösse des Systems mitgeht (Audit «Dynamic Type»).
 
 ### 9. Sprachen
 Deutsch und Englisch, folgt der Gerätesprache.
